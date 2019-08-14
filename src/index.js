@@ -8,7 +8,9 @@ const fs = require("fs"),
     cors = require("cors"),
     passport = require("passport"),
     errorhandler = require("errorhandler"),
-    mongoose = require("mongoose");
+    faker = require("faker"),
+    { User, sequelize } = require("./database/config");
+    // mongoose = require("mongoose");
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -18,7 +20,7 @@ const app = express();
 app.use(cors());
 
 // Normal express config defaults
-app.use(require("morgan")("dev"));
+// app.use(require("morgan")("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -39,15 +41,28 @@ if (!isProduction) {
 }
 
 if (isProduction) {
-    mongoose.connect(process.env.MONGODB_URI);
+    // mongoose.connect(process.env.MONGODB_URI);
 } else {
-    mongoose.connect("mongodb://localhost/conduit");
-    mongoose.set("debug", true);
+    // mongoose.connect("mongodb://localhost/conduit");
+    // mongoose.set("debug", true);
+    sequelize.sync({
+        force: true
+    }).then((v) => {
+        User.create({
+            first_name: faker.name.firstName(),
+            last_name: faker.name.lastName(),
+            email: faker.internet.email(),
+            password: faker.internet.password(8)
+        }).then((user) => {
+            console.log(user);
+        })
+    });
+
 }
 
-require("./models/User");
+// require("./models/User");
 
-app.use(require("./routes"));
+// app.use(require("./routes"));
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
