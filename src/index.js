@@ -15,14 +15,13 @@ const fs = require('fs'),
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-// Create global app object
+
 const app = express();
 
 app.use(cors());
 
-// Normal express config defaults
-app.use(require('morgan')('dev'));
 
+app.use(require("morgan")("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -47,13 +46,6 @@ if (!isProduction) {
   app.use(errorhandler());
 }
 
-// if (isProduction) {
-//     //remove mongoose conection string, use postgres db fr production
-// } else {
-//     //use postgres db for development
-// }
-
-//require("./models/User");
 
 //app.use(require("./routes"));
 

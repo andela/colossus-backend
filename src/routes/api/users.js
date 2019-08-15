@@ -1,7 +1,5 @@
-// const mongoose = require("mongoose");
 const router = require("express").Router();
 const passport = require("passport");
-// const User = mongoose.model("User");
 
 router.get("/user", function(req, res, next) {
     User.findById(req.payload.id)
@@ -21,7 +19,6 @@ router.put("/user", function(req, res, next) {
                 return res.sendStatus(401);
             }
 
-            // only update fields that were actually passed...
             if (typeof req.body.user.username !== "undefined") {
                 user.username = req.body.user.username;
             }
