@@ -1,9 +1,10 @@
-require('dotenv').config({
-    path: require('path').join(__dirname, '../.env')
-});
-
-const { Sequelize, DataTypes } = require('sequelize');
-const { User } = require('../models');
+import { config } from 'dotenv';
+import { join } from 'path';
+import { Sequelize } from 'sequelize';
+import { User } from '../models';
+config({
+    path: join(__dirname, '../.env')
+})
 const sequelize = new Sequelize({
     username: process.env.DB_USER,
     password: process.env.DB_PASS,
@@ -16,7 +17,9 @@ const sequelize = new Sequelize({
     dialect: 'postgres'
 });
 
-module.exports = {
-    User: User(sequelize, DataTypes),
+const UserModel = User(sequelize, Sequelize);
+
+export  {
+    UserModel,
     sequelize
 };

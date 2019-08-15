@@ -1,15 +1,15 @@
-const fs = require("fs"),
-    http = require("http"),
-    path = require("path"),
-    methods = require("methods"),
-    express = require("express"),
-    bodyParser = require("body-parser"),
-    session = require("express-session"),
-    cors = require("cors"),
-    passport = require("passport"),
-    errorhandler = require("errorhandler"),
-    faker = require("faker"),
-    { User, sequelize } = require("./database/config");
+import fs from "fs";
+import http from "http";
+import path from "path";
+import methods from "methods";
+import express, { static } from "express";
+import { urlencoded, json } from "body-parser";
+import session from "express-session";
+import cors from "cors";
+import passport from "passport";
+import errorhandler from "errorhandler";
+import { name, internet } from "faker";
+import { UserModel, sequelize } from "./database/config";
     // mongoose = require("mongoose");
 
 const isProduction = process.env.NODE_ENV === "production";
@@ -21,11 +21,11 @@ app.use(cors());
 
 // Normal express config defaults
 // app.use(require("morgan")("dev"));
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(urlencoded({ extended: false }));
+app.use(json());
 
 app.use(require("method-override")());
-app.use(express.static(__dirname + "/public"));
+app.use(static(__dirname + "/public"));
 
 app.use(
     session({
@@ -48,11 +48,11 @@ if (isProduction) {
     sequelize.sync({
         force: true
     }).then((v) => {
-        User.create({
-            first_name: faker.name.firstName(),
-            last_name: faker.name.lastName(),
-            email: faker.internet.email(),
-            password: faker.internet.password(8)
+        UserModel.create({
+            first_name: name.firstName(),
+            last_name: name.lastName(),
+            email: internet.email(),
+            password: internet.password(8)
         }).then((user) => {
             console.log(user);
         })
