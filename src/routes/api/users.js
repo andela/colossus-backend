@@ -32,7 +32,7 @@ router.put('/user', (req, res, next) => {
       if (!req.body.user.bio) {
         user.bio = req.body.user.bio;
       }
-      if (!req.body.user.image {
+      if (!req.body.user.image) {
         user.image = req.body.user.image;
       }
       if (!req.body.user.password) {
