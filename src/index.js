@@ -1,21 +1,17 @@
 import express from 'express';
+import morgan from 'morgan';
 import winston from 'winston';
-import fs from 'fs';
-import passport from 'passport';
 import bodyParser from 'body-parser';
 import session from 'express-session';
-import http from 'http';
-import errorhandler from 'errorhandler';
-import methods from 'methods';
 import cors from 'cors';
-import path from 'path';
-import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
+import method from 'method-override';
 import swaggerDocument from './docs/swagger.json';
 
-const app = express();
+const isProduction = process.env.NODE_ENV === 'production';
 
-const isProduction = process.env.NODE_ENV === "production";
+// Create global app object
+const app = express();
 
 const logger = winston.createLogger({
   level: 'info',
@@ -38,10 +34,14 @@ app.use(express.static(`${__dirname}/public`));
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+app.get('/', (req, res) => res.status(200).json({
+  status: 200,
+  message: 'Welcome To Bare Foot Nomad',
+}));
 
-app.use(require('morgan')('dev'));
-app.use(require('method-override')());
-app.use(express.static(`${__dirname }/public`));
+morgan('dev');
+app.use(method());
+app.use(express.static(`${__dirname}/public`));
 app.use(
   session({
     secret: 'authorshaven',
@@ -65,16 +65,14 @@ app.use((req, res, next) => {
 
 if (!isProduction) {
   app.use((err, req, res, next) => {
-    logger.error(err.stack);
-
     res.status(err.status || 500);
-
     res.json({
       errors: {
         message: err.message,
         error: err
       }
     });
+    next();
   });
 }
 
@@ -86,6 +84,7 @@ app.use((err, req, res, next) => {
       error: {}
     }
   });
+  next();
 });
 
 const PORT = process.env.PORT || 3000;
