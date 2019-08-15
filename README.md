@@ -2,8 +2,11 @@
 
 Barefoot Nomad - Making company travel and accomodation easy and convinient.
 =======
+<<<<<<< HEAD
 [![](https://img.shields.io/badge/reviewed%20by-Hound%20CI-bluevoilet)](https://houndci.com/repos)
 
+=======
+>>>>>>> ch(travisCI):add travis yml file
 [![Build Status](https://travis-ci.com/andela/colossus-backend.svg?branch=develop)](https://travis-ci.com/andela/colossus-backend)
 
 ## Vision
