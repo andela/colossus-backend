@@ -29,6 +29,16 @@ const logger = winston.createLogger({
   ]
 });
 
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  defaultMeta: { service: 'user-service' },
+  transports: [
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+    new winston.transports.File({ filename: 'combined.log' })
+  ]
+});
+
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -57,7 +67,6 @@ if (!isProduction) {
     format: winston.format.simple()
   }));
 }
-
 
 app.use((req, res, next) => {
   const err = new Error('Not Found');
