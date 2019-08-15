@@ -1,17 +1,12 @@
 import swaggerUi from 'swagger-ui-express';
+import express from 'express';
+import bodyParser from 'body-parser';
+import session from 'express-session';
+import cors from 'cors';
+import errorhandler from 'errorhandler';
+import mongoose from 'mongoose';
+import User from './models/User';
 import swaggerDocument from './docs/swagger.json';
-
-const fs = require('fs'),
-  http = require('http'),
-  path = require('path'),
-  methods = require('methods'),
-  express = require('express'),
-  bodyParser = require('body-parser'),
-  session = require('express-session'),
-  cors = require('cors'),
-  passport = require('passport'),
-  errorhandler = require('errorhandler'),
-  mongoose = require('mongoose');
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -33,6 +28,10 @@ app.use(express.static(`${__dirname}/public`));
 // Documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+app.get('/', (req, res) => res.status(200).json({
+  status: 200,
+  message: 'Welcome To Bare Foot Nomad',
+}));
 
 app.use(
   session({
@@ -54,8 +53,6 @@ if (isProduction) {
   mongoose.set('debug', true);
 }
 
-require('./models/User');
-
 app.use(require('./routes'));
 
 // / catch 404 and forward to error handler
@@ -71,16 +68,14 @@ app.use((req, res, next) => {
 // will print stacktrace
 if (!isProduction) {
   app.use((err, req, res, next) => {
-    console.log(err.stack);
-
     res.status(err.status || 500);
-
     res.json({
       errors: {
         message: err.message,
         error: err
       }
     });
+    next();
   });
 }
 
@@ -94,6 +89,7 @@ app.use((err, req, res, next) => {
       error: {}
     }
   });
+  next();
 });
 
 // finally, let's start our server...
