@@ -47,16 +47,15 @@ if (!isProduction) {
   app.use(errorhandler());
 }
 
-if (isProduction) {
-  mongoose.connect(process.env.MONGODB_URI);
-} else {
-  mongoose.connect('mongodb://localhost/conduit');
-  mongoose.set('debug', true);
-}
+// if (isProduction) {
+//     //remove mongoose conection string, use postgres db fr production
+// } else {
+//     //use postgres db for development
+// }
 
-require('./models/User');
+//require("./models/User");
 
-app.use(require('./routes'));
+//app.use(require("./routes"));
 
 // / catch 404 and forward to error handler
 app.use((req, res, next) => {
