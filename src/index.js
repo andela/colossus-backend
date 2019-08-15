@@ -28,8 +28,6 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(require('method-override')());
-
 app.use(express.static(`${__dirname}/public`));
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
