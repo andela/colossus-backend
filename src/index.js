@@ -10,17 +10,13 @@ import passport from "passport";
 import errorhandler from "errorhandler";
 import { name, internet } from "faker";
 import { UserModel, sequelize } from "./database/config";
-    // mongoose = require("mongoose");
 
 const isProduction = process.env.NODE_ENV === "production";
 
-// Create global app object
 const app = express();
 
 app.use(cors());
 
-// Normal express config defaults
-// app.use(require("morgan")("dev"));
 app.use(urlencoded({ extended: false }));
 app.use(json());
 
@@ -41,10 +37,8 @@ if (!isProduction) {
 }
 
 if (isProduction) {
-    // mongoose.connect(process.env.MONGODB_URI);
+    sequelize.sync({});
 } else {
-    // mongoose.connect("mongodb://localhost/conduit");
-    // mongoose.set("debug", true);
     sequelize.sync({
         force: true
     }).then((v) => {
@@ -60,11 +54,6 @@ if (isProduction) {
 
 }
 
-// require("./models/User");
-
-// app.use(require("./routes"));
-
-/// catch 404 and forward to error handler
 app.use(function(req, res, next) {
     const err = new Error("Not Found");
     err.status = 404;
