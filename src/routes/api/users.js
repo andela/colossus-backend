@@ -1,7 +1,7 @@
-const mongoose = require("mongoose");
+// const mongoose = require("mongoose");
 const router = require("express").Router();
 const passport = require("passport");
-const User = mongoose.model("User");
+// const User = mongoose.model("User");
 
 router.get("/user", function(req, res, next) {
     User.findById(req.payload.id)
