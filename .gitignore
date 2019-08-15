@@ -92,4 +92,9 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 
+# Ignore Winston(logger) log Files
+combined.log
+error.log
 # End of https://www.gitignore.io/api/node
+
+

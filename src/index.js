@@ -1,27 +1,33 @@
+import express from 'express';
+import winston from 'winston';
+import fs from 'fs';
+import passport from 'passport';
+import bodyParser from 'body-parser';
+import session from 'express-session';
+import http from 'http';
+import errorhandler from 'errorhandler';
+import methods from 'methods';
+import cors from 'cors';
+import path from 'path';
+import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './docs/swagger.json';
 
-const fs = require('fs'),
-  http = require('http'),
-  path = require('path'),
-  methods = require('methods'),
-  express = require('express'),
-  bodyParser = require('body-parser'),
-  session = require('express-session'),
-  cors = require('cors'),
-  passport = require('passport'),
-  errorhandler = require('errorhandler'),
-  mongoose = require('mongoose');
-
-const isProduction = process.env.NODE_ENV === 'production';
-
-// Create global app object
 const app = express();
 
-app.use(cors());
+const isProduction = process.env.NODE_ENV === "production";
 
-// Normal express config defaults
-app.use(require('morgan')('dev'));
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  defaultMeta: { service: 'user-service' },
+  transports: [
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+    new winston.transports.File({ filename: 'combined.log' })
+  ]
+});
+
+app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -30,10 +36,12 @@ app.use(require('method-override')());
 
 app.use(express.static(`${__dirname}/public`));
 
-// Documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 
+app.use(require('morgan')('dev'));
+app.use(require('method-override')());
+app.use(express.static(`${__dirname }/public`));
 app.use(
   session({
     secret: 'authorshaven',
@@ -44,34 +52,20 @@ app.use(
 );
 
 if (!isProduction) {
-  app.use(errorhandler());
+  logger.add(new winston.transports.Console({
+    format: winston.format.simple()
+  }));
 }
 
-if (isProduction) {
-  mongoose.connect(process.env.MONGODB_URI);
-} else {
-  mongoose.connect('mongodb://localhost/conduit');
-  mongoose.set('debug', true);
-}
-
-require('./models/User');
-
-app.use(require('./routes'));
-
-// / catch 404 and forward to error handler
 app.use((req, res, next) => {
   const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
-// / error handlers
-
-// development error handler
-// will print stacktrace
 if (!isProduction) {
   app.use((err, req, res, next) => {
-    console.log(err.stack);
+    logger.error(err.stack);
 
     res.status(err.status || 500);
 
@@ -84,8 +78,6 @@ if (!isProduction) {
   });
 }
 
-// production error handler
-// no stacktraces leaked to user
 app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.json({
@@ -96,7 +88,10 @@ app.use((err, req, res, next) => {
   });
 });
 
-// finally, let's start our server...
-const server = app.listen(process.env.PORT || 3000, () => {
-  console.log(`Listening on port ${server.address().port}`);
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  logger.info(`Listening on PORT ${PORT}`);
 });
+
+export default app;
