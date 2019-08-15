@@ -23,19 +23,19 @@ router.put('/user', (req, res, next) => {
         return res.sendStatus(401);
       }
 
-      if (typeof req.body.user.username !== 'undefined') {
+      if (!req.body.user.username) {
         user.username = req.body.user.username;
       }
-      if (typeof req.body.user.email !== 'undefined') {
+      if (!req.body.user.email) {
         user.email = req.body.user.email;
       }
-      if (typeof req.body.user.bio !== 'undefined') {
+      if (!req.body.user.bio) {
         user.bio = req.body.user.bio;
       }
-      if (typeof req.body.user.image !== 'undefined') {
+      if (!req.body.user.image {
         user.image = req.body.user.image;
       }
-      if (typeof req.body.user.password !== 'undefined') {
+      if (!req.body.user.password) {
         user.setPassword(req.body.user.password);
       }
 
