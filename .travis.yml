@@ -1,0 +1,20 @@
+language: node_js
+node_js:
+  - "stable"
+notifications:
+  email: false
+cache:
+  directories:
+    - "node_modules"
+install:
+  - npm install    
+services:
+  - postgresql
+before_script:
+  - psql -c 'create database barefootnomadDB;' -U postgres
+  - psql -c 'CREATE USER evans WITH PASSWORD null;' -U postgres 
+  - npm run build   
+script:
+  - npm test
+after_success:
+  - npm run coverage
