@@ -6,7 +6,7 @@ import swaggerUi from 'swagger-ui-express';
 import session from 'express-session';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import swaggerDocument from './docs/swagger.json';
+import swaggerDocument from './docs/swagger.js/index.js';
 import { UserModel, sequelize } from './database/config';
 
 const app = express();
