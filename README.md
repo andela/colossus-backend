@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/github/andela/colossus-backend/badge.svg?branch=develop)](https://coveralls.io/github/andela/colossus-backend?branch=develop)
+
 Barefoot Nomad - Making company travel and accomodation easy and convinient.
 =======
 
