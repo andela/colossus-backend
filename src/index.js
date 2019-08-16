@@ -1,17 +1,23 @@
 import express from 'express';
-import morgan from 'morgan';
 import winston from 'winston';
+import fs from 'fs';
+import passport from 'passport';
 import bodyParser from 'body-parser';
 import session from 'express-session';
+import http from 'http';
+import errorhandler from 'errorhandler';
+import methods from 'methods';
 import cors from 'cors';
+import path from 'path';
+import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
-import method from 'method-override';
 import swaggerDocument from './docs/swagger.json';
+import { UserModel, sequelize} from './database/config';
+import faker from 'faker';
 
-const isProduction = process.env.NODE_ENV === 'production';
-
-// Create global app object
 const app = express();
+
+const isProduction = process.env.NODE_ENV === "production";
 
 const logger = winston.createLogger({
   level: 'info',
@@ -22,24 +28,19 @@ const logger = winston.createLogger({
     new winston.transports.File({ filename: 'combined.log' })
   ]
 });
-
 app.use(cors());
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.use(require('method-override')());
 
 app.use(express.static(`${__dirname}/public`));
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.get('/', (req, res) => res.status(200).json({
-  status: 200,
-  message: 'Welcome To Bare Foot Nomad',
-}));
 
-morgan('dev');
-app.use(method());
-app.use(express.static(`${__dirname}/public`));
+app.use(require('morgan')('dev'));
+app.use(require('method-override')());
 app.use(
   session({
     secret: 'authorshaven',
@@ -63,14 +64,16 @@ app.use((req, res, next) => {
 
 if (!isProduction) {
   app.use((err, req, res, next) => {
+    logger.error(err.stack);
+
     res.status(err.status || 500);
+
     res.json({
       errors: {
         message: err.message,
         error: err
       }
     });
-    next();
   });
 }
 
@@ -82,10 +85,22 @@ app.use((err, req, res, next) => {
       error: {}
     }
   });
-  next();
 });
 
 const PORT = process.env.PORT || 3000;
+
+if (!isProduction) {
+    sequelize.sync({force: true}).then((val) => {
+        UserModel.create({
+            first_name: faker.name.firstName(),
+            last_name: faker.name.lastName(),
+            email: faker.internet.email(),
+            password: faker.internet.password(8)
+        }).then((user) => {
+            console.log(user);
+        })
+    });
+}
 
 app.listen(PORT, () => {
   logger.info(`Listening on PORT ${PORT}`);
