@@ -6,6 +6,10 @@ import swaggerUi from 'swagger-ui-express';
 import session from 'express-session';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import path from 'path';
+import morgan from 'morgan';
+import swaggerUi from 'swagger-ui-express';
+import faker from 'faker';
 import swaggerDocument from './docs/swagger';
 import { UserModel, sequelize } from './database/config';
 
@@ -22,16 +26,17 @@ const logger = winston.createLogger({
     new winston.transports.File({ filename: 'combined.log' })
   ]
 });
+
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
-app.use(require('method-override')());
-
 app.use(express.static(`${__dirname}/public`));
 
+app.get('/', (req, res) => res.status(200).json({
+  status: 200,
+  message: 'Welcome To Barefoot nomad',
+}));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
 
 app.use(require('morgan')('dev'));
 app.use(require('method-override')());
@@ -89,8 +94,6 @@ app.use((err, req, res, next) => {
   next();
 });
 
-const PORT = process.env.PORT || 3000;
-
 if (!isProduction) {
   sequelize.sync({ force: true }).then((val) => {
     UserModel.create({
@@ -104,6 +107,7 @@ if (!isProduction) {
   });
 }
 
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   logger.info(`Listening on PORT ${PORT}`);
 });

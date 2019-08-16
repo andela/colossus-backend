@@ -1,10 +1,10 @@
-import { config } from 'dotenv';
+import dotenv from 'dotenv';
 import { join } from 'path';
 import { Sequelize } from 'sequelize';
 import { User } from '../models';
-config({
-    path: join(__dirname, '../.env')
-})
+
+dotenv.config();
+
 const sequelize = new Sequelize({
     username: process.env.DB_USER,
     password: process.env.DB_PASS,
