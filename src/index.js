@@ -1,19 +1,17 @@
+import '@babel/polyfill';
 import express from 'express';
+import faker from 'faker';
 import winston from 'winston';
-import fs from 'fs';
-import passport from 'passport';
-import bodyParser from 'body-parser';
+import swaggerUi from 'swagger-ui-express';
 import session from 'express-session';
-import http from 'http';
-import errorhandler from 'errorhandler';
-import methods from 'methods';
+import bodyParser from 'body-parser';
 import cors from 'cors';
 import path from 'path';
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
 import faker from 'faker';
-import swaggerDocument from './docs/swagger.json';
-import { UserModel, sequelize} from './database/config';
+import swaggerDocument from './docs/swagger';
+import { UserModel, sequelize } from './database/config';
 
 const app = express();
 
@@ -52,6 +50,11 @@ app.use(
   })
 );
 
+app.get('/', (req, res) => res.status(200).json({
+  status: 200,
+  message: 'Welcome To Barefoot nomad',
+}));
+
 if (!isProduction) {
   logger.add(new winston.transports.Console({
     format: winston.format.simple()
@@ -76,6 +79,7 @@ if (!isProduction) {
         error: err
       }
     });
+    next();
   });
 }
 
@@ -87,6 +91,7 @@ app.use((err, req, res, next) => {
       error: {}
     }
   });
+  next();
 });
 
 if (!isProduction) {
