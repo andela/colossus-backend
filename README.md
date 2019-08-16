@@ -1,5 +1,6 @@
 Barefoot Nomad - Making company travel and accomodation easy and convinient.
 =======
+[![](https://img.shields.io/badge/reviewed%20by-Hound%20CI-bluevoilet)](https://houndci.com/repos)
 
 
 ## Vision
