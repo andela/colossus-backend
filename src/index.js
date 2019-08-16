@@ -1,7 +1,7 @@
 import '@babel/polyfill';
 import express from 'express';
-import winston from 'winston';
 import faker from 'faker';
+import winston from 'winston';
 import swaggerUi from 'swagger-ui-express';
 import session from 'express-session';
 import bodyParser from 'body-parser';
