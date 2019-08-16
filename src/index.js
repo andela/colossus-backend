@@ -1,23 +1,17 @@
+import '@babel/polyfill';
 import express from 'express';
 import winston from 'winston';
-import fs from 'fs';
-import passport from 'passport';
+import faker from 'faker';
+import swaggerUi from 'swagger-ui-express';
 import bodyParser from 'body-parser';
 import session from 'express-session';
-import http from 'http';
-import errorhandler from 'errorhandler';
-import methods from 'methods';
 import cors from 'cors';
-import path from 'path';
-import morgan from 'morgan';
-import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './docs/swagger.json';
-import { UserModel, sequelize} from './database/config';
-import faker from 'faker';
+import { UserModel, sequelize } from './database/config';
 
 const app = express();
 
-const isProduction = process.env.NODE_ENV === "production";
+const isProduction = process.env.NODE_ENV === 'production';
 
 const logger = winston.createLogger({
   level: 'info',
@@ -41,6 +35,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(require('morgan')('dev'));
 app.use(require('method-override')());
+
 app.use(
   session({
     secret: 'authorshaven',
@@ -49,6 +44,11 @@ app.use(
     saveUninitialized: false
   })
 );
+
+app.get('/', (req, res) => res.status(200).json({
+  status: 200,
+  message: 'Welcome To Barefoot nomad',
+}));
 
 if (!isProduction) {
   logger.add(new winston.transports.Console({
@@ -74,6 +74,7 @@ if (!isProduction) {
         error: err
       }
     });
+    next();
   });
 }
 
@@ -85,21 +86,22 @@ app.use((err, req, res, next) => {
       error: {}
     }
   });
+  next();
 });
 
 const PORT = process.env.PORT || 3000;
 
 if (!isProduction) {
-    sequelize.sync({force: true}).then((val) => {
-        UserModel.create({
-            first_name: faker.name.firstName(),
-            last_name: faker.name.lastName(),
-            email: faker.internet.email(),
-            password: faker.internet.password(8)
-        }).then((user) => {
-            console.log(user);
-        })
+  sequelize.sync({ force: true }).then((val) => {
+    UserModel.create({
+      first_name: faker.name.firstName(),
+      last_name: faker.name.lastName(),
+      email: faker.internet.email(),
+      password: faker.internet.password(8)
+    }).then((user) => {
+      logger.info(user);
     });
+  });
 }
 
 app.listen(PORT, () => {
