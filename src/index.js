@@ -8,7 +8,6 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import path from 'path';
 import morgan from 'morgan';
-import faker from 'faker';
 import swaggerDocument from './docs/swagger';
 import { UserModel, sequelize } from './database/config';
 
