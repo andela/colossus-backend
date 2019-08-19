@@ -7,3 +7,5 @@ const auth = new Auth();
 const authController = new AuthController();
 
 router.post('/auth/logout', auth.checkToken, authController.logout);
+
+export default router;
