@@ -6,7 +6,12 @@ import session from 'express-session';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import swaggerDocument from './docs/swagger';
+<<<<<<< HEAD
 
+=======
+import { UserModel, sequelize } from './database/config';
+import userRoute from './routes/User';
+>>>>>>> feature(signup):return JWT on successful signup
 
 const app = express();
 
