@@ -18,7 +18,7 @@ export class Auth {
     const { authorization } = req.headers;
     // Extract token
     const token = authorization.split(' ')[1];
-    // Verify token to check if expired. `verified` is undefined if token is invalid
+    // Verify token to know if it is expired. `verified` is undefined if token is invalid
     const verified = await new Promise((resolve, reject) => {
       jwt.verify(token, 'secret', null, (err, decoded) => {
         if (err) reject(err);
@@ -55,17 +55,21 @@ export class Auth {
       });
       return;
     }
-    UserModel.findByPk(decoded.id).then((user) => {
-      if (user) {
-        req.user = user;
-        req.token = token;
-        next();
-      } else {
-        res.status(401).json({
-          status: 401,
-          error: 'User not recognized'
-        });
-      }
+    const user = await new Promise((resolve, reject) => {
+      UserModel.findByPk(decoded.id).then((value) => {
+        resolve(value);
+      })
+      .catch((err) => reject(err));
     });
+    if (user) {
+      req.user = user;
+      req.token = token;
+      next();
+    } else {
+      res.status(401).json({
+        status: 401,
+        error: 'User not recognized'
+      });
+    }
   }
 }
