@@ -21,7 +21,7 @@ class UserController {
           firstName,
           lastName,
           email,
-          password, 
+          password,
         });
         // Generate JWT
         const token = jwt.sign({ id: newUser.id, email, }, process.env.JWT_SECRET, { expiresIn: '50h' });
