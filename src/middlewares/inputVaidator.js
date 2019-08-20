@@ -29,11 +29,11 @@ export default class AuthValidator {
       .isEmail()
       .withMessage('Invalid email');
     req
-      .check('first_name', 'First Name is required')
+      .check('firstName', 'First Name is required')
       .notEmpty()
       .trim();
     req
-      .check('last_name', 'Last Name is required')
+      .check('lastName', 'Last Name is required')
       .notEmpty()
       .trim();
     req
@@ -43,7 +43,7 @@ export default class AuthValidator {
       .isLength({ min: 8 })
       .withMessage('password cannot be less then 8 characters');
     req
-      .check('phone_number', 'The phone number is required')
+      .check('phoneNumber', 'The phone number is required')
       .notEmpty()
       .trim()
       .isLength({ min: 11 })
@@ -52,7 +52,6 @@ export default class AuthValidator {
       .withMessage('Password must be alphanumeric');
     req
       .check('address', 'Address is required')
-      .notEmpty()
       .trim()
       .isLength({ min: 11 })
       .withMessage('Invalid address, the address cannot be less that 11 characters');
