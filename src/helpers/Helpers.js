@@ -10,8 +10,8 @@ class Helpers {
    *
    *
    * @static
-   * @param {object}-  errors
-   * @returns {object} The response
+   * @param {object} errors - The error messages
+   * @returns {object} - The response
    * @memberof Helpers
    */
   static extractErrors(errors) {

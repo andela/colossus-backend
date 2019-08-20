@@ -3,15 +3,23 @@ import Helpers from '../helpers/Helpers';
 const { extractErrors } = Helpers;
 
 
+/**
+ *
+ * validates user sign up inputs
+ *
+ * @export
+ * @class AuthValidator
+ * @param {callback} next
+ */
 export default class AuthValidator {
   /**
    *
    *
    * @static
-   * @param {object} req
-   * @param {object} res
-   * @param {callback} next
-   * @returns {number} The sum of the two numbers.
+   * @param {object} req - The request entered by the user.
+   * @param {object} res  - The response sent to the user is error if validation fails
+   * @param {callback} next - The next middleware is called if validation is successful
+   * @returns {object} The response
    * @memberof AuthValidator
    */
   static validateSignUp(req, res, next) {
@@ -32,20 +40,22 @@ export default class AuthValidator {
       .check('password', 'Password is required')
       .notEmpty()
       .trim()
-      .isLength({ min: 6 })
-      .withMessage('password cannot be less then 6 characters');
+      .isLength({ min: 8 })
+      .withMessage('password cannot be less then 8 characters');
     req
       .check('phone_number', 'The phone number is required')
       .notEmpty()
       .trim()
       .isLength({ min: 11 })
-      .withMessage('Enter a valid phone number');
+      .withMessage('Enter a valid phone number')
+      .isAlphanumeric()
+      .withMessage('Password must be alphanumeric');
     req
       .check('address', 'Address is required')
       .notEmpty()
       .trim()
       .isLength({ min: 11 })
-      .withMessage('Invalid address');
+      .withMessage('Invalid address, the address cannot be less that 11 characters');
 
     const errors = req.validationErrors();
     if (errors) {
@@ -62,10 +72,10 @@ export default class AuthValidator {
    *
    *
    * @static
-   * @param {*} req
-   * @param {*} res
-   * @param {*} next
-   * @returns
+   * @param {object} req - The request entered by the user.
+   * @param {object} res  - The response sent to the user is error if validation fails
+   * @param {callback} next - The next middleware is called if validation is successful
+   * @returns {number} The response
    * @memberof AuthValidator
    */
   static validateLogin(req, res, next) {
