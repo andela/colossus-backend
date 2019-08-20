@@ -6,7 +6,7 @@ export const User = (sequelize, DataTypes) => sequelize.define('User', {
     autoIncrement: true,
     primaryKey: true
   },
-  first_name: {
+  firstName: {
     type: DataTypes.STRING,
     allowNull: false,
     validate: {
@@ -15,7 +15,7 @@ export const User = (sequelize, DataTypes) => sequelize.define('User', {
       }
     }
   },
-  last_name: {
+  lastName: {
     type: DataTypes.STRING,
     allowNull: false,
     validate: {
