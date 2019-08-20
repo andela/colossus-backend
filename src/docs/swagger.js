@@ -1,4 +1,4 @@
-module.exports = {
+const swagger = {
   swagger: '2.0',
   info: {
     version: '1.0',
@@ -34,3 +34,5 @@ module.exports = {
     }
   }
 };
+
+export default swagger;
