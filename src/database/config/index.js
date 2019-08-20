@@ -1,4 +1,6 @@
-module.exports = {
+const config = {
     secret:
         process.env.NODE_ENV === "production" ? process.env.SECRET : "secret"
 };
+
+export default config;

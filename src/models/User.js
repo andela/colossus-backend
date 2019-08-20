@@ -1,7 +1,7 @@
 import { genSaltSync, hashSync } from 'bcryptjs';
 
-const newUser = (sequelize, DataTypes) => {
-  const User = sequelize.define('User', {
+export const userDefinition = (sequelize, DataTypes) => {
+  return sequelize.define('User', {
     firstName: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -52,7 +52,4 @@ const newUser = (sequelize, DataTypes) => {
       }
     }
   });
-  return User;
 };
-
-export default newUser;

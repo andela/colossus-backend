@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import Sequelize from 'sequelize';
+import { Sequelize } from 'sequelize';
 import configuration from '../database/config/config';
 
 const basename = path.basename(__filename);
@@ -32,4 +32,4 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-module.exports = db;
+export default db;
