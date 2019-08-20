@@ -1,7 +1,12 @@
 import { genSaltSync, hashSync } from 'bcryptjs';
 
-export const userDefinition = (sequelize, DataTypes) => {
+export const UserDefinition = (sequelize, DataTypes) => {
   return sequelize.define('User', {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
+    },
     firstName: {
       type: DataTypes.STRING,
       allowNull: false,
