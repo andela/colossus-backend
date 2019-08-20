@@ -1,5 +1,17 @@
-const router = require("express").Router();
+import { Router } from 'express';
+import AuthRouter from './auth';
 
-router.use("/api", require("./api"));
+const router = Router();
+const welcomeRouter = Router();
 
-module.exports = router;
+welcomeRouter.get('/', (req, res) => {
+  res.status(200).json({
+    status: 200,
+    message: 'Welcome to Barefoot nomad'
+  });
+});
+
+router.use('/', welcomeRouter);
+router.use('/', AuthRouter);
+
+export default router;

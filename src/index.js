@@ -6,9 +6,15 @@ import session from 'express-session';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import swaggerDocument from './docs/swagger';
+import router from './routes';
+import db from './models';
+import jwt from 'jsonwebtoken';
+import faker from 'faker';
+import { User } from './database/models';
 
 
 const app = express();
+const { sequelize } = db;
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -26,15 +32,8 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(`${__dirname}/public`));
-
-app.get('/', (req, res) => res.status(200).json({
-  status: 200,
-  message: 'Welcome To Barefoot nomad',
-}));
+app.use('/api/v1', router);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
-app.use(require('morgan')('dev'));
-app.use(require('method-override')());
 
 app.use(
   session({
@@ -44,11 +43,6 @@ app.use(
     saveUninitialized: false
   })
 );
-
-app.get('/', (req, res) => res.status(200).json({
-  status: 200,
-  message: 'Welcome To Barefoot nomad',
-}));
 
 if (!isProduction) {
   logger.add(new winston.transports.Console({
@@ -75,6 +69,24 @@ if (!isProduction) {
       }
     });
     next();
+  });
+}
+
+if (!isProduction) {
+  const force = true;
+  sequelize.sync({force}).then(v => {
+    User.create({
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      password: faker.internet.password(),
+      email: faker.internet.email()
+    })
+      .then(user => {
+        const token = jwt.sign({id: user.id}, 'secret', {
+          expiresIn: 60 * 2
+        });
+        logger.info(token);
+      });
   });
 }
 

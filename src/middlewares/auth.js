@@ -4,7 +4,7 @@ import { User, InvalidToken } from '../database/models';
 /**
  * Performs auth related operations on incoming requests
  */
-export default class Auth {
+export class Auth {
   /**
    * 
    * @param {Request} req 
@@ -13,20 +13,14 @@ export default class Auth {
    */
   async checkToken(req, res, next) {
     const { authorization } = req.headers;
-    const token = authorization.split(' ')[1];
-    const payload = jwt.decode(token);
-    const verified = await new Promise((resolve, reject) => {
-      jwt.verify(token, 'secret', null, (err, decoded) => {
-        if (err) reject(err);
-        resolve(decoded);
+    if (!authorization) {
+      res.status(400).json({
+        status: 400,
+        error: 'No authorization header present in request'
       });
-    });
-    const isInvalid = await new Promise((resolve, reject) => {
-      InvalidToken.findByActual(token).then((value) => {
-        resolve(value);
-      })
-        .catch((err) => reject(err));
-    });
+      return;
+    }
+    const token = authorization.split(' ')[1];
     if (!token) {
       res.status(401).json({
         status: 401,
@@ -34,6 +28,17 @@ export default class Auth {
       });
       return;
     }
+    const payload = jwt.decode(token);
+    const verified = await new Promise((resolve) => {
+      jwt.verify(token, 'secret', null, (err, decoded) => {
+        resolve(decoded);
+      });
+    });
+    const isInvalid = await new Promise((resolve) => {
+      InvalidToken.findByActual(token).then((value) => {
+        resolve(value);
+      });
+    });
     if (!verified) {
       res.status(401).json({
         status: 401,
@@ -43,16 +48,15 @@ export default class Auth {
     }
     if (isInvalid) {
       res.status(401).json({
-        status: 400,
+        status: 401,
         error: 'User is logged out'
       });
       return;
     }
-    const user = await new Promise((resolve, reject) => {
+    const user = await new Promise((resolve) => {
       User.findByPk(payload.id).then((u) => {
         resolve(u);
-      })
-        .catch((err) => reject(err));
+      });
     });
     if (user) {
       req.user = user;
