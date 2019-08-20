@@ -47,11 +47,11 @@ module.exports = {
             schema: {
               type: 'object',
               properties: {
-                first_name: {
+                firstName: {
                   type: 'string',
                   example: 'James'
                 },
-                last_name: {
+                lastName: {
                   type: 'string',
                   example: 'Doe'
                 },
