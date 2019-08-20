@@ -49,7 +49,7 @@ export class Auth {
     if (isInvalid) {
       res.status(401).json({
         status: 401,
-        error: 'User is logged out'
+        error: 'You need to sign in to be able to access this resource'
       });
       return;
     }
