@@ -12,7 +12,8 @@
     "coverage": "nyc report --reporter=text-lcov | coveralls && nyc report --reporter=lcov",
     "clean": "rm -rf dist && mkdir dist",
     "build": "npm run clean && npm run babel-build",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "npm run build && npm run migration",
+    "migration": "npx sequelize-cli db:migrate"
   },
   "author": "Andela Simulations Programme",
   "license": "MIT",
