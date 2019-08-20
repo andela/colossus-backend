@@ -1,5 +1,3 @@
-import fs from 'fs';
-import path from 'path';
 import { Sequelize, DataTypes } from 'sequelize';
 import configuration from '../database/config/config';
 
