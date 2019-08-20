@@ -1,15 +1,12 @@
 import '@babel/polyfill';
 import express from 'express';
-import faker from 'faker';
 import winston from 'winston';
 import swaggerUi from 'swagger-ui-express';
 import session from 'express-session';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import path from 'path';
-import morgan from 'morgan';
 import swaggerDocument from './docs/swagger';
-import { UserModel, sequelize } from './database/config';
+
 
 const app = express();
 
@@ -91,19 +88,6 @@ app.use((err, req, res, next) => {
   });
   next();
 });
-
-if (!isProduction) {
-  sequelize.sync({ force: true }).then((val) => {
-    UserModel.create({
-      first_name: faker.name.firstName(),
-      last_name: faker.name.lastName(),
-      email: faker.internet.email(),
-      password: faker.internet.password(8)
-    }).then((user) => {
-      logger.info(user);
-    });
-  });
-}
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
