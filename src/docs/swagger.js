@@ -16,5 +16,21 @@ module.exports = {
       name: 'Authorization',
       in: 'header'
     }
+  },
+  produces: ['application/json'],
+  paths: {
+    '/auth/logout': {
+      'post': {
+        description: 'Logs user out of application',
+        parameters: [
+          {
+            name: 'Authorization',
+            in: 'header',
+            description: 'Auth token',
+            type: 'string'
+          }
+        ]
+      }
+    }
   }
 };
