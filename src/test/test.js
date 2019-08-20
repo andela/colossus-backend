@@ -18,7 +18,7 @@ describe('POST /api/v1/auth/signup', () => {
         .send({
           firstName: 'James',
           lastName: 'Potter',
-          email: 'JamesPotter@hogwarts.com',
+          email: 'JamesPotters@hogwarts.com',
           password: 'expeliamus',
         })
         .end((err, res) => {
