@@ -4,6 +4,9 @@ import mocha from 'mocha';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../index';
+import models from '../models';
+
+const UserModel = models.User;
 
 const { expect } = chai;
 
@@ -18,7 +21,7 @@ describe('POST /api/v1/auth/signup', () => {
         .send({
           firstName: 'James',
           lastName: 'Potter',
-          email: 'JamesPotters@hogwarts.com',
+          email: 'JeanGray@hogwarts.com',
           password: 'expeliamus',
         })
         .end((err, res) => {
@@ -32,6 +35,15 @@ describe('POST /api/v1/auth/signup', () => {
           expect(res.body.data).to.be.a('object');
           done();
         });
+    });
+  });
+  after((done) => {
+    UserModel.destroy({
+      where: {
+        email: 'JeanGray@hogwarts.com'
+      }
+    }).then(() => {
+      done();
     });
   });
 });
