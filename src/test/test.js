@@ -13,17 +13,33 @@ const { sequelize } = db;
 const api = request(server);
 let token = null;
 const root = '/api/v1';
+let isSynced = false;
 
 const createTables = async () => {
-  await sequelize.sync({
-    force: true
+  const obj = await new Promise((res, rej) => {
+    sequelize.sync({
+      force: true
+    })
+      .then(value => {
+      res(value);
+    })
   });
+  if (obj) {
+    isSynced = true;
+  }
 };
 
 createTables();
 
 describe('POST /api/v1/signup', () => {
   describe('When all values in the POST body are the right format', () => {
+    beforeEach((done) => {
+      setTimeout(() => {
+        if (isSynced) {
+          done();
+        }
+      }, 5000);
+    });
     it('Should return an object with properties "status" and "data" on success', (done) => {
       api
         .post(`${root}/signup`)
