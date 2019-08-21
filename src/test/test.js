@@ -87,7 +87,9 @@ describe('POST /api/v1/logout', () => {
       password: faker.internet.password(8),
       email: faker.internet.email()
     });
-    token = jwt.sign({ id: user.id }, 'secret');
+    token = jwt.sign({ id: user.id }, 'secret', {
+      expiresIn: 60
+    });
   });
   it('should respond with a 400 when auth header is absent', (done) => {
     api
