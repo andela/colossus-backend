@@ -6,7 +6,7 @@ import session from 'express-session';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import swaggerDocument from './docs/swagger';
-
+import routes from './routes';
 
 const app = express();
 
@@ -44,6 +44,8 @@ app.use(
     saveUninitialized: false
   })
 );
+
+app.use('/', routes);
 
 app.get('/', (req, res) => res.status(200).json({
   status: 200,
