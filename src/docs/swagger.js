@@ -17,10 +17,112 @@ const swagger = {
       in: 'header'
     }
   },
-  produces: ['application/json'],
+  tags: [
+    {
+      name: 'auth',
+      description: 'Handles Signup and Signin'
+    }
+  ],
   paths: {
+    '/auth/signup': {
+      post: {
+        tags: [
+          'auth'
+        ],
+        summary: 'Create a user account',
+        description: '',
+        consumes: [
+          'application/json',
+          'application/xml'
+        ],
+        produces: [
+          'application/json'
+        ],
+        parameters: [
+          {
+            in: 'body',
+            name: 'body',
+            description: 'body',
+            required: true,
+            schema: {
+              type: 'object',
+              properties: {
+                firstName: {
+                  type: 'string',
+                  example: 'James'
+                },
+                lastName: {
+                  type: 'string',
+                  example: 'Doe'
+                },
+                email: {
+                  type: 'string',
+                  example: 'JDoe@email.com'
+                },
+                password: {
+                  type: 'string',
+                  example: 'secret'
+                }
+              }
+            }
+          }
+        ],
+        responses: {
+          201: {
+            description: 'successful operation; user created',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'integer'
+                },
+                data: {
+                  type: 'object',
+                  properties: {
+                    token: {
+                      type: 'string',
+                      example: '$4567yjnjfn645msfvjfnv.efghnjfnjvn'
+                    },
+                    id: {
+                      type: 'integer',
+                      example: 1
+                    },
+                    firstName: {
+                      type: 'string',
+                      example: 'Jean'
+                    },
+                    lastName: {
+                      type: 'string',
+                      example: 'Dee'
+                    },
+                    email: {
+                      type: 'string',
+                      example: 'JeanD@email.com'
+                    }
+                  }
+                }
+              }
+            }
+          },
+          400: {
+            description: 'Bad Request',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'integer'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     '/auth/logout': {
-      'post': {
+      post: {
         description: 'Logs user out of application',
         parameters: [
           {

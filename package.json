@@ -4,7 +4,7 @@
   "description": "A Social platform for the creative at heart",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha './src/**/**test.js' --require @babel/polyfill --require @babel/register --timeout 30000 --exit",
+    "test": "npm run migration && nyc mocha './src/**/**test.js' --require @babel/polyfill --require @babel/register --timeout 30000 --exit",
     "start-dev": "nodemon --exec babel-node src/index.js",
     "start": "node dist/index.js",
     "start-docker:dev": "babel-node src/index.js",
@@ -18,8 +18,10 @@
   "author": "Andela Simulations Programme",
   "license": "MIT",
   "dependencies": {
+    "@babel/polyfill": "^7.4.4",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
+    "chai-http": "^4.3.0",
     "cors": "^2.8.4",
     "dotenv": "^6.0.0",
     "ejs": "^2.6.1",

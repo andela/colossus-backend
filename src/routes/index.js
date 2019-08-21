@@ -1,17 +1,17 @@
 import { Router } from 'express';
-import AuthRouter from './auth';
+import { AuthRouter } from './api';
 
-const router = Router();
-const welcomeRouter = Router();
+const WelcomeRouter = Router();
+const MainRouter = Router();
 
-welcomeRouter.get('/', (req, res) => {
+WelcomeRouter.get('/', (req, res) => {
   res.status(200).json({
     status: 200,
-    message: 'Welcome to Barefoot nomad'
+    message: 'Welcome to Barefoot Nomad'
   });
 });
 
-router.use('/', welcomeRouter);
-router.use('/', AuthRouter);
+MainRouter.use('/', WelcomeRouter);
+MainRouter.use('/', AuthRouter);
 
-export default router;
+export default MainRouter;

@@ -5,13 +5,12 @@ import swaggerUi from 'swagger-ui-express';
 import session from 'express-session';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import jwt from 'jsonwebtoken';
+import faker from 'faker';
 import swaggerDocument from './docs/swagger';
 import router from './routes';
 import db from './models';
-import jwt from 'jsonwebtoken';
-import faker from 'faker';
 import { User } from './database/models';
-
 
 const app = express();
 const { sequelize } = db;
@@ -74,17 +73,18 @@ if (!isProduction) {
 
 if (!isProduction) {
   const force = true;
-  sequelize.sync({force}).then(v => {
+  sequelize.sync({ force }).then((v) => {
     User.create({
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       password: faker.internet.password(),
       email: faker.internet.email()
     })
-      .then(user => {
-        const token = jwt.sign({id: user.id}, 'secret', {
+      .then((user) => {
+        const token = jwt.sign({ id: user.id }, 'secret', {
           expiresIn: 60 * 2
         });
+        logger.info(v);
         logger.info(token);
       });
   });

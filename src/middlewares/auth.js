@@ -6,12 +6,14 @@ import { User, InvalidToken } from '../database/models';
  */
 export class Auth {
   /**
-   * 
-   * @param {Request} req 
-   * @param {Response} res 
-   * @param {*} next 
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {*} next
+   * @returns {Promise<void>} any
+   *
    */
-  async checkToken(req, res, next) {
+  static async checkToken(req, res, next) {
     const { authorization } = req.headers;
     if (!authorization) {
       res.status(400).json({
@@ -69,4 +71,4 @@ export class Auth {
       });
     }
   }
-} 
+}
