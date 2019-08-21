@@ -14,9 +14,13 @@ const api = request(server);
 let token = null;
 const root = '/api/v1';
 
-sequelize.sync({
-  force: true
-});
+const createTables = async () => {
+  await sequelize.sync({
+    force: true
+  });
+};
+
+createTables();
 
 describe('POST /api/v1/signup', () => {
   describe('When all values in the POST body are the right format', () => {
