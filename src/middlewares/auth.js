@@ -14,6 +14,7 @@ export class Auth {
    *
    */
   static async checkToken(req, res, next) {
+    // Get auth header
     const { authorization } = req.headers;
     if (!authorization) {
       res.status(400).json({
@@ -22,6 +23,7 @@ export class Auth {
       });
       return;
     }
+    // Retrieve token
     const token = authorization.split(' ')[1];
     if (!token) {
       res.status(401).json({
@@ -30,12 +32,15 @@ export class Auth {
       });
       return;
     }
+    // Get payload from token
     const payload = jwt.decode(token);
+    // Check if token is valid
     const verified = await new Promise((resolve) => {
       jwt.verify(token, 'secret', null, (err, decoded) => {
         resolve(decoded);
       });
     });
+    // Confirm user has not signed out thus needing a new token
     const isInvalid = await new Promise((resolve) => {
       InvalidToken.findByActual(token).then((value) => {
         resolve(value);
@@ -55,6 +60,7 @@ export class Auth {
       });
       return;
     }
+    // Get user from payload
     const user = await new Promise((resolve) => {
       User.findByPk(payload.id).then((u) => {
         resolve(u);
