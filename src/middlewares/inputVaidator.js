@@ -44,17 +44,6 @@ export default class AuthValidator {
       .withMessage('password cannot be less then 8 characters')
       .isAlphanumeric()
       .withMessage('Password must be alphanumeric');
-    req
-      .check('phoneNumber', 'The phone number is required')
-      .notEmpty()
-      .trim()
-      .isLength({ min: 11 })
-      .withMessage('Enter a valid phone number');
-    req
-      .check('address', 'Address is required')
-      .trim()
-      .isLength({ min: 11 })
-      .withMessage('Invalid address, the address cannot be less that 11 characters');
 
     const errors = req.validationErrors();
     if (errors) {

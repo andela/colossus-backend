@@ -108,7 +108,7 @@ module.exports = {
             }
           },
           400: {
-            description: 'Bad Request',
+            description: 'Bad Request: Some fields are empty or invalid data format',
             schema: {
               type: 'object',
               properties: {

@@ -26,6 +26,7 @@ class AuthController extends CommonHelper {
         password,
       } = req.body;
 
+      // Check if the email already exists
       const user = await UserModel.findOne({ where: { email, } });
       if (user) {
         res.status(400).json({ status: 400, error: 'Email already exists', });

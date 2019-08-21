@@ -11,5 +11,12 @@ router.post('/signin', AuthController.signIn);
 router.post('/sendEmail', emailValidation, AuthController.sendEmail);
 router.post('/resetPassword', passwordValidation, AuthController.resetPassword);
 
+import AuthValidator from '../../middlewares/inputVaidator';
+
+
+
+const router = express.Router();
+
+router.post('/signup', AuthValidator.validateSignUp, AuthController.signUp);
 
 export default router;
