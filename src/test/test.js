@@ -76,7 +76,7 @@ describe('POST /api/v1/signup', () => {
           // eslint-disable-next-line no-unused-expressions
           const { status, body } = res;
           expect(err).to.be.null;
-          expect(status).to.eql(400);
+          expect(status).to.equal(400);
           expect(body).to.be.a('object');
           expect(body).to.haveOwnProperty('status');
           expect(body.status).to.equal(400);
