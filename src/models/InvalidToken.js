@@ -16,7 +16,8 @@ export const InvalidTokenDefinition = (sequelize, DataTypes) => {
       }
     }
   });
-  token.findByActual = function(actual) {
+  // eslint-disable-next-line func-names
+  token.findByActual = function (actual) {
     const Token = this;
     return Token.findOne({
       where: {

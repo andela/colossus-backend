@@ -8,4 +8,4 @@ const InvalidToken = InvalidTokenDefinition(sequelize, DataTypes);
 export {
   User,
   InvalidToken
-}
+};

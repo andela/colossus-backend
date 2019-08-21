@@ -1,11 +1,6 @@
 import dotenv from 'dotenv';
-import path from 'path';
 
-const loc = path.join(__dirname, '../../.env');
-
-dotenv.config({
-  path: loc
-});
+dotenv.config();
 
 const config = {
   development: {

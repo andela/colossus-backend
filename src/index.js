@@ -16,7 +16,7 @@ const app = express();
 const { sequelize } = db;
 
 const isProduction = process.env.NODE_ENV === 'production';
-
+const isTest = app.get('env') === 'test';
 const logger = winston.createLogger({
   level: 'info',
   format: winston.format.json(),
@@ -71,7 +71,7 @@ if (!isProduction) {
   });
 }
 
-if (!isProduction) {
+if (!isProduction && !(app.get('env') === 'test')) {
   const force = true;
   sequelize.sync({ force }).then((v) => {
     User.create({
@@ -104,6 +104,7 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   logger.info(`Listening on PORT ${PORT}`);
+  logger.info(app.get('env'));
 });
 
 export default app;

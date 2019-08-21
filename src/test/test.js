@@ -12,11 +12,11 @@ const { expect } = chai;
 
 chai.use(chaiHttp);
 
-describe('POST /api/v1/auth/signup', () => {
+describe('POST /api/v1/signup', () => {
   describe('When all values in the POST body are the right format', () => {
     it('Should return an object with properties "status" and "data" on success', (done) => {
       chai.request(server)
-        .post('/api/v1/auth/signup')
+        .post('/api/v1/signup')
         .type('form')
         .send({
           firstName: 'James',
@@ -39,7 +39,7 @@ describe('POST /api/v1/auth/signup', () => {
 
     it('Should return an error if the email already exists', (done) => {
       chai.request(server)
-        .post('/api/v1/auth/signup')
+        .post('/api/v1/signup')
         .type('form')
         .send({
           firstName: 'James',
