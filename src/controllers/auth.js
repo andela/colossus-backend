@@ -15,7 +15,7 @@ export default class AuthController {
         firstName,
         lastName,
         email,
-        password,
+        password
       } = req.body;
         // Check if the email already exists
       const user = await User.findOne({
@@ -34,7 +34,7 @@ export default class AuthController {
           firstName,
           lastName,
           email,
-          password,
+          password
         });
           // Generate JWT
         const token = jwt.sign({ id: newUser.id, email },
@@ -49,7 +49,7 @@ export default class AuthController {
             token,
             firstName,
             lastName,
-            email,
+            email
           },
         });
       }

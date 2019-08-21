@@ -4,7 +4,7 @@
   "description": "A Social platform for the creative at heart",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha './src/**/**test.js' --require @babel/polyfill --require @babel/register --timeout 30000 --exit",
+    "test": "nyc mocha ./src/**/**test.js --require @babel/polyfill --require @babel/register --reporter spec --timeout 30000 --exit",
     "start-dev": "nodemon --exec babel-node src/index.js",
     "start": "node dist/index.js",
     "start-docker:dev": "babel-node src/index.js",

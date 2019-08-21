@@ -1,23 +1,34 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable linebreak-style */
 import mocha from 'mocha';
-import chai from 'chai';
-import chaiHttp from 'chai-http';
-import server from '../index';
-import models from '../models';
+import { expect } from 'chai';
+import request from 'supertest';
+import jwt from 'jsonwebtoken';
+import faker from 'faker';
+import server from '..';
+import db from '../models';
+import { User } from '../database/models';
 
-const UserModel = models.User;
+const { sequelize } = db;
+const api = request(server);
+let token = null;
+const root = '/api/v1';
 
-const { expect } = chai;
+server.set('env', 'test');
 
-chai.use(chaiHttp);
+sequelize.sync({
+  force: true
+});
+
+beforeEach(() => {
+  server.set('env', 'test');
+});
 
 describe('POST /api/v1/signup', () => {
   describe('When all values in the POST body are the right format', () => {
     it('Should return an object with properties "status" and "data" on success', (done) => {
-      chai.request(server)
-        .post('/api/v1/signup')
-        .type('form')
+      api
+        .post(`${root}/signup`)
         .send({
           firstName: 'James',
           lastName: 'Potter',
@@ -27,7 +38,7 @@ describe('POST /api/v1/signup', () => {
         .end((err, res) => {
           // eslint-disable-next-line no-unused-expressions
           expect(err).to.be.null;
-          expect(res).to.has.status(201);
+          expect(res).to.have.status(201);
           expect(res.body).to.be.a('object');
           expect(res.body).to.haveOwnProperty('status');
           expect(res.body.status).to.equal(201);
@@ -38,9 +49,8 @@ describe('POST /api/v1/signup', () => {
     });
 
     it('Should return an error if the email already exists', (done) => {
-      chai.request(server)
-        .post('/api/v1/signup')
-        .type('form')
+      api
+        .post(`${root}/signup`)
         .send({
           firstName: 'James',
           lastName: 'Potter',
@@ -60,13 +70,47 @@ describe('POST /api/v1/signup', () => {
         });
     });
   });
-  after((done) => {
-    UserModel.destroy({
+  after(() => {
+    User.destroy({
       where: {
         email: 'JeanGray@hogwarts.com'
       }
-    }).then(() => {
-      done();
     });
+  });
+});
+
+describe('POST /api/v1/logout', () => {
+  beforeEach(async () => {
+    const user = await User.create({
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      password: faker.internet.password(8),
+      email: faker.internet.email()
+    });
+    token = jwt.sign({ id: user.id }, 'secret');
+  });
+  it('should respond with a 400 when auth header is absent', (done) => {
+    api
+      .post(`${root}/logout`)
+      .end((err, res) => {
+        const { body, status } = res;
+        expect(body).to.have.keys('error', 'status');
+        expect(status).to.eql(400);
+        done();
+      });
+  });
+  it('should respond with a 401 or 200 depending on token validity', (done) => {
+    api
+      .post(`${root}/logout`)
+      .set('Authorization', `Bearer ${token}`)
+      .end((err, res) => {
+        const { status, body } = res;
+        const isTrueAboutStatus = status === 401 || status === 200;
+        const isTrueAboutBody = Object.keys(body).some((value) => value === 'data' || value === 'error');
+        expect(isTrueAboutStatus).to.be.eql(true);
+        expect(isTrueAboutBody).to.be.eql(true);
+        console.log(status, body);
+        done();
+      });
   });
 });

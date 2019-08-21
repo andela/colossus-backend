@@ -16,7 +16,6 @@ const app = express();
 const { sequelize } = db;
 
 const isProduction = process.env.NODE_ENV === 'production';
-const isTest = app.get('env') === 'test';
 const logger = winston.createLogger({
   level: 'info',
   format: winston.format.json(),
