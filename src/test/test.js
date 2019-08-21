@@ -23,10 +23,6 @@ const createTables = async () => {
 createTables();
 
 describe('POST /api/v1/signup', () => {
-  before((done) => {
-    createTables()
-    done();
-  });
   describe('When all values in the POST body are the right format', () => {
     it('Should return an object with properties "status" and "data" on success', (done) => {
       api
