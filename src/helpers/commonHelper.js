@@ -1,14 +1,13 @@
-/**
- * @class CommonHelper
- */
+/* eslint-disable require-jsdoc */
+
 class CommonHelper {
   /**
-   *
-   * @param {String} location
-   * @param {String} url
-   * @param {String} token
-   * @return {String} link
-   */
+     * create a random link
+     * @param {String} location host environment
+     * @param {String} url the host url
+     * @param {String} token users's token
+     */
+
   static generateEmailLink(location, url, token) {
     const link = `${location}${url}?query=${token}`;
     return link;
