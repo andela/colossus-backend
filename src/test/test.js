@@ -14,14 +14,8 @@ const api = request(server);
 let token = null;
 const root = '/api/v1';
 
-server.set('env', 'test');
-
 sequelize.sync({
   force: true
-});
-
-beforeEach(() => {
-  server.set('env', 'test');
 });
 
 describe('POST /api/v1/signup', () => {
@@ -37,13 +31,14 @@ describe('POST /api/v1/signup', () => {
         })
         .end((err, res) => {
           // eslint-disable-next-line no-unused-expressions
+          const { status, body } = res;
           expect(err).to.be.null;
-          expect(res).to.have.status(201);
-          expect(res.body).to.be.a('object');
-          expect(res.body).to.haveOwnProperty('status');
-          expect(res.body.status).to.equal(201);
-          expect(res.body).to.haveOwnProperty('data');
-          expect(res.body.data).to.be.a('object');
+          expect(status).to.eql(201);
+          expect(body).to.be.a('object');
+          expect(body).to.haveOwnProperty('status');
+          expect(body.status).to.equal(201);
+          expect(body).to.haveOwnProperty('data');
+          expect(body.data).to.be.a('object');
           done();
         });
     });
@@ -59,13 +54,14 @@ describe('POST /api/v1/signup', () => {
         })
         .end((err, res) => {
           // eslint-disable-next-line no-unused-expressions
+          const { status, body } = res;
           expect(err).to.be.null;
-          expect(res).to.has.status(400);
-          expect(res.body).to.be.a('object');
-          expect(res.body).to.haveOwnProperty('status');
-          expect(res.body.status).to.equal(400);
-          expect(res.body).to.haveOwnProperty('error');
-          expect(res.body.error).to.be.a('string');
+          expect(status).to.eql(400);
+          expect(body).to.be.a('object');
+          expect(body).to.haveOwnProperty('status');
+          expect(body.status).to.equal(400);
+          expect(body).to.haveOwnProperty('error');
+          expect(body.error).to.be.a('string');
           done();
         });
     });

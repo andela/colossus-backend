@@ -19,6 +19,14 @@ const config = {
       underscored: true
     }
   },
+  test: {
+    use_env_variable: 'DATABASE_DEV',
+    url: process.env.DATABASE_DEV,
+    dialect: 'postgres',
+    define: {
+      underscored: true
+    }
+  }
 };
 
 export default config;
