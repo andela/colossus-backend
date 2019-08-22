@@ -52,7 +52,16 @@ describe('POST /api/v1/auth/signup', () => {
           done();
         });
     });
-
+    it('Should RETURN  if no verificationToken is provided', (done) => {
+      verificationToken = '';
+      chai.request(server)
+        .post(`/api/v1/auth/verifyuser?query=${verificationToken}`)
+        .end((err, res) => {
+          expect(res.body).to.be.a('object');
+          expect(res.body.status).to.equal('error');
+          done();
+        });
+    });
     it('Should return an error if the email already exists', (done) => {
       chai.request(server)
         .post('/api/v1/auth/signup')
@@ -75,17 +84,6 @@ describe('POST /api/v1/auth/signup', () => {
           done();
         });
     });
-  });
-
-  it('Should RETURN  if no verificationToken is provided', (done) => {
-    verificationToken = '';
-    chai.request(server)
-      .post(`/api/v1/auth/verifyuser?query=${verificationToken}`)
-      .end((err, res) => {
-        expect(res.body).to.be.a('object');
-        expect(res.body.status).to.equal('error');
-        done();
-      });
   });
 });
 
