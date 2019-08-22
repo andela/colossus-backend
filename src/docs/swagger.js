@@ -212,6 +212,170 @@ module.exports = {
           }
         }
       }
-    }
+    },
+    '/auth/sendEmail': {
+      post: {
+        tags: ['auth'],
+        summary: 'Send a password reset link to a registered user\'s email',
+        description: '',
+        consumes: ['application/json'],
+        produces: ['application/json'],
+        parameters: [
+          {
+            in: 'body',
+            name: 'body',
+            description: 'body',
+            required: true,
+            schema: {
+              $ref: '#definitions/SendEmail',
+            },
+          },
+        ],
+        responses: {
+          200: {
+            description: 'successfully sends a password reset mail',
+            schema: {
+              $ref: '#definitions/MailSentResponse',
+            },
+          },
+          404: {
+            description: 'Email Not Found',
+            schema: {
+              $ref: '#definitions/EmailNotFoundResponse',
+            },
+          },
+        },
+      },
+    },
+    '/auth/resetPassword': {
+      get: {
+        tags: ['auth'],
+        summary: 'Reset User Password',
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'query',
+            in: 'query',
+            description: 'token containing the current user\'s email',
+            required: true,
+            type: 'string',
+            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Iml5YXJhZmVyZ3Vzb25AZ21haWwuY29tIiwiaWF0IjoxNTY2NDAzMTA3LCJleHAiOjE1NjY0ODk1MDd9.jDq8clsqJtTBN0-PKLJdu0U2GihHDCtn5P90aO0CHAs',
+          },
+          {
+            in: 'body',
+            name: 'body',
+            description: 'body',
+            required: true,
+            schema: {
+              $ref: '#definitions/ResetPassword',
+            },
+          },
+        ],
+        responses: {
+          200: {
+            description: 'successful operation',
+            schema: {
+              $ref: '#definitions/PasswordResetResponse',
+            },
+          },
+          400: {
+            description: 'Validation error in the password reset route',
+            schema: {
+              $ref: '#definitions/PasswordResetValidationResponse',
+            },
+          },
+        },
+      },
+    },
+  },
+  definitions: {
+    SendEmail: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          example: 'fergusoniyara@gmail.com',
+        }
+      },
+    },
+    ResetPassword: {
+      type: 'object',
+      properties: {
+        password: {
+          type: 'string',
+          example: 'Password@2018',
+        },
+        confirmPassword: {
+          type: 'string',
+          example: 'Password@2018',
+        }
+      },
+    },
+    MessageSentResponse: {
+      type: 'object',
+      properties: {
+        status: {
+          type: 'integer',
+          example: 200,
+        },
+        data: {
+          type: 'object',
+          properties: {
+            message: {
+              type: 'string',
+              example: 'A verification has been sent to your email. Kindly follow that link to reset your password',
+            },
+            token: {
+              type: 'string',
+              example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Iml5YXJhZmVyZ3Vzb25AZ21haWwuY29tIiwiaWF0IjoxNTY2NDAzMTA3LCJleHAiOjE1NjY0ODk1MDd9.jDq8clsqJtTBN0-PKLJdu0U2GihHDCtn5P90aO0CHAs',
+            },
+          },
+        },
+      },
+    },
+    PasswordResetResponse: {
+      type: 'object',
+      properties: {
+        status: {
+          type: 'integer',
+          example: 200,
+        },
+        data: {
+          type: 'object',
+          properties: {
+            message: {
+              type: 'string',
+              example: 'Password reset successful',
+            }
+          },
+        },
+      },
+    },
+    EmailNotFoundResponse: {
+      type: 'object',
+      properties: {
+        status: {
+          type: 'integer',
+          example: 404,
+        },
+        error: {
+          type: 'string',
+          example: 'No User with the provided email'
+        },
+      },
+    },
+    PasswordResetValidationResponse: {
+      type: 'object',
+      properties: {
+        status: {
+          type: 'integer',
+          example: 400,
+        },
+        error: {
+          type: 'string',
+          example: 'Password must contain at least one uppercase letter, one lowercase letter and a special character'
+        },
+      },
+    },
   }
 };
