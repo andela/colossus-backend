@@ -66,6 +66,7 @@ export default class AuthValidator {
    * @returns {number} The response
    * @memberof AuthValidator
    */
+
   // static validateLogin(req, res, next) {
   //   req
   //     .check('email', 'Email is required')
