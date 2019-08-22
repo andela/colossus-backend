@@ -1,10 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
-<<<<<<< HEAD
 /* eslint-disable linebreak-style */
 import chai from 'chai';
-=======
-import chai, { assert } from 'chai';
->>>>>>> add unit & integration tests of  email verification capability
 import chaiHttp from 'chai-http';
 import server from '../index';
 import models from '../models';
@@ -14,11 +10,8 @@ const UserModel = models.User;
 const { expect } = chai;
 chai.use(chaiHttp);
 
-<<<<<<< HEAD
 let emailToken;
-=======
 let verificationToken;
->>>>>>> add unit & integration tests of  email verification capability
 
 describe('POST /api/v1/auth/signup', () => {
   describe('When all values in the POST body are the right format', () => {
@@ -84,7 +77,6 @@ describe('POST /api/v1/auth/signup', () => {
     });
   });
 
-
   it('Should RETURN  if no verificationToken is provided', (done) => {
     verificationToken = '';
     chai.request(server)
@@ -108,6 +100,7 @@ describe('POST /api/v1/auth/signin', () => {
           password: 'expeliamus',
         })
         .end((err, res) => {
+          // eslint-disable-next-line no-unused-expressions
           expect(err).to.be.null;
           expect(res).to.has.status(200);
           expect(res.body).to.be.a('object');

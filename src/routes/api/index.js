@@ -1,11 +1,6 @@
 import express from 'express';
 import authRouter from './auth';
 
-<<<<<<< HEAD
-const router = require('express').Router();
-
-router.use('/auth', authRouter);
-=======
 const router = express.Router();
 
 router.use('/auth', authRouter);
@@ -22,6 +17,5 @@ router.use((err, req, res, next) => {
 
   return next(err);
 });
->>>>>>> add email verification feature
 
 module.exports = router;

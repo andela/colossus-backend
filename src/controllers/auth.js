@@ -4,12 +4,9 @@ import { compareSync } from 'bcryptjs';
 import { generateToken, decodeToken } from '../helpers/jwtHelper';
 import CommonHelper from '../helpers/commonHelper';
 import sendVerificationMail from '../services/email';
+import errorResponse from '../utils/index';
 
 import models from '../models';
-import errorResponse from '../utils/index';
-import { generateToken } from '../helpers/jwtHelper';
-import sendVerificationMail from '../services/email';
-import CommonHelper from '../helpers/commonHelper';
 
 const UserModel = models.User;
 
