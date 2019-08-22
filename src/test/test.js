@@ -140,6 +140,19 @@ describe('POST /api/v1/auth/signin', () => {
 });
 
 describe('POST /api/v1/auth/sendEmail', () => {
+  before((done) => {
+    chai
+      .request(server)
+      .post('/api/v1/auth/signup')
+      .send({
+        firstName: 'Iyara',
+        lastName: 'Ferguson',
+        email: 'iyaraferguson@gmail.com',
+        password: 'Password@2017'
+      }).then(() => {
+        done();
+      });
+  });
   describe('Should send an email if the requesting user is registered on barefoot nomad', () => {
     it('Should successfully send a password reset mail', (done) => {
       chai.request(server)
@@ -377,6 +390,15 @@ describe('POST /api/v1/auth/resetPassword', () => {
           expect(res.body.error).to.be.equal('Password must contain at least 8 characters');
           done();
         });
+    });
+  });
+  after((done) => {
+    UserModel.destroy({
+      where: {
+        email: 'iyaraferguson@gmail.com'
+      }
+    }).then(() => {
+      done();
     });
   });
 });
