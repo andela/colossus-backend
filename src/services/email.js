@@ -7,14 +7,15 @@ const transport = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: process.env.GMAIL_USERNAME,
-    pass: process.env.GMAIL_PASSWORD,
-  },
+    pass: process.env.GMAIL_PASSWORD
+  }
 });
+
 
 const sendVerificationMail = async (clientMail, subject, html) => {
   await transport.sendMail({
     to: clientMail,
-    from: 'noreply@BarefootNomad.com',
+    from: 'no-reply@barefoot.com',
     subject,
     html
   });

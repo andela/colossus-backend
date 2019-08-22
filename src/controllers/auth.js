@@ -1,6 +1,11 @@
 /* eslint-disable require-jsdoc */
 import jwt from 'jsonwebtoken';
 import { compareSync } from 'bcryptjs';
+// eslint-disable-next-line import/named
+import { generateToken, decodeToken } from '../helpers/jwtHelper';
+import CommonHelper from '../helpers/commonHelper';
+import sendVerificationMail from '../services/email';
+
 import models from '../models';
 import errorResponse from '../utils/index';
 import { generateToken } from '../helpers/jwtHelper';
@@ -10,6 +15,12 @@ import CommonHelper from '../helpers/commonHelper';
 const UserModel = models.User;
 
 class AuthController extends CommonHelper {
+  /**
+   * @param {Object} req
+   * @param {Object} res
+   * @returns {Object} the new user
+   * @description register a new client
+   */
   static async signUp(req, res) {
     try {
       const {
@@ -18,7 +29,7 @@ class AuthController extends CommonHelper {
         email,
         password,
       } = req.body;
-        // Check if the email already exists
+
       const user = await UserModel.findOne({ where: { email, } });
       if (user) {
         res.status(400).json({ status: 400, error: 'Email already exists', });
@@ -30,16 +41,30 @@ class AuthController extends CommonHelper {
           email,
           password,
         });
-          // Generate JWT
-        const token = jwt.sign({ id: newUser.id, email, }, process.env.JWT_SECRET, { expiresIn: '50h' });
-        return res.status(201).json({
+
+        const payload = {
+          email, password
+        };
+        const token = generateToken(payload);
+        const location = process.env.FRONTEND_URL;
+        const url = '/verifyuser';
+        const link = AuthController.generateEmailLink(location, url, token);
+        const message = `
+          <p>Thank you for registering. Please Click the link below to verify your Barefoot Nomad account</p>&nbsp;
+          <strong>
+            <a href=${link}>Link</a>
+          </strong>
+         `;
+        await sendVerificationMail(email, 'Verify Your Email', message);
+
+        return res.header('x-auth-token', token).status(201).json({
           status: 201,
           data: {
             id: newUser.id,
             token,
-            firstName,
-            lastName,
-            email,
+            firstName: newUser.firstName,
+            lastName: newUser.lastName,
+            email: newUser.email,
           },
         });
       }
@@ -78,6 +103,30 @@ class AuthController extends CommonHelper {
       });
     } catch (error) {
       return res.status(500).json({ status: 500, error });
+  /**
+   * @param {*} req new unverified client
+   * @param {*} res success or error object
+   * @returns {object} a verified client
+   * @description check that client is an actual user
+   */
+  static async verifyUser(req, res) {
+    const { query } = req.query;
+    try {
+      const decoded = decodeToken(query);
+
+      const user = await UserModel.findOne({ where: { email: decoded.email } });
+      user.update({ isVerified: true });
+      const payload = { user };
+      delete payload.password;
+      const newToken = generateToken(payload);
+
+      return res.status(200).json({
+        status: 'success',
+        message: 'Client successfully verified',
+        token: newToken
+      });
+    } catch (err) {
+      res.status(500).json({ status: 'error', error: err.message });
     }
   }
 

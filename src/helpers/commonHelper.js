@@ -2,10 +2,10 @@
 
 class CommonHelper {
   /**
-     * create a random link
      * @param {String} location host environment
      * @param {String} url the host url
      * @param {String} token users's token
+     * @description creates a random link to be sent to user
      */
 
   static generateEmailLink(location, url, token) {

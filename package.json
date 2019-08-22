@@ -20,10 +20,6 @@
   "license": "MIT",
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
-<<<<<<< HEAD
-=======
-    "@sendgrid/mail": "^6.4.0",
->>>>>>> add email verification feature
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "chai-http": "^4.3.0",
@@ -35,11 +31,7 @@
     "express-jwt": "^5.3.1",
     "express-session": "^1.15.6",
     "faker": "^4.1.0",
-<<<<<<< HEAD
     "jsonwebtoken": "^8.3.0",
-=======
-    "jsonwebtoken": "^8.5.1",
->>>>>>> add email verification feature
     "method-override": "^2.3.10",
     "methods": "^1.1.2",
     "morgan": "^1.9.1",
