@@ -66,25 +66,25 @@ export default class AuthValidator {
    * @returns {number} The response
    * @memberof AuthValidator
    */
-  static validateLogin(req, res, next) {
-    req
-      .check('email', 'Email is required')
-      .notEmpty()
-      .isEmail()
-      .trim()
-      .withMessage('Invalid email');
-    req
-      .check('password', 'Password is required')
-      .notEmpty()
-      .trim();
+  // static validateLogin(req, res, next) {
+  //   req
+  //     .check('email', 'Email is required')
+  //     .notEmpty()
+  //     .isEmail()
+  //     .trim()
+  //     .withMessage('Invalid email');
+  //   req
+  //     .check('password', 'Password is required')
+  //     .notEmpty()
+  //     .trim();
 
-    const errors = req.validationErrors();
-    if (errors) {
-      return res.status(400).json({
-        status: 'error',
-        errors: extractErrors(errors),
-      });
-    }
-    return next();
-  }
+  //   const errors = req.validationErrors();
+  //   if (errors) {
+  //     return res.status(400).json({
+  //       status: 'error',
+  //       errors: extractErrors(errors),
+  //     });
+  //   }
+  //   return next();
+  // }
 }
