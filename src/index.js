@@ -91,6 +91,12 @@ if (!isProduction && !(app.get('env') === 'test')) {
   });
 }
 
+if (isProduction) {
+  sequelize.sync({
+    force: false
+  });
+}
+
 app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.json({
