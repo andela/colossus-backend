@@ -1,7 +1,6 @@
+/* eslint-disable import/named */
 /* eslint-disable require-jsdoc */
-import jwt from 'jsonwebtoken';
 import { compareSync } from 'bcryptjs';
-// eslint-disable-next-line import/named
 import { generateToken, decodeToken } from '../helpers/jwtHelper';
 import CommonHelper from '../helpers/commonHelper';
 import sendVerificationMail from '../services/email';
@@ -73,36 +72,6 @@ class AuthController extends CommonHelper {
     }
   }
 
-  static async signIn(req, res) {
-    try {
-      const {
-        email,
-        password,
-      } = req.body;
-      let user = await UserModel.findOne({ where: { email, } });
-      // Check if the user does not exist
-      if (!user) {
-        return res.status(400).json({ status: 400, error: 'Unauthorized', });
-      }
-      user = user.dataValues;
-      // Check if the password matches with the user's password in the db
-      if (!compareSync(password, user.password)) {
-        return res.status(400).json({ status: 400, error: 'Unauthorized', });
-      }
-      // Generate JWT
-      const token = jwt.sign({ id: user.id, email, }, process.env.JWT_SECRET, { expiresIn: '50h' });
-      return res.status(200).json({
-        status: 200,
-        data: {
-          id: user.id,
-          token,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email,
-        },
-      });
-    } catch (error) {
-      return res.status(500).json({ status: 500, error });
   /**
    * @param {*} req new unverified client
    * @param {*} res success or error object
@@ -114,10 +83,12 @@ class AuthController extends CommonHelper {
     try {
       const decoded = decodeToken(query);
 
-      const user = await UserModel.findOne({ where: { email: decoded.email } });
+      let user = await UserModel.findOne({ where: { email: decoded.email } });
       user.update({ isVerified: true });
-      const payload = { user };
-      delete payload.password;
+
+      user = user.dataValues;
+      const { id, email, isVerified } = user;
+      const payload = { id, email, isVerified };
       const newToken = generateToken(payload);
 
       return res.status(200).json({
@@ -127,6 +98,47 @@ class AuthController extends CommonHelper {
       });
     } catch (err) {
       res.status(500).json({ status: 'error', error: err.message });
+    }
+  }
+
+  /**
+   * @param {*} req the client
+   * @param {*} res error or success
+   * @returns {void}
+   * @description Login a registered && verified user
+   */
+  static async signIn(req, res) {
+    try {
+      const {
+        email,
+        password,
+      } = req.body;
+
+      let user = await UserModel.findOne({ where: { email, } });
+      if (!user) {
+        return res.status(400).json({ status: 400, error: 'Invalid credentials' });
+      }
+      user = user.dataValues;
+      if (!compareSync(password, user.password)) {
+        return res.status(400).json({ status: 400, error: 'Invalid password' });
+      }
+
+      const { id } = user;
+      const payload = { id, email };
+      const token = generateToken(payload);
+
+      return res.status(200).json({
+        status: 200,
+        data: {
+          id,
+          token,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email,
+        },
+      });
+    } catch (error) {
+      return res.status(500).json({ status: 500, error });
     }
   }
 

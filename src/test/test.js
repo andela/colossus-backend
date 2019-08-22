@@ -41,7 +41,7 @@ describe('POST /api/v1/auth/signup', () => {
           expect(res.body.status).to.equal(201);
           expect(res.body).to.haveOwnProperty('data');
           expect(res.body.data).to.be.a('object');
-          
+
           verificationToken = res.body.data.token;
           done();
         });
@@ -83,6 +83,18 @@ describe('POST /api/v1/auth/signup', () => {
         });
     });
   });
+
+
+  it('Should RETURN  if no verificationToken is provided', (done) => {
+    verificationToken = '';
+    chai.request(server)
+      .post(`/api/v1/auth/verifyuser?query=${verificationToken}`)
+      .end((err, res) => {
+        expect(res.body).to.be.a('object');
+        expect(res.body.status).to.equal('error');
+        done();
+      });
+  });
 });
 
 describe('POST /api/v1/auth/signin', () => {
@@ -96,14 +108,11 @@ describe('POST /api/v1/auth/signin', () => {
           password: 'expeliamus',
         })
         .end((err, res) => {
-          // eslint-disable-next-line no-unused-expressions
           expect(err).to.be.null;
           expect(res).to.has.status(200);
           expect(res.body).to.be.a('object');
           expect(res.body).to.haveOwnProperty('status');
           expect(res.body.status).to.equal(200);
-          expect(res.body).to.haveOwnProperty('data');
-          expect(res.body.data).to.be.a('object');
           done();
         });
     });
@@ -149,16 +158,8 @@ describe('POST /api/v1/auth/signin', () => {
           done();
         });
     });
-  it('Should RETURN  if no verificationToken is provided', (done) => {
-    verificationToken = '';
-    chai.request(server)
-      .post(`/api/v1/auth/verifyuser?query=${verificationToken}`)
-      .end((err, res) => {
-        expect(res.body).to.be.a('object');
-        expect(res.body.status).to.equal('error');
-        done();
-      });
   });
+
   after((done) => {
     UserModel.destroy({
       where: {
