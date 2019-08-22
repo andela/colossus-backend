@@ -244,6 +244,12 @@ module.exports = {
               $ref: '#definitions/EmailNotFoundResponse',
             },
           },
+          400: {
+            description: 'Invalid Request Object',
+            schema: {
+              $ref: '#definitions/EmailInvalidResponse',
+            },
+          },
         },
       },
     },
@@ -373,7 +379,20 @@ module.exports = {
         },
         error: {
           type: 'string',
-          example: 'Password must contain at least one uppercase letter, one lowercase letter and a special character'
+          example: 'Password must contain at least one number'
+        },
+      },
+    },
+    EmailInvalidResponse:  {
+      type: 'object',
+      properties: {
+        status: {
+          type: 'integer',
+          example: 400,
+        },
+        error: {
+          type: 'string',
+          example: 'Invalid email supplied'
         },
       },
     },
