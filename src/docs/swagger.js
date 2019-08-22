@@ -268,6 +268,21 @@ module.exports = {
             example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Iml5YXJhZmVyZ3Vzb25AZ21haWwuY29tIiwiaWF0IjoxNTY2NDAzMTA3LCJleHAiOjE1NjY0ODk1MDd9.jDq8clsqJtTBN0-PKLJdu0U2GihHDCtn5P90aO0CHAs',
           },
           {
+    '/auth/verifyuser': {
+      post: {
+        tags: [
+          'auth'
+        ],
+        summary: 'Verifies if a client is an actual user',
+        description: '',
+        consumes: [
+          'req.query parameters',
+        ],
+        produces: [
+          'application/json'
+        ],
+        parameters: [
+          {
             in: 'body',
             name: 'body',
             description: 'body',
@@ -396,5 +411,57 @@ module.exports = {
         },
       },
     },
+              type: 'object',
+              properties: {
+                email: {
+                  type: 'string',
+                  example: 'JDoe@email.com'
+                },
+                password: {
+                  type: 'string',
+                  example: 'secret'
+                }
+              }
+            }
+          }
+        ],
+        responses: {
+          200: {
+            description: 'successful operation; user verified',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'integer'
+                },
+                data: {
+                  type: 'object',
+                  properties: {
+                    token: {
+                      type: 'string',
+                      example: '$4567yjnjfn645msfvjfnv.efghnjfnjvn'
+                    }
+                  }
+                }
+              }
+            }
+          },
+          401: {
+            description: 'Not authorized',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'integer'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 };
