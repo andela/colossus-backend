@@ -48,7 +48,6 @@ class AuthController extends CommonHelper {
     }
   }
 
-<<<<<<< HEAD
   static async signIn(req, res) {
     try {
       const {
@@ -79,7 +78,9 @@ class AuthController extends CommonHelper {
       });
     } catch (error) {
       return res.status(500).json({ status: 500, error });
-=======
+    }
+  }
+
   /**
    *
    * @param {Object} req
@@ -128,7 +129,6 @@ class AuthController extends CommonHelper {
       });
     } catch (error) {
       return errorResponse(error, res, 500);
->>>>>>> feat(reset-password): Reset Password Endpoint
     }
   }
 }

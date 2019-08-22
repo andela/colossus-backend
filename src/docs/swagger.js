@@ -383,7 +383,7 @@ module.exports = {
         },
       },
     },
-    EmailInvalidResponse:  {
+    EmailInvalidResponse: {
       type: 'object',
       properties: {
         status: {
