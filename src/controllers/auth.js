@@ -122,7 +122,7 @@ class AuthController extends CommonHelper {
 
       return res.status(200).json({
         status: 'success',
-        message: 'Client successfully verified',
+        message: 'successfully verified',
         token: newToken
       });
     } catch (err) {
