@@ -65,6 +65,7 @@ class AuthController extends CommonHelper {
         });
       }
     } catch (error) {
+      console.log('SIGNUP<=>ERROR : ', error);
       return res.status(500).json({ status: 500, error });
     }
   }
@@ -135,6 +136,7 @@ class AuthController extends CommonHelper {
         },
       });
     } catch (error) {
+      console.log('SIGNIN<=>ERROR : ', error);
       return res.status(500).json({ status: 500, error });
     }
   }
