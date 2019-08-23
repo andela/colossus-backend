@@ -9,7 +9,13 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       actual: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: 'Actual token is required'
+          }
+        }
       },
       createdAt: {
         allowNull: false,
@@ -21,7 +27,5 @@ module.exports = {
       }
     });
   },
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('InvalidTokens');
-  }
+  down: (queryInterface) => queryInterface.dropTable('InvalidTokens')
 };

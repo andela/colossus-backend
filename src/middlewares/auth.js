@@ -52,12 +52,12 @@ const checkToken = async (req, res, next) => {
   if (isInvalid) {
     res.status(401).json({
       status: 401,
-      error: 'User has signed out'
+      error: 'You need to be signed in to access this resource'
     });
     return;
   }
   const user = await new Promise((resolve) => {
-    User.findByPk(payload.id).then((item) => {
+    User.findByEmail(payload.email).then((item) => {
       resolve(item);
     });
   });

@@ -57,6 +57,15 @@ const newUser = (sequelize, DataTypes) => {
       }
     }
   });
+  // eslint-disable-next-line func-names
+  User.findByEmail = function (email) {
+    const user = this;
+    return user.findOne({
+      where: {
+        email
+      }
+    });
+  };
   return User;
 };
 

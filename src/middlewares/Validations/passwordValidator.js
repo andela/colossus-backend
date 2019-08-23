@@ -1,5 +1,7 @@
 import errorResponse from '../../utils/index';
-import { decodeToken } from '../../helpers/jwtHelper';
+import helper from '../../helpers/jwtHelper';
+
+const { decodeToken } = helper;
 
 /**
  *

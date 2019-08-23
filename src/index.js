@@ -7,10 +7,13 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import swaggerDocument from './docs/swagger';
 import routes from './routes';
+import db from './models';
 
 const app = express();
+const { sequelize } = db;
 
 const isProduction = process.env.NODE_ENV === 'production';
+const isTest = process.env.NODE_ENV === 'test';
 
 const logger = winston.createLogger({
   level: 'info',
@@ -89,6 +92,13 @@ app.use((err, req, res, next) => {
     }
   });
   next();
+});
+
+// Run sync if environment is development.
+// This would drop created tables.
+// Do not run in production or test
+sequelize.sync({
+  force: !isProduction && !isTest
 });
 
 const PORT = process.env.PORT || 3000;
