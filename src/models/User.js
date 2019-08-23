@@ -1,6 +1,6 @@
 import { genSaltSync, hashSync } from 'bcryptjs';
 
-const newUser = (sequelize, DataTypes) => {
+const UserDefinition = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     firstName: {
       type: DataTypes.STRING,
@@ -57,7 +57,16 @@ const newUser = (sequelize, DataTypes) => {
       }
     }
   });
+  // eslint-disable-next-line func-names
+  User.findByEmail = function (email) {
+    const user = this;
+    return user.findOne({
+      where: {
+        email
+      }
+    });
+  };
   return User;
 };
 
-export default newUser;
+export default UserDefinition;

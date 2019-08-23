@@ -4,10 +4,16 @@
 /* eslint-disable linebreak-style */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 import server from '../index';
 import models from '../models';
 
-const UserModel = models.User;
+dotenv.config();
+
+const { User } = models;
+
+const UserModel = User;
 
 const { expect } = chai;
 chai.should();
@@ -15,6 +21,8 @@ chai.use(chaiHttp);
 
 let emailToken;
 let verificationToken;
+
+const root = '/api/v1';
 
 describe('POST /api/v1/auth/signup', () => {
   describe('Tests for signup', () => {
@@ -516,5 +524,69 @@ describe('POST /api/v1/auth/resetPassword', () => {
     }).then(() => {
       done();
     });
+  });
+});
+
+describe('POST /api/v1/auth/logout', () => {
+  before((done) => {
+    UserModel.create({
+      email: 'jacky@app.com',
+      firstName: 'Jacky',
+      lastName: 'Elmsworth',
+      password: 'sillblixt'
+    })
+      .then((user) => {
+        verificationToken = jwt.sign({ email: user.email }, process.env.JWT_SECRET);
+        done();
+      });
+  });
+  it('should respond with a 400 if auth header is absent', (done) => {
+    chai
+      .request(server)
+      .post(`${root}/auth/logout`)
+      .end((err, res) => {
+        const { status, body } = res;
+        const isTrueAboutBody = Object.keys(body).some((value) => value === 'error');
+        expect(status).to.be.eql(400);
+        expect(isTrueAboutBody).to.be.eql(true);
+        done();
+      });
+  });
+  it('should respond with a 401 if token is absent', (done) => {
+    chai
+      .request(server)
+      .post(`${root}/auth/logout`)
+      .set('Authorization', 'Bearer')
+      .end((err, res) => {
+        const { status, body } = res;
+        const isTrueAboutBody = Object.keys(body).some((value) => value === 'error');
+        expect(isTrueAboutBody).to.be.eql(true);
+        expect(status).to.be.eql(401);
+        done();
+      });
+  });
+  it('should respond with a 200 when a valid token is sent', (done) => {
+    chai
+      .request(server)
+      .post(`${root}/auth/logout`)
+      .set('Authorization', `Bearer ${verificationToken}`)
+      .end((err, res) => {
+        const { status, body } = res;
+        const isTrueAboutBody = Object.keys(body).some((value) => value === 'data');
+        expect(status).to.be.eql(200);
+        expect(isTrueAboutBody).to.be.eql(true);
+        expect(body.data).to.be.a('string');
+        done();
+      });
+  });
+  after((done) => {
+    UserModel.destroy({
+      where: {
+        email: 'jacky@app.com'
+      }
+    })
+      .then(() => {
+        done();
+      });
   });
 });

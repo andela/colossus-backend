@@ -1,7 +1,7 @@
 /* eslint-disable import/named */
 /* eslint-disable require-jsdoc */
 import { compareSync } from 'bcryptjs';
-import { generateToken, decodeToken } from '../helpers/jwtHelper';
+import helper from '../helpers/jwtHelper';
 import CommonHelper from '../helpers/commonHelper';
 import sendVerificationMail from '../services/email';
 import errorResponse from '../utils/index';
@@ -9,6 +9,7 @@ import errorResponse from '../utils/index';
 import models from '../models';
 
 const { User, InvalidToken } = models;
+const { generateToken, decodeToken } = helper;
 
 const UserModel = User;
 const InvalidTokenModel = InvalidToken;
@@ -56,7 +57,7 @@ class AuthController extends CommonHelper {
          `;
         await sendVerificationMail(email, 'Verify Your Email', message);
 
-        return res.header('x-auth-token', token).status(201).json({
+        return res.status(201).json({
           status: 201,
           data: {
             id: newUser.id,
@@ -200,14 +201,21 @@ class AuthController extends CommonHelper {
    * @returns {Promise<void>} logs user out
    */
   static async logout(req, res) {
-    const { token, user } = req;
-    const invalidated = await InvalidTokenModel.create({
-      actual: token
-    });
-    if (invalidated) {
-      res.status(200).json({
-        status: 200,
-        data: `Successfully signed out user with email ${user.email}`
+    try {
+      const { token, user } = req;
+      const invalidated = await InvalidTokenModel.create({
+        actual: token
+      });
+      if (invalidated) {
+        res.status(200).json({
+          status: 200,
+          data: `Successfully signed out user with email ${user.email}`
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        status: 500,
+        error
       });
     }
   }
