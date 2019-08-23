@@ -43,6 +43,7 @@ const checkToken = async (req, res, next) => {
     });
     return;
   }
+  // Check if token has been invalidated by user logging out
   const isInvalid = await new Promise((resolve) => {
     InvalidToken.findByActual(token).then((invalid) => {
       resolve(invalid);
