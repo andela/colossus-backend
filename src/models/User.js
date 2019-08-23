@@ -40,8 +40,13 @@ const newUser = (sequelize, DataTypes) => {
           msg: 'Password is required'
         }
       }
+    },
+    isVerified: {
+      defaultValue: false,
+      type: DataTypes.BOOLEAN
     }
-  }, {
+  },
+  {
     hooks: {
       beforeSave: (user) => {
         // Hash password before saving

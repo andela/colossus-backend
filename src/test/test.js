@@ -8,10 +8,10 @@ import models from '../models';
 const UserModel = models.User;
 
 const { expect } = chai;
-
 chai.use(chaiHttp);
 
 let emailToken;
+let verificationToken;
 
 describe('POST /api/v1/auth/signup', () => {
   describe('When all values in the POST body are the right format', () => {
@@ -34,10 +34,34 @@ describe('POST /api/v1/auth/signup', () => {
           expect(res.body.status).to.equal(201);
           expect(res.body).to.haveOwnProperty('data');
           expect(res.body.data).to.be.a('object');
+
+          verificationToken = res.body.data.token;
           done();
         });
     });
 
+    it('Should send a verification Mail to the client', (done) => {
+      chai.request(server)
+        .post(`/api/v1/auth/verifyuser?query=${verificationToken}`)
+        .end((err, res) => {
+          expect(res).to.has.status(200);
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.haveOwnProperty('status');
+          expect(res.body.status).to.equal('success');
+          expect(res.body).to.haveOwnProperty('message');
+          done();
+        });
+    });
+    it('Should RETURN  if no verificationToken is provided', (done) => {
+      verificationToken = '';
+      chai.request(server)
+        .post(`/api/v1/auth/verifyuser?query=${verificationToken}`)
+        .end((err, res) => {
+          expect(res.body).to.be.a('object');
+          expect(res.body.status).to.equal('error');
+          done();
+        });
+    });
     it('Should return an error if the email already exists', (done) => {
       chai.request(server)
         .post('/api/v1/auth/signup')
@@ -80,8 +104,6 @@ describe('POST /api/v1/auth/signin', () => {
           expect(res.body).to.be.a('object');
           expect(res.body).to.haveOwnProperty('status');
           expect(res.body.status).to.equal(200);
-          expect(res.body).to.haveOwnProperty('data');
-          expect(res.body.data).to.be.a('object');
           done();
         });
     });
@@ -128,6 +150,7 @@ describe('POST /api/v1/auth/signin', () => {
         });
     });
   });
+
   after((done) => {
     UserModel.destroy({
       where: {

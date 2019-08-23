@@ -1,15 +1,22 @@
+/* eslint-disable import/named */
 /* eslint-disable require-jsdoc */
-import jwt from 'jsonwebtoken';
 import { compareSync } from 'bcryptjs';
-import models from '../models';
-import errorResponse from '../utils/index';
-import { generateToken } from '../helpers/jwtHelper';
-import sendVerificationMail from '../services/email';
+import { generateToken, decodeToken } from '../helpers/jwtHelper';
 import CommonHelper from '../helpers/commonHelper';
+import sendVerificationMail from '../services/email';
+import errorResponse from '../utils/index';
+
+import models from '../models';
 
 const UserModel = models.User;
 
 class AuthController extends CommonHelper {
+  /**
+   * @param {Object} req
+   * @param {Object} res
+   * @returns {Object} the new user
+   * @description register a new client
+   */
   static async signUp(req, res) {
     try {
       const {
@@ -18,7 +25,7 @@ class AuthController extends CommonHelper {
         email,
         password,
       } = req.body;
-        // Check if the email already exists
+
       const user = await UserModel.findOne({ where: { email, } });
       if (user) {
         res.status(400).json({ status: 400, error: 'Email already exists', });
@@ -30,16 +37,30 @@ class AuthController extends CommonHelper {
           email,
           password,
         });
-          // Generate JWT
-        const token = jwt.sign({ id: newUser.id, email, }, process.env.JWT_SECRET, { expiresIn: '50h' });
-        return res.status(201).json({
+
+        const payload = {
+          email, password
+        };
+        const token = generateToken(payload);
+        const location = process.env.FRONTEND_URL;
+        const url = '/verifyuser';
+        const link = AuthController.generateEmailLink(location, url, token);
+        const message = `
+          <p>Thank you for registering. Please Click the link below to verify your Barefoot Nomad account</p>&nbsp;
+          <strong>
+            <a href=${link}>Link</a>
+          </strong>
+         `;
+        await sendVerificationMail(email, 'Verify Your Email', message);
+
+        return res.header('x-auth-token', token).status(201).json({
           status: 201,
           data: {
             id: newUser.id,
             token,
-            firstName,
-            lastName,
-            email,
+            firstName: newUser.firstName,
+            lastName: newUser.lastName,
+            email: newUser.email,
           },
         });
       }
@@ -48,28 +69,65 @@ class AuthController extends CommonHelper {
     }
   }
 
+  /**
+   * @param {*} req new unverified client
+   * @param {*} res success or error object
+   * @returns {object} a verified client
+   * @description check that client is an actual user
+   */
+  static async verifyUser(req, res) {
+    const { query } = req.query;
+    try {
+      const decoded = decodeToken(query);
+
+      let user = await UserModel.findOne({ where: { email: decoded.email } });
+      user.update({ isVerified: true });
+
+      user = user.dataValues;
+      const { id, email, isVerified } = user;
+      const payload = { id, email, isVerified };
+      const newToken = generateToken(payload);
+
+      return res.status(200).json({
+        status: 'success',
+        message: 'successfully verified',
+        token: newToken
+      });
+    } catch (err) {
+      res.status(500).json({ status: 'error', error: err.message });
+    }
+  }
+
+  /**
+   * @param {*} req the client
+   * @param {*} res error or success
+   * @returns {void}
+   * @description Login a registered && verified user
+   */
   static async signIn(req, res) {
     try {
       const {
         email,
         password,
       } = req.body;
+
       let user = await UserModel.findOne({ where: { email, } });
-      // Check if the user does not exist
       if (!user) {
-        return res.status(400).json({ status: 400, error: 'Unauthorized', });
+        return res.status(400).json({ status: 400, error: 'Invalid credentials' });
       }
       user = user.dataValues;
-      // Check if the password matches with the user's password in the db
       if (!compareSync(password, user.password)) {
-        return res.status(400).json({ status: 400, error: 'Unauthorized', });
+        return res.status(400).json({ status: 400, error: 'Invalid password' });
       }
-      // Generate JWT
-      const token = jwt.sign({ id: user.id, email, }, process.env.JWT_SECRET, { expiresIn: '50h' });
+
+      const { id } = user;
+      const payload = { id, email };
+      const token = generateToken(payload);
+
       return res.status(200).json({
         status: 200,
         data: {
-          id: user.id,
+          id,
           token,
           firstName: user.firstName,
           lastName: user.lastName,
