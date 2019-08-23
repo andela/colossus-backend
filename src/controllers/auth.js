@@ -8,7 +8,10 @@ import errorResponse from '../utils/index';
 
 import models from '../models';
 
-const UserModel = models.User;
+const { User, InvalidToken } = models;
+
+const UserModel = User;
+const InvalidTokenModel = InvalidToken;
 
 class AuthController extends CommonHelper {
   /**
@@ -187,6 +190,25 @@ class AuthController extends CommonHelper {
       });
     } catch (error) {
       return errorResponse(error, res, 500);
+    }
+  }
+
+  /**
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @returns {Promise<void>} logs user out
+   */
+  static async logout(req, res) {
+    const { token, user } = req;
+    const invalidated = await InvalidTokenModel.create({
+      actual: token
+    });
+    if (invalidated) {
+      res.status(200).json({
+        status: 200,
+        data: `Successfully signed out user with email ${user.email}`
+      });
     }
   }
 }
