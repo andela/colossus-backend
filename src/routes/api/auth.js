@@ -18,7 +18,7 @@ router.post('/resetPassword', passwordValidation, AuthController.resetPassword);
 
 
 // GOOGLE ROUTER
-router.get('/google', passportGoogle.authenticate('google', {scope: ['profile', 'email']}));
+router.get('/google', passportGoogle.authenticate('google', { scope: ['profile', 'email'] }));
 
 router.get('/google/callback', 
   passportGoogle.authenticate('google', { failureRedirect: '/' }),(req, res) => {
@@ -26,7 +26,7 @@ router.get('/google/callback',
   });
 
 // FACEBOOK ROUTER
-router.get('/facebook', passportFacebook.authenticate('facebook', {scope: ['email']}));
+router.get('/facebook', passportFacebook.authenticate('facebook', { scope: ['email'] }));
 
 router.get('/facebook/callback', 
   passportFacebook.authenticate('facebook', { failureRedirect: '/' }),(req, res) => {

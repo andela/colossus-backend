@@ -1,6 +1,7 @@
 import passport from 'passport';
 import models from '../models';
 import dotenv from 'dotenv';
+import generator from 'generate-password';
 
 dotenv.config();
 
@@ -16,20 +17,22 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
       callbackURL:'https://barefoot-nomad.herokuapp.com/api/v1/auth/google/callback',
       proxy: true
     }, async (accessToken, refreshToken, profile, done) => {
-         try{
-           const user = await UserModel.findOne({ where: { email:profile.emails[0].value } });
-             if(user) return done(null, user);
-                else {
-                  const data = {
-                      firstName: profile.name.givenName,
-                      lastName: profile.name.familyName,
-                      email: profile.emails[0].value,
-                      };
-             const user = await UserModel.create(data);
-                  if (err) return done(err)
-                     return done(null, user);    
-                  }                 
-             }catch(err){
+    try{
+      const user = await UserModel.findOne({ where: { email:profile.emails[0].value } });
+        if(user) return done(null, user);
+          else {
+            const genPassword = generator.generate({ length: 10, numbers: true});
+            const data = {
+                firstName: profile.name.givenName,
+                lastName: profile.name.familyName,
+                email: profile.emails[0].value,
+                password: genPassword
+                };
+            const user = await UserModel.create(data,err);
+               if (err) return done(err)
+                return done(null, user);    
+              }                 
+            } catch (err){
                 console.log(err);
               }
             })
@@ -42,7 +45,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
   passport.deserializeUser(async(id, done) => {
     try{
       const user = await UserModel.findOne({ where: { id, } });
-       if(user) return done(null, user);
+       if (user) return done(null, user);
       }catch(err){
         console.log(err);
       }
