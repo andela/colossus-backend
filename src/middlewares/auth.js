@@ -59,7 +59,7 @@ const checkToken = async (req, res, next) => {
   if (!payload.isVerified) {
     res.status(401).json({
       status: 401,
-      error: 'This resource is accessible by only verified users'
+      error: 'This resource can only be accessed by verified users'
     });
     return;
   }
