@@ -33,6 +33,7 @@ app.use(expressValidator());
 
 app.use(require('morgan')('dev'));
 
+
 app.get('/', (req, res) => res.status(200).json({
   status: 200,
   message: 'Welcome To Barefoot nomad',
