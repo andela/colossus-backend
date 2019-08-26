@@ -355,6 +355,65 @@ module.exports = {
         }
       }
     },
+    '/auth/logout': {
+      post: {
+        tags: ['logout'],
+        summary: 'This route logs user out',
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'Authorization',
+            in: 'headers',
+            description: 'Authorization token to get user',
+            type: 'string'
+          }
+        ],
+        responses: {
+          200: {
+            description: 'Success. User successfully signed out',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'integer'
+                },
+                data: {
+                  type: 'string'
+                }
+              }
+            }
+          },
+          401: {
+            description: 'Unauthorized',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'integer'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          },
+          400: {
+            description: 'Bad request',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'integer'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     definitions: {
       SendEmail: {
         type: 'object',
