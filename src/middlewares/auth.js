@@ -56,6 +56,13 @@ const checkToken = async (req, res, next) => {
     });
     return;
   }
+  if (!payload.isVerified) {
+    res.status(401).json({
+      status: 401,
+      error: 'This resource is accessible by only verified users'
+    });
+    return;
+  }
   const user = await new Promise((resolve) => {
     User.findByEmail(payload.email).then((item) => {
       resolve(item);

@@ -43,7 +43,9 @@ class AuthController extends CommonHelper {
         });
 
         const payload = {
-          email, password
+          email,
+          password,
+          isVerified: newUser.isVerified
         };
         const token = generateToken(payload);
         const location = process.env.FRONTEND_URL;
@@ -124,8 +126,12 @@ class AuthController extends CommonHelper {
         return res.status(400).json({ status: 400, error: 'Invalid password' });
       }
 
-      const { id } = user;
-      const payload = { id, email };
+      const { id, isVerified } = user;
+      const payload = {
+        id,
+        email,
+        isVerified
+      };
       const token = generateToken(payload);
 
       return res.status(200).json({
