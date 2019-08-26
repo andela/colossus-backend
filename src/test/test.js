@@ -10,6 +10,7 @@ import models from '../models';
 const UserModel = models.User;
 
 const { expect } = chai;
+chai.should();
 chai.use(chaiHttp);
 
 let emailToken;
@@ -29,6 +30,7 @@ describe('POST /api/v1/auth/signup', () => {
         })
         .end((err, res) => {
           // eslint-disable-next-line no-unused-expressions
+          emailToken = res.body.data.token;
           expect(err).to.be.null;
           expect(res).to.has.status(201);
           expect(res.body).to.be.a('object');
@@ -76,9 +78,9 @@ describe('POST /api/v1/auth/signup', () => {
 
         .end((err, res) => {
           // eslint-disable-next-line no-unused-expressions
-          expect(res.body.error).to.be.a('array');
           expect(res.statusCode).to.equal(400);
           expect(res.body.status).to.equal('error');
+          expect(res.body).to.haveOwnProperty('error');
           done();
         });
     });
@@ -95,9 +97,9 @@ describe('POST /api/v1/auth/signup', () => {
         })
         .end((err, res) => {
           // eslint-disable-next-line no-unused-expressions
-          expect(res.body.error).to.be.a('array');
           expect(res.statusCode).to.equal(400);
           expect(res.body.status).to.equal('error');
+          expect(res.body).to.haveOwnProperty('error');
           done();
         });
     });
@@ -108,15 +110,34 @@ describe('POST /api/v1/auth/signup', () => {
         .type('form')
         .send({
           firstName: 'James',
-          lastName: '',
-          email: 'JeanGray@hogwarts.com',
+          lastName: 'We are great',
+          email: '',
           password: 'expeliamus',
         })
         .end((err, res) => {
           // eslint-disable-next-line no-unused-expressions
-          expect(res.body.error).to.be.a('array');
           expect(res.statusCode).to.equal(400);
           expect(res.body.status).to.equal('error');
+          expect(res.body).to.haveOwnProperty('error');
+          done();
+        });
+    });
+
+    it('Should return an error if the password is not provided', (done) => {
+      chai.request(server)
+        .post('/api/v1/auth/signup')
+        .type('form')
+        .send({
+          firstName: 'James',
+          lastName: 'Hohn',
+          email: 'JeanGray@hogwarts.com',
+          password: '',
+        })
+        .end((err, res) => {
+          // eslint-disable-next-line no-unused-expressions
+          expect(res.statusCode).to.equal(400);
+          expect(res.body.status).to.equal('error');
+          expect(res.body).to.haveOwnProperty('error');
           done();
         });
     });
@@ -185,12 +206,47 @@ describe('POST /api/v1/auth/signin', () => {
           done();
         });
     });
+
+
+    it('Should return an error if the email is not provided', (done) => {
+      chai.request(server)
+        .post('/api/v1/auth/signin')
+        .type('form')
+        .send({
+          email: '',
+          password: 'expeliamus',
+        })
+        .end((err, res) => {
+          // eslint-disable-next-line no-unused-expressions
+          expect(res.statusCode).to.equal(400);
+          expect(res.body.status).to.equal(400);
+          expect(res.body).to.haveOwnProperty('error');
+          done();
+        });
+    });
+
+    it('Should return an error if the password is not provided', (done) => {
+      chai.request(server)
+        .post('/api/v1/auth/signup')
+        .type('form')
+        .send({
+          email: 'JeanGray@hogwarts.com',
+          password: '',
+        })
+        .end((err, res) => {
+          // eslint-disable-next-line no-unused-expressions
+          expect(res.statusCode).to.equal(400);
+          expect(res.body.status).to.equal('error');
+          expect(res.body).to.haveOwnProperty('error');
+          done();
+        });
+    });
   });
 
   after((done) => {
     UserModel.destroy({
       where: {
-        email: 'JeanGray@hogwarts.com'
+        email: ''
       }
     }).then(() => {
       done();
@@ -217,10 +273,11 @@ describe('POST /api/v1/auth/sendEmail', () => {
       chai.request(server)
         .post('/api/v1/auth/sendEmail')
         .send({
-          email: 'iyaraferguson@gmail.com'
+          email: 'JeanGray@hogwarts.com'
         })
         .end((err, res) => {
-          emailToken = res.body.data.token;
+          // emailToken = res.body.data.token;
+
           expect(res).to.have.status(200);
           expect(res.body.status).to.be.equal(200);
           expect(res.body.data).to.have.key('message', 'token');
