@@ -15,7 +15,7 @@
     "coverage": "nyc report --reporter=text-lcov | coveralls && nyc report --reporter=lcov",
     "clean": "rm -rf dist && mkdir dist",
     "build": "npm run clean && npm run babel-build",
-    "heroku-postbuild": "npm run build && npm start",
+    "heroku-postbuild": "npm run build && export NODE_ENV=production && npm start",
     "migration": "npx sequelize-cli db:migrate",
     "undo-migration": "npx sequelize-cli db:migrate:undo:all"
   },
