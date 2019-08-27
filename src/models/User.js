@@ -66,6 +66,13 @@ const UserDefinition = (sequelize, DataTypes) => {
       }
     });
   };
+  User.associate = (models) => {
+    // associations can be defined here
+    User.hasMany(models.Request, {
+      foreignKey: 'userId',
+      as: 'requests'
+    });
+  };
   return User;
 };
 
