@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npm run undo-migration && npm run migration && nyc mocha './src/**/**test.js' --require @babel/polyfill --require @babel/register --timeout 30000 --exit",
-    "test-local:windows": "set NODE_ENV=test && npm test",
+    "test-local:windows": "set NODE_ENV=test&& npm test",
     "test-local:linux": "export NODE_ENV=test && npm test",
     "test-travis": "export NODE_ENV=test && npm test",
     "start-dev": "nodemon --exec babel-node src/index.js",

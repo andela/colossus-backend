@@ -11,7 +11,7 @@ import models from '../models';
 
 dotenv.config();
 
-const { User } = models;
+const { User, sequelize } = models;
 
 const UserModel = User;
 
@@ -25,6 +25,14 @@ let verificationToken;
 const root = '/api/v1';
 
 describe('POST /api/v1/auth/signup', () => {
+  before((done) => {
+    sequelize.sync({
+      force: true
+    })
+      .then(() => {
+        done();
+      });
+  });
   describe('Tests for signup', () => {
     it('Should return an object with properties "status" and "data" on success', (done) => {
       chai.request(server)
