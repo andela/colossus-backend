@@ -3,10 +3,12 @@ import express from 'express';
 import winston from 'winston';
 import swaggerUi from 'swagger-ui-express';
 import session from 'express-session';
+import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import expressValidator from 'express-validator';
 import swaggerDocument from './docs/swagger';
+import passport from 'passport';
 import routes from './routes';
 
 const app = express();
@@ -31,14 +33,21 @@ app.use(expressValidator());
 
 app.use(require('morgan')('dev'));
 
+
 app.get('/', (req, res) => res.status(200).json({
   status: 200,
   message: 'Welcome To Barefoot nomad',
 }));
+
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(express.static(`${__dirname}/public`));
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(require('method-override')());
-
+app.use(cookieParser());
 app.use(
   session({
     secret: 'authorshaven',
@@ -47,6 +56,9 @@ app.use(
     saveUninitialized: false
   })
 );
+// Passport Middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', routes);
 
