@@ -565,17 +565,17 @@ describe('POST /api/v1/auth/logout', () => {
         done();
       });
   });
-  it('should respond with a 200 when a valid token is sent', (done) => {
+  it('should respond with a 200 or 401 when a valid token is sent', (done) => {
     chai
       .request(server)
       .post(`${root}/auth/logout`)
       .set('Authorization', `Bearer ${verificationToken}`)
       .end((err, res) => {
         const { status, body } = res;
-        const isTrueAboutBody = Object.keys(body).some((value) => value === 'data');
-        expect(status).to.be.eql(200);
+        const isTrueAboutBody = Object.keys(body).some((value) => value === 'data' || value === 'error');
+        const isTrueAboutStatus = status === 200 || status === 401;
         expect(isTrueAboutBody).to.be.eql(true);
-        expect(body.data).to.be.a('string');
+        expect(isTrueAboutStatus).to.be.eql(true);
         done();
       });
   });
