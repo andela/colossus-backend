@@ -2,7 +2,6 @@ import '@babel/polyfill';
 import express from 'express';
 import winston from 'winston';
 import swaggerUi from 'swagger-ui-express';
-import session from 'express-session';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import expressValidator from 'express-validator';
@@ -34,22 +33,18 @@ app.use(expressValidator());
 
 app.use(require('morgan')('dev'));
 
+
 app.get('/', (req, res) => res.status(200).json({
   status: 200,
   message: 'Welcome To Barefoot nomad',
 }));
+
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(express.static(`${__dirname}/public`));
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
-app.use(require('method-override')());
-
-app.use(
-  session({
-    secret: 'authorshaven',
-    cookie: { maxAge: 60000 },
-    resave: false,
-    saveUninitialized: false
-  })
-);
 
 app.use('/', routes);
 
@@ -103,7 +98,7 @@ app.use((err, req, res, next) => {
 // Not ideal for test environment
 if (!isTest) {
   sequelize.sync({
-    force: !isProduction && !isTest
+    force: !isProduction
   });
 }
 
