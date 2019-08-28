@@ -1,14 +1,18 @@
 /* eslint-disable import/named */
 /* eslint-disable require-jsdoc */
 import { compareSync } from 'bcryptjs';
-import { generateToken, decodeToken } from '../helpers/jwtHelper';
+import helper from '../helpers/jwtHelper';
 import CommonHelper from '../helpers/commonHelper';
 import sendVerificationMail from '../services/email';
 import errorResponse from '../utils/index';
 
 import models from '../models';
 
-const UserModel = models.User;
+const { User, InvalidToken } = models;
+const { generateToken, decodeToken } = helper;
+
+const UserModel = User;
+const InvalidTokenModel = InvalidToken;
 
 class AuthController extends CommonHelper {
   /**
@@ -39,7 +43,9 @@ class AuthController extends CommonHelper {
         });
 
         const payload = {
-          email, password
+          email,
+          password,
+          isVerified: newUser.isVerified
         };
         const token = generateToken(payload);
         const location = process.env.FRONTEND_URL;
@@ -53,7 +59,7 @@ class AuthController extends CommonHelper {
          `;
         await sendVerificationMail(email, 'Verify Your Email', message);
 
-        return res.header('x-auth-token', token).status(201).json({
+        return res.status(201).json({
           status: 201,
           data: {
             id: newUser.id,
@@ -120,8 +126,12 @@ class AuthController extends CommonHelper {
         return res.status(400).json({ status: 400, error: 'Invalid password' });
       }
 
-      const { id } = user;
-      const payload = { id, email };
+      const { id, isVerified } = user;
+      const payload = {
+        id,
+        email,
+        isVerified
+      };
       const token = generateToken(payload);
 
       return res.status(200).json({
@@ -187,6 +197,32 @@ class AuthController extends CommonHelper {
       });
     } catch (error) {
       return errorResponse(error, res, 500);
+    }
+  }
+
+  /**
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @returns {Promise<void>} logs user out
+   */
+  static async logout(req, res) {
+    try {
+      const { token, user } = req;
+      const invalidated = await InvalidTokenModel.create({
+        actual: token
+      });
+      if (invalidated) {
+        res.status(200).json({
+          status: 200,
+          data: `Successfully signed out user with email ${user.email}`
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        status: 500,
+        error
+      });
     }
   }
 }

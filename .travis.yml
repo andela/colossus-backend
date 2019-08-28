@@ -14,6 +14,6 @@ before_script:
   - psql -c 'create database barefootnomadDB;' -U postgres
   - npm run build   
 script:
-  - npm test
+  - npm run test-travis
 after_success:
   - npm run coverage
