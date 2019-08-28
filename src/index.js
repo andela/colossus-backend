@@ -48,8 +48,6 @@ app.use(express.static(`${__dirname}/public`));
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.use('/', routes);
-
 app.use(session({
   secret: 'authorshaven',
   cookie: { maxAge: 60000 },
@@ -59,6 +57,8 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use('/', routes);
 
 app.get('/', (req, res) => res.status(200).json({
   status: 200,
