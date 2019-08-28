@@ -9,6 +9,11 @@ module.exports = {
     requestId: {
       type: Sequelize.INTEGER,
       allowNull: false,
+      references: {
+        model: 'Requests',
+        key: 'id',
+        as: 'requestId',
+      },
     },
     from: {
       type: Sequelize.STRING,
