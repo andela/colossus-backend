@@ -50,8 +50,15 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use('/', routes);
 
+app.use(session({
+  secret: 'authorshaven',
+  cookie: { maxAge: 60000 },
+  resave: false,
+  saveUninitialized: false
+}));
+
 app.use(passport.initialize());
-app.use(session());
+app.use(passport.session());
 
 app.get('/', (req, res) => res.status(200).json({
   status: 200,
