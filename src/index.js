@@ -1,5 +1,7 @@
 import '@babel/polyfill';
 import express from 'express';
+import passport from 'passport';
+import session from 'express-session';
 import winston from 'winston';
 import swaggerUi from 'swagger-ui-express';
 import bodyParser from 'body-parser';
@@ -47,6 +49,9 @@ app.use(express.static(`${__dirname}/public`));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use('/', routes);
+
+app.use(passport.initialize());
+app.use(session());
 
 app.get('/', (req, res) => res.status(200).json({
   status: 200,
