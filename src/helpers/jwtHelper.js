@@ -7,7 +7,9 @@ const generateToken = (payload, secretKey = process.env.JWT_SECRET, duration = {
 
 const decodeToken = (token) => jwt.verify(token, process.env.JWT_SECRET);
 
-module.exports = {
+const helper = {
   generateToken,
   decodeToken
 };
+
+export default helper;

@@ -1,19 +1,21 @@
 import '@babel/polyfill';
 import express from 'express';
+import passport from 'passport';
+import session from 'express-session';
 import winston from 'winston';
 import swaggerUi from 'swagger-ui-express';
-import session from 'express-session';
-import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import expressValidator from 'express-validator';
 import swaggerDocument from './docs/swagger';
-import passport from 'passport';
 import routes from './routes';
+import db from './models';
 
 const app = express();
+const { sequelize } = db;
 
 const isProduction = process.env.NODE_ENV === 'production';
+const isTest = process.env.NODE_ENV === 'test';
 
 const logger = winston.createLogger({
   level: 'info',
@@ -46,17 +48,13 @@ app.use(express.static(`${__dirname}/public`));
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.use(require('method-override')());
-app.use(cookieParser());
-app.use(
-  session({
-    secret: 'authorshaven',
-    cookie: { maxAge: 60000 },
-    resave: false,
-    saveUninitialized: false
-  })
-);
-// Passport Middleware
+app.use(session({
+  secret: 'authorshaven',
+  cookie: { maxAge: 60000 },
+  resave: false,
+  saveUninitialized: false
+}));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -105,6 +103,16 @@ app.use((err, req, res, next) => {
   });
   next();
 });
+
+// Run sync if environment is development.
+// This would drop created tables.
+// Do not run in production or test
+// Not ideal for test environment
+if (!isTest) {
+  sequelize.sync({
+    force: !isProduction
+  });
+}
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
