@@ -108,11 +108,11 @@ app.use((err, req, res, next) => {
 // This would drop created tables.
 // Do not run in production or test
 // Not ideal for test environment
-if (!isTest) {
-  sequelize.sync({
-    force: !isProduction
-  });
-}
+// if (!isTest) {
+//   sequelize.sync({
+//     force: !isProduction
+//   });
+// }
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

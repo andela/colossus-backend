@@ -1,9 +1,5 @@
 const newTrip = (sequelize, DataTypes) => {
   const Trip = sequelize.define('Trip', {
-    requestId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
     from: {
       type: DataTypes.STRING,
       allowNull: false,

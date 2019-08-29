@@ -9,6 +9,7 @@ module.exports = {
     requestId: {
       type: Sequelize.INTEGER,
       allowNull: false,
+      onDelete: 'CASCADE',
       references: {
         model: 'Requests',
         key: 'id',

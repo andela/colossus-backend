@@ -1,9 +1,5 @@
 const newRequest = (sequelize, DataTypes) => {
   const Request = sequelize.define('Request', {
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
     passportName: {
       type: DataTypes.STRING,
       allowNull: false,
