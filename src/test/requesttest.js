@@ -3,6 +3,9 @@ import chaiHttp from 'chai-http';
 import dotenv from 'dotenv';
 import server from '../index';
 import models from '../models';
+import helper from '../helpers/jwtHelper';
+
+const { generateToken } = helper;
 
 dotenv.config();
 
@@ -17,22 +20,6 @@ chai.use(chaiHttp);
 
 describe('GET /api/v1/request', () => {
   let token;
-  let userId;
-  let requestId;
-  const request = {
-    userId,
-    reason: 'test reason',
-    managerId: 1, // There is no association for this field currently
-    status: 'pending',
-    type: '1-way',
-  }; const trip = {
-    requestId,
-    from: 'lagos',
-    to: 'kampala',
-    departureDate: '2019-08-09 13:00',
-    arrivalDate: '2019-08-10 13:00',
-    accommodation: 'hilton',
-  };
   describe('Tests for for getting requests', () => {
     before((done) => {
       // Sign up a user to get a token to use for the protected route
@@ -46,42 +33,40 @@ describe('GET /api/v1/request', () => {
           password: 'expeliamus',
         })
         .end((err, res) => {
-          token = res.body.data.token;
-          userId = res.body.data.id;
-          expect(res).to.has.status(201);
-          expect(res.body).to.be.a('object');
-          expect(res.body).to.haveOwnProperty('status');
-          expect(res.body.status).to.equal(201);
-          expect(res.body).to.haveOwnProperty('data');
-          expect(res.body.data).to.be.a('object');
+          // generate a verified token to access protected routes
+          token = generateToken({
+            id: res.body.data.id,
+            email: res.body.data.email,
+            isVerified: true
+          });
           // create a request and trip by adding values to the tables
-          Request.create(request)
+          Request.create({
+            userId: res.body.data.id,
+            passportName: 'test name',
+            reason: 'test reason',
+            managerId: 1, // There is no association for this field currently
+            status: 'pending',
+            type: '1-way',
+          })
             .then((newRequest) => {
-              requestId = newRequest.id;
-              Trip.create(trip)
+              Trip.create({
+                requestId: newRequest.id,
+                from: 'lagos',
+                to: 'kampala',
+                departureDate: '2019-08-09 13:00',
+                arrivalDate: '2019-08-10 13:00',
+                accommodation: 'hilton',
+              })
                 .then(() => {
                   done();
                 });
             });
-          // const newRequest = await Request.create(request).catch(error => console.log(error));
-          // requestId = newRequest.id;
-          // await Trip.create(trip).catch(error => console.log(error));
-          // done();
         });
-    });
-    after((done) => {
-      Request.destroy({
-        where: {
-          id: requestId,
-        }
-      }).then(() => {
-        done();
-      });
     });
     it('Should return an object with properties "status" and "data" on success', (done) => {
       chai.request(server)
-        .set('Authorization', `Bearer ${token}`)
         .get('/api/v1/request')
+        .set('Authorization', `Bearer ${token}`)
         .end((err, res) => {
           // eslint-disable-next-line no-unused-expressions
           expect(err).to.be.null;

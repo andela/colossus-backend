@@ -1,14 +1,6 @@
-const newRequest = (sequelize, DataTypes) => {
+export default (sequelize, DataTypes) => {
   const Request = sequelize.define('Request', {
     passportName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    gender: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    role: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -42,5 +34,3 @@ const newRequest = (sequelize, DataTypes) => {
   };
   return Request;
 };
-
-export default newRequest;

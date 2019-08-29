@@ -20,14 +20,6 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    gender: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    role: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
     reason: {
       type: Sequelize.STRING,
       allowNull: false,

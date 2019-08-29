@@ -1,4 +1,4 @@
-const newTrip = (sequelize, DataTypes) => {
+export default (sequelize, DataTypes) => {
   const Trip = sequelize.define('Trip', {
     from: {
       type: DataTypes.STRING,
@@ -30,5 +30,3 @@ const newTrip = (sequelize, DataTypes) => {
   };
   return Trip;
 };
-
-export default newTrip;

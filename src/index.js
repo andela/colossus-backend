@@ -104,16 +104,6 @@ app.use((err, req, res, next) => {
   next();
 });
 
-// Run sync if environment is development.
-// This would drop created tables.
-// Do not run in production or test
-// Not ideal for test environment
-// if (!isTest) {
-//   sequelize.sync({
-//     force: !isProduction
-//   });
-// }
-
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   logger.info(`Listening on PORT ${PORT}`);

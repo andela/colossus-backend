@@ -1,6 +1,6 @@
 import models from '../models';
 
-const { Request, User, InvalidToken, Trip } = models;
+const { Request } = models;
 
 /**
  *
@@ -18,9 +18,9 @@ export default class RequestController {
   static async getAllRequests(req, res) {
     try {
       const allRequests = await Request.findAll({
-        // where: {
-        //   userId: req.user.id,
-        // }
+        where: {
+          userId: req.user.id
+        }
       });
       return res.status(200).json({ status: 200, data: allRequests });
     } catch (error) {
