@@ -11,7 +11,8 @@ import path from 'path';
 export const blob = async (req, res, next) => {
   if (req.file) {
     const file = {
-      extension: path.extname(req.file.originalName),
+      mimetype: req.file.mimetype,
+      extension: path.extname(req.file.originalname),
       data: Buffer.from(
         fs.readFileSync(
           req.file.path
@@ -19,7 +20,7 @@ export const blob = async (req, res, next) => {
       )
         .toString('base64')
     };
-    fs.unlink(req.file.path);
+    fs.unlinkSync(req.file.path);
     req.file = file;
     next();
   } else {
