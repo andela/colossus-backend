@@ -1,5 +1,6 @@
 import multer from 'multer';
+import path from 'path';
 
 export default multer({
-  dest: '/upload/'
+  dest: path.join(__dirname, '/upload')
 });

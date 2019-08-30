@@ -59,9 +59,12 @@ module.exports = {
     picture: {
       type: Sequelize.JSON
     },
+<<<<<<< HEAD
     lineManagerId: {
       type: Sequelize.INTEGER
     },
+=======
+>>>>>>> 0973dc187569767c73e42c13cf5dc36816d807cd
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE
