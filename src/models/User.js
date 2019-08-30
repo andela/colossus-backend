@@ -94,7 +94,8 @@ const UserDefinition = (sequelize, DataTypes) => {
           user.password = hashSync(user.password, salt);
         }
       }
-    }
+    },
+    timestamps: true
   });
   // eslint-disable-next-line func-names
   User.findByEmail = function (email) {
@@ -117,10 +118,15 @@ const UserDefinition = (sequelize, DataTypes) => {
   };
 
   // eslint-disable-next-line func-names
-  User.associate = function (db) {
+  User.associate = function (models) {
     const user = this;
-    user.belongsTo(db.User, {
+    user.belongsTo(models.User, {
       as: 'lineManager'
+    });
+    // associations can be defined here
+    user.hasMany(models.Request, {
+      foreignKey: 'userId',
+      as: 'requests'
     });
   };
   return User;
