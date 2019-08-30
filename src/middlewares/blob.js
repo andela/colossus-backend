@@ -13,12 +13,7 @@ export const blob = async (req, res, next) => {
     const file = {
       mimetype: req.file.mimetype,
       extension: path.extname(req.file.originalname),
-      data: Buffer.from(
-        fs.readFileSync(
-          req.file.path
-        )
-      )
-        .toString('base64')
+      data: Buffer.from(fs.readFileSync(req.file.path)).toString('base64')
     };
     fs.unlinkSync(req.file.path);
     req.file = file;
