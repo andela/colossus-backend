@@ -82,7 +82,7 @@ const UserDefinition = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     },
     picture: {
-      type: DataTypes.BLOB('medium')
+      type: DataTypes.JSON
     }
   },
   {

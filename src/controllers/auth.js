@@ -232,8 +232,9 @@ class AuthController extends CommonHelper {
    */
   static async editProfile(req, res) {
     try {
-      const { body, user } = req;
+      const { body, user, file } = req;
       const { id } = user;
+      body.picture = file;
       const data = await UserModel.findByIdAndEdit(
         id,
         body
