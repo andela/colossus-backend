@@ -13,7 +13,7 @@ dotenv.config();
  * @param {NextFunction} next
  * @returns {Promise<void>} checks token in headers
  */
-const checkToken = async (req, res, next) => {
+export const checkToken = async (req, res, next) => {
   const { authorization } = req.headers;
   if (!authorization) {
     res.status(400).json({
@@ -56,13 +56,6 @@ const checkToken = async (req, res, next) => {
     });
     return;
   }
-  if (!payload.isVerified) {
-    res.status(401).json({
-      status: 401,
-      error: 'This resource can only be accessed by verified users'
-    });
-    return;
-  }
   const user = await new Promise((resolve) => {
     User.findByEmail(payload.email).then((item) => {
       resolve(item);
@@ -80,4 +73,21 @@ const checkToken = async (req, res, next) => {
   }
 };
 
-export default checkToken;
+/**
+ *
+ * @param {Request} req
+ * @param {Response} res
+ * @param {*} next
+ * @returns {Promise<void>} protects routes and only gives access to verified users
+ */
+export const checkVerified = (req, res, next) => {
+  const { user } = req;
+  if (!user.isVerified) {
+    res.status(400).json({
+      status: 400,
+      error: 'Only verified users can access this resource'
+    });
+    return;
+  }
+  next();
+};

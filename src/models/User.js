@@ -2,6 +2,11 @@ import { genSaltSync, hashSync } from 'bcryptjs';
 
 const UserDefinition = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
+    },
     firstName: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -44,6 +49,40 @@ const UserDefinition = (sequelize, DataTypes) => {
     isVerified: {
       defaultValue: false,
       type: DataTypes.BOOLEAN
+    },
+    gender: {
+      type: DataTypes.ENUM('male', 'female')
+    },
+    birthDate: {
+      type: DataTypes.DATE
+    },
+    language: {
+      type: DataTypes.STRING,
+      defaultValue: 'EN'
+    },
+    currency: {
+      type: DataTypes.STRING,
+      defaultValue: 'NGN'
+    },
+    address: {
+      type: DataTypes.STRING
+    },
+    role: {
+      type: DataTypes.ENUM(
+        'super_admin',
+        'travel_admin',
+        'travel_team_member',
+        'manager',
+        'requester',
+        'user'
+      ),
+      defaultValue: 'user'
+    },
+    department: {
+      type: DataTypes.STRING
+    },
+    picture: {
+      type: DataTypes.BLOB('medium')
     }
   },
   {
@@ -64,6 +103,24 @@ const UserDefinition = (sequelize, DataTypes) => {
       where: {
         email
       }
+    });
+  };
+
+  // eslint-disable-next-line func-names
+  User.findByIdAndEdit = function (id, update) {
+    const user = this;
+    return user.update(update, {
+      where: {
+        id
+      }
+    });
+  };
+
+  // eslint-disable-next-line func-names
+  User.associate = function (db) {
+    const user = this;
+    user.belongsTo(db.User, {
+      as: 'lineManager'
     });
   };
   return User;

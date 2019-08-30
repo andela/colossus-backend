@@ -19,4 +19,11 @@ db.Sequelize = Sequelize;
 db.User = User(sequelize, DataTypes);
 db.InvalidToken = InvalidToken(sequelize, DataTypes);
 
+Object.keys(db).forEach((key) => {
+  const item = db[key];
+  if (item.associate) {
+    item.associate(db);
+  }
+});
+
 export default db;
