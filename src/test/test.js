@@ -11,7 +11,7 @@ import models from '../models';
 
 dotenv.config();
 
-const { User, sequelize } = models;
+const { User } = models;
 
 const UserModel = User;
 
