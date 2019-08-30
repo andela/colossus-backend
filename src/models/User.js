@@ -119,11 +119,11 @@ const UserDefinition = (sequelize, DataTypes) => {
 
   // eslint-disable-next-line func-names
   User.associate = function (models) {
+    // Associations can be defined here
     const user = this;
     user.belongsTo(models.User, {
       as: 'lineManager'
     });
-    // associations can be defined here
     user.hasMany(models.Request, {
       foreignKey: 'userId',
       as: 'requests'
