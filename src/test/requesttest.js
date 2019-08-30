@@ -7,6 +7,9 @@ import helper from '../helpers/jwtHelper';
 
 const { generateToken } = helper;
 
+let userId;
+let token;
+
 dotenv.config();
 
 const {
@@ -19,7 +22,6 @@ chai.should();
 chai.use(chaiHttp);
 
 describe('GET /api/v1/request', () => {
-  let token;
   describe('Tests for for getting requests', () => {
     before((done) => {
       // Sign up a user to get a token to use for the protected route
@@ -39,6 +41,7 @@ describe('GET /api/v1/request', () => {
             email: res.body.data.email,
             isVerified: true
           });
+          userId = res.body.data.id;
           // create a request and trip by adding values to the tables
           Request.create({
             userId: res.body.data.id,
@@ -86,5 +89,33 @@ describe('GET /api/v1/request', () => {
           done();
         });
     });
+  });
+});
+
+describe('POST /api/v1/request', () => {
+  it('Should successfully create a request', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/request')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        passportName: 'Iyara Ferguson',
+        reason: 'Work leave',
+        managerId: 2,
+        userId,
+        type: 'one-way',
+        from: 'Lagos',
+        to: 'Dubai',
+        departureDate: '2018-03-29T13:34:00.000',
+        accommodation: 'Burj Al-Arab',
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(201);
+        expect(res.body.status).to.be.equal(201);
+        expect(res.body.data).to.have.key('id', 'passportName', 'reason', 'managerId',
+          'status', 'type', 'createdAt', 'updatedAt', 'userId', 'trips');
+        expect(res.body.data.trips).to.be.an('array');
+        done();
+      });
   });
 });
