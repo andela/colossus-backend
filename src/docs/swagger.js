@@ -414,6 +414,65 @@ module.exports = {
         }
       }
     },
+    '/auth/edit': {
+      patch: {
+        tags: ['edit profile'],
+        summary: 'Edits user profile',
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'Authorization',
+            in: 'headers',
+            description: 'Bearer token',
+            type: 'string'
+          }
+        ],
+        responses: {
+          200: {
+            description: 'User has successfully edited profile',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'integer'
+                },
+                data: {
+                  type: 'object'
+                }
+              }
+            }
+          },
+          400: {
+            description: 'Bad request',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'integer'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          },
+          401: {
+            description: 'Unauthorized',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'integer'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     definitions: {
       SendEmail: {
         type: 'object',
