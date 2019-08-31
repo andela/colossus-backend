@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.use('/auth', authRouter);
 
-router.use('/request', checkToken, requestRouter);
+router.use('/request', /* checkToken */ requestRouter);
 
 router.use((err, req, res, next) => {
   if (err.name === 'ValidationError') {
