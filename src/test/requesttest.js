@@ -92,30 +92,3 @@ describe('GET /api/v1/request', () => {
   });
 });
 
-describe('POST /api/v1/request', () => {
-  it('Should successfully create a request', (done) => {
-    chai
-      .request(server)
-      .post('/api/v1/request')
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        passportName: 'Iyara Ferguson',
-        reason: 'Work leave',
-        managerId: 2,
-        userId,
-        type: 'one-way',
-        from: 'Lagos',
-        to: 'Dubai',
-        departureDate: '2018-03-29T13:34:00.000',
-        accommodation: 'Burj Al-Arab',
-      })
-      .end((err, res) => {
-        expect(res).to.have.status(201);
-        expect(res.body.status).to.be.equal(201);
-        expect(res.body.data).to.have.key('id', 'passportName', 'reason', 'managerId',
-          'status', 'type', 'createdAt', 'updatedAt', 'userId', 'trips');
-        expect(res.body.data.trips).to.be.an('array');
-        done();
-      });
-  });
-});
