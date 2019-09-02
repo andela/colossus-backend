@@ -13,8 +13,6 @@ const { User } = model;
 
 chai.use(chaiHttp);
 
-const request = chai.request(app);
-
 let token = null;
 
 describe('PATCH /api/v1/auth/edit', () => {
@@ -36,7 +34,7 @@ describe('PATCH /api/v1/auth/edit', () => {
   });
   describe('When a user wants to edit their profile', () => {
     it('should respond with a 401 when no token is sent', (done) => {
-      request
+      chai.request(app)
         .patch(url)
         .set('Authorization', 'Bearer')
         .send({
@@ -53,7 +51,7 @@ describe('PATCH /api/v1/auth/edit', () => {
         });
     });
     it('should respond with a 200 when token is sent', (done) => {
-      request
+      chai.request(app)
         .patch(url)
         .set('Authorization', `Bearer ${token}`)
         .send({
