@@ -14,7 +14,7 @@ export default (sequelize, DataTypes) => {
     },
     status: {
       type: DataTypes.STRING,
-      allowNull: false,
+      defaultValue: 'Pending',
     },
     type: {
       type: DataTypes.STRING,

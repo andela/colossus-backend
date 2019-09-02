@@ -30,7 +30,7 @@ module.exports = {
     },
     arrivalDate: {
       type: Sequelize.DATE,
-      allowNull: false,
+      allowNull: true,
     },
     accommodation: {
       type: Sequelize.STRING,
