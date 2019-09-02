@@ -205,5 +205,335 @@ describe('PATCH /api/v1/request/:requestId/status', () => {
           done();
         });
     });
+
+describe('POST /api/v1/request', () => {
+  it('Should successfully create a request', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/request')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        passportName: 'okon chinedu',
+        reason: 'to enjoy myself',
+        managerId: 2,
+        userId,
+        type: 'one-way',
+        from: 'Lagos',
+        to: 'calabar',
+        departureDate: '2018-03-29T13:34:00.000',
+        accommodation: 'hotel presidential',
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(201);
+        expect(res.body.status).to.be.equal(201);
+        expect(res.body.data.trips).to.be.an('array');
+        done();
+      });
+  });
+  it('should return create request validation error', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/request')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        passportName: '',
+        reason: '',
+        managerId: 2,
+        userId,
+        type: '',
+        from: '',
+        to: '',
+        departureDate: '',
+        accommodation: '',
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        done();
+      });
+  });
+  it('Should return an error if a one-way has more than one FROM entry' , (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/request')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        passportName: 'ngozi bayo',
+        reason: 'to charge my phone',
+        managerId: 2,
+        userId,
+        type: 'one-way',
+        from: 'Lagos',
+        from: 'osun',
+        to: 'warri',
+        departureDate: '2018-03-29T13:34:00.000',
+        accommodation: 'hotel presidential',
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body).to.haveOwnProperty('error');
+        done();
+      });
+  });
+  it('Should return an error if a round-trip has more than one FROM entry' , (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/request')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        passportName: 'ngozi bayo',
+        reason: 'to charge my phone',
+        managerId: 2,
+        userId,
+        type: 'round-trip',
+        from: 'Lagos',
+        from: 'osun',
+        to: 'warri',
+        departureDate: '2018-03-29T13:34:00.000',
+        arrivalDate: '2019-03-29T13:20:00.000',
+        accommodation: 'hotel presidential',
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body).to.haveOwnProperty('error');
+        done();
+      });
+  });
+  it('Should return an error if a one-way trip has more than one TO entry' , (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/request')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        passportName: 'ngozi bayo',
+        reason: 'to charge my phone',
+        managerId: 2,
+        userId,
+        type: 'one-way',
+        from: 'Lagos',
+        to: 'warri',
+        to: 'canada',
+        departureDate: '2018-03-29T13:34:00.000',
+        accommodation: 'hotel presidential',
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body).to.haveOwnProperty('error');
+        done();
+      });
+  });
+  it('Should return an error if a round-trip has more than one TO entry' , (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/request')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        passportName: 'ngozi bayo',
+        reason: 'to charge my phone',
+        managerId: 2,
+        userId,
+        type: 'round-trip',
+        from: 'Lagos',
+        to: 'warri',
+        to: 'canada',
+        departureDate: '2018-03-29T13:34:00.000',
+        arrivalDate: '2019-03-29T13:20:00.000',
+        accommodation: 'hotel presidential',
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body).to.haveOwnProperty('error');
+        done();
+      });
+  });
+  it('Should return an error if a one-way  has more than one DEPARTURE DATE entry' , (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/request')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        passportName: 'ngozi bayo',
+        reason: 'to charge my phone',
+        managerId: 2,
+        userId,
+        type: 'one-way',
+        from: 'Lagos',
+        to: 'warri',
+        departureDate: '2018-03-29T13:34:00.000',
+        departureDate: '2018-03-29T13:34:00.000',
+        accommodation: 'hotel presidential',
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body).to.haveOwnProperty('error');
+        done();
+      });
+  });
+   it('Should return an error if a round-trip has more than one DEPARTURE DATE entry' , (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/request')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        passportName: 'ngozi bayo',
+        reason: 'to charge my phone',
+        managerId: 2,
+        userId,
+        type: 'one-way',
+        from: 'Lagos',
+        to: 'warri',
+        departureDate: '2018-03-29T13:34:00.000',
+        departureDate: '2018-03-29T13:34:00.000',
+        arrivalDate: '2019-03-29T13:20:00.000',
+        accommodation: 'hotel presidential',
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body).to.haveOwnProperty('error');
+        done();
+      });
+  });
+  it('Should return an error if a one-way trip has an ARRIVALDATE entry' , (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/request')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        passportName: 'ngozi bayo',
+        reason: 'to charge my phone',
+        managerId: 2,
+        userId,
+        type: 'one-way',
+        from: 'Lagos',
+        to: 'warri',
+        departureDate: '2018-03-29T13:34:00.000',
+        arrivalDate: '2018-03-29T13:34:00.000',
+        accommodation: 'hotel presidential',
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body).to.haveOwnProperty('error');
+        done();
+      });
+  });
+  it('Should return an error if a round trip has more than one ARRIVALDATE entry' , (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/request')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        passportName: 'ngozi bayo',
+        reason: 'to charge my phone',
+        managerId: 2,
+        userId,
+        type: 'round-trip',
+        from: 'Lagos',
+        to: 'warri',
+        departureDate: '2018-03-29T13:34:00.000',
+        arrivalDate: '2018-03-29T13:34:00.000',
+        arrivalDate: '2019-03-29T13:20:00.000',
+        accommodation: 'hotel presidential',
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body).to.haveOwnProperty('error');
+        done();
+      });
+  });
+  it('Should return an error if a round trip has no ARRIVALDATE entry' , (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/request')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        passportName: 'ngozi bayo',
+        reason: 'to charge my phone',
+        managerId: 2,
+        userId,
+        type: 'round-trip',
+        from: 'Lagos',
+        to: 'warri',
+        departureDate: '2018-03-29T13:34:00.000',
+        accommodation: 'hotel presidential',
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body).to.haveOwnProperty('error');
+        done();
+      });
+  });
+  it('Should return an error if a multi-city trip has less than 2 FROM entries' , (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/request')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        passportName: 'ngozi bayo',
+        reason: 'to charge my phone',
+        managerId: 2,
+        userId,
+        type: 'multi-city',
+        from: 'Lagos',
+        to: 'warri',
+        to: 'kogi',
+        departureDate: '2018-03-29T13:34:00.000',
+        departureDate: '2019-03-29T13:20:00.000',
+        accommodation: 'hotel presidential',
+        accommodation: 'my house',
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body).to.haveOwnProperty('error');
+        done();
+      });
+  });
+   it('Should return an error if a multi-city trip has less than 2 TO entries' , (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/request')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        passportName: 'ngozi bayo',
+        reason: 'to charge my phone',
+        managerId: 2,
+        userId,
+        type: 'multi-city',
+        from: 'Lagos',
+        from: 'warri',
+        to: 'warri',
+        departureDate: '2018-03-29T13:34:00.000',
+        departureDate: '2019-03-29T13:20:00.000',
+        accommodation: 'hotel presidential',
+        accommodation: 'my house',
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body).to.haveOwnProperty('error');
+        done();
+      });
+  });
+   it('Should return an error if a multi-city trip has less than 2 DAPARTURE-DATE entries' , (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/request')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        passportName: 'ngozi bayo',
+        reason: 'to charge my phone',
+        managerId: 2,
+        userId,
+        type: 'multi-city',
+        from: 'Lagos',
+        from: 'warri',
+        to: 'warri',
+        to : 'togo',
+        departureDate: '2018-03-29T13:34:00.000',
+        accommodation: 'hotel presidential',
+        accommodation: 'my house',
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body).to.haveOwnProperty('error');
+        done();
+      });
   });
 });
