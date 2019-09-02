@@ -26,7 +26,6 @@ class CommonHelper {
     const multiCity = body.filter(el => el[0] === 'from'
     || el[0] === 'to'
     || el[0] === 'departureDate'
-    || el[0] === 'arrivalDate'
     || el[0] === 'accommodation');
 
     while (multiCity[0][1].length > 0) {
@@ -36,6 +35,7 @@ class CommonHelper {
         el[1].splice(0, 1);
         return null;
       });
+      obj.arrivalDate = null;
       obj.requestId = id;
       Trips.push(obj);
     }
