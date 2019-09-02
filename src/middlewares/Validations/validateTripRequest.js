@@ -34,8 +34,7 @@ export default (req, res, next) => {
     if (type === 'multi-city' && from.length < 2) errors.push('You need to specify all origins of your multicity travel request');
     if (type === 'multi-city' && to.length < 2) errors.push('You need to specify all destinations of your multicity travel request');
     if (type === 'multi-city' && departureDate.length < 2) errors.push('You need to specify all depature dates for each request');
-    if (type === 'multi-city' && arrivalDate.length < 2) errors.push('You need to specify all arrival dates for each request');
-    if (type === 'multi-city' && !arrivalDate) errors.push('arrival date is required');
+    if (type === 'multi-city' && arrivalDate) errors.push('arrival date is not required for multi-city trips');
 
     if (errors.length > 0) throw new Error(errors);
     return next();
