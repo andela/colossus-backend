@@ -49,7 +49,7 @@ describe('GET /api/v1/request', () => {
             reason: 'test reason',
             managerId: 1, // There is no association for this field currently
             status: 'pending',
-            type: '1-way',
+            type: 'one-way',
           })
             .then((newRequest) => {
               Trip.create({
@@ -57,8 +57,7 @@ describe('GET /api/v1/request', () => {
                 from: 'lagos',
                 to: 'kampala',
                 departureDate: '2019-08-09 13:00',
-                arrivalDate: '2019-08-10 13:00',
-                accommodation: 'hilton',
+                accommodation: 'hilton'
               })
                 .then(() => {
                   done();
