@@ -86,6 +86,7 @@ export default class RequestController {
 
       res.status(201).json({ status: 201, data: requestSummary });
     } catch (error) {
+      console.log('REQUES=>', error);
       res.status(500).json({ status: 500, error });
     }
   }
