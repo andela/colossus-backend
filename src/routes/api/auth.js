@@ -3,9 +3,10 @@ import passportFacebook from '../../auth/facebook';
 import passportGoogle from '../../auth/google';
 import { AuthController } from '../../controllers';
 import AuthValidator from '../../middlewares/inputVaidator';
-import emailValidation from '../../middlewares/Validations/emailValidation';
-import passwordValidation from '../../middlewares/Validations/passwordValidator';
-import { checkToken } from '../../middlewares';
+import emailValidation from '../../middlewares/emailValidation';
+import passwordValidation from '../../middlewares/passwordValidator';
+import { checkToken, checkVerified, blob } from '../../middlewares';
+import multipart from '../../helpers/multipartHelper';
 
 const router = Router();
 
@@ -16,6 +17,16 @@ router.post('/signin', AuthController.signIn);
 router.post('/sendEmail', emailValidation, AuthController.sendEmail);
 router.post('/resetPassword', passwordValidation, AuthController.resetPassword);
 router.post('/logout', checkToken, AuthController.logout);
+
+// Patch requests
+router.patch(
+  '/edit',
+  checkToken,
+  checkVerified,
+  multipart.single('picture'),
+  blob,
+  AuthController.editProfile
+);
 
 
 // GOOGLE ROUTER

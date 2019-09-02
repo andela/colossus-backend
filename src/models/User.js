@@ -2,6 +2,11 @@ import { genSaltSync, hashSync } from 'bcryptjs';
 
 const UserDefinition = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
+    },
     firstName: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -44,6 +49,40 @@ const UserDefinition = (sequelize, DataTypes) => {
     isVerified: {
       defaultValue: false,
       type: DataTypes.BOOLEAN
+    },
+    gender: {
+      type: DataTypes.ENUM('male', 'female')
+    },
+    birthDate: {
+      type: DataTypes.DATE
+    },
+    language: {
+      type: DataTypes.STRING,
+      defaultValue: 'EN'
+    },
+    currency: {
+      type: DataTypes.STRING,
+      defaultValue: 'NGN'
+    },
+    address: {
+      type: DataTypes.STRING
+    },
+    role: {
+      type: DataTypes.ENUM(
+        'super_admin',
+        'travel_admin',
+        'travel_team_member',
+        'manager',
+        'requester',
+        'user'
+      ),
+      defaultValue: 'user'
+    },
+    department: {
+      type: DataTypes.STRING
+    },
+    picture: {
+      type: DataTypes.JSON
     }
   },
   {
@@ -55,7 +94,8 @@ const UserDefinition = (sequelize, DataTypes) => {
           user.password = hashSync(user.password, salt);
         }
       }
-    }
+    },
+    timestamps: true
   });
   // eslint-disable-next-line func-names
   User.findByEmail = function (email) {
@@ -66,9 +106,27 @@ const UserDefinition = (sequelize, DataTypes) => {
       }
     });
   };
-  User.associate = (models) => {
-    // associations can be defined here
-    User.hasMany(models.Request, {
+
+  // eslint-disable-next-line func-names
+  User.findByIdAndEdit = function (id, update) {
+    const user = this;
+    return user.update(update, {
+      where: {
+        id
+      }
+    });
+  };
+
+  // eslint-disable-next-line func-names
+  User.associate = function (models) {
+    // Associations can be defined here
+    const user = this;
+    user.belongsTo(models.User, {
+      as: 'lineManager',
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE'
+    });
+    user.hasMany(models.Request, {
       foreignKey: 'userId',
       as: 'requests'
     });

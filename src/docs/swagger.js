@@ -414,64 +414,22 @@ module.exports = {
         }
       }
     },
-    '/request': {
-      post: {
-        tags: [
-          'request'
-        ],
-        summary: 'Create a travel request',
-        description: '',
-        consumes: [
-          'application/json',
-          'application/xml'
-        ],
-        produces: [
-          'application/json'
-        ],
+    '/auth/edit': {
+      patch: {
+        tags: ['edit profile'],
+        summary: 'Edits user profile',
+        produces: ['application/json'],
         parameters: [
           {
-            in: 'body',
-            name: 'body',
-            description: 'body',
-            required: true,
-            schema: {
-              type: 'object',
-              properties: {
-                passportName: {
-                  type: 'string',
-                  example: 'James'
-                },
-                reason: {
-                  type: 'string',
-                  example: 'shopping'
-                },
-                type: {
-                  type: 'string',
-                  example: 'one-way'
-                },
-                from: {
-                  type: 'string',
-                  example: 'lagos'
-                },
-                to: {
-                  type: 'string',
-                  example: 'kano'
-                },
-                departureDate: {
-                  type: 'date',
-                  example: '2018-03-29T13:34:00.000'
-                },
-                 accommodation: {
-                  type: 'string',
-                  example: 'hotel presidential'
-                }
-              }
-            }
+            name: 'Authorization',
+            in: 'headers',
+            description: 'Bearer token',
+            type: 'string'
           }
         ],
         responses: {
-          201: {
-            description: 'successful operation; request created',
+          200: {
+            description: 'User has successfully edited profile',
             schema: {
               type: 'object',
               properties: {
@@ -479,47 +437,27 @@ module.exports = {
                   type: 'integer'
                 },
                 data: {
-                  type: 'object',
-                  properties: {
-                    id: {
-                      type: 'integer',
-                      example: 1
-                    },
-                    passportName: {
-                      type: 'string',
-                      example: 'James'
-                    },
-                    reason: {
-                      type: 'string',
-                      example: 'shopping'
-                    },
-                    type: {
-                      type: 'string',
-                      example: 'one-way'
-                    },
-                    from: {
-                      type: 'string',
-                      example: 'lagos'
-                    },
-                    to: {
-                      type: 'string',
-                      example: 'kano'
-                    },
-                    departureDate: {
-                      type: 'date',
-                      example: '2018-03-29T13:34:00.000'
-                    },
-                     accommodation: {
-                      type: 'string',
-                      example: 'hotel presidential'
-                    }
-                  }
+                  type: 'object'
                 }
               }
             }
           },
           400: {
-            description: 'Bad Request: Some fields are empty or invalid data format',
+            description: 'Bad request',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'integer'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          },
+          401: {
+            description: 'Unauthorized',
             schema: {
               type: 'object',
               properties: {

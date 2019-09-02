@@ -26,7 +26,6 @@ export default class RequestController {
     }
   }
 
-
   /**
    * @param {Object} req
    * @param {Object} res
@@ -37,17 +36,36 @@ export default class RequestController {
     try {
       let Trips = [];
       const {
-        reason, passportName, managerId, type, userId,
-        from, to, arrivalDate, departureDate, accommodation
+        reason,
+        passportName,
+        managerId,
+        type,
+        userId,
+        from,
+        to,
+        arrivalDate,
+        departureDate,
+        accommodation
       } = req.body;
 
       const request = await Request.create({
-        reason, type, passportName, managerId, userId
+        reason,
+        type,
+        passportName,
+        managerId,
+        userId
       });
 
       const { id } = request;
 
-      const obj = generatesingleTrip(from, to, arrivalDate, departureDate, accommodation, id);
+      const obj = generatesingleTrip(
+        from,
+        to,
+        arrivalDate,
+        departureDate,
+        accommodation,
+        id
+      );
 
       if (type === 'one-way') obj.arrivalDate = null;
 
@@ -57,10 +75,14 @@ export default class RequestController {
 
       await Trip.bulkCreate(Trips, { returning: true });
 
-      const requestSummary = await Request.findOne({ where: { id, }, include: { model: Trip, as: 'trips' } });
+      const requestSummary = await Request.findOne({
+        where: { id },
+        include: { model: Trip, as: 'trips' }
+      });
 
       res.status(201).json({ status: 201, data: requestSummary });
     } catch (error) {
+      console.log('REQUES=>', error);
       res.status(500).json({ status: 500, error });
     }
   }

@@ -1,4 +1,4 @@
-import errorResponse from '../../utils/index';
+import errorResponse from '../utils/index';
 
 const validateEmail = (req, res, next) => {
   const { email } = req.body;
