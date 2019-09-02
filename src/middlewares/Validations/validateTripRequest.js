@@ -48,7 +48,11 @@ export default (req, res, next) => {
 
       if (accommodation.length < 2) errors.push('All accommodation arrangements for this request must be specified');
       if (departureDate.length < 2) errors.push('You need to specify all depature dates for each request');
+      if (from.length < 2) errors.push('You need to specify all destinations of your multicity travel request');
       if (to.length < 2) errors.push('You need to specify all destinations of your multicity travel request');
+      if (from.length !== to.length) errors.push('All origins and destinations of your multicity request must be complete');
+      if (departureDate.length !== from.length || departureDate.length !== to.length) 
+        { errors.push('departure dates does not correspond with origins or destinations of travel'); }
       if (arrivalDate) errors.push('arrival date is not required for multi-city trips');
     }
 
