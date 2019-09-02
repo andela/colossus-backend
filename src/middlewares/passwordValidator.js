@@ -1,5 +1,5 @@
-import errorResponse from '../../utils/index';
-import helper from '../../helpers/jwtHelper';
+import errorResponse from '../utils/index';
+import helper from '../helpers/jwtHelper';
 
 const { decodeToken } = helper;
 
