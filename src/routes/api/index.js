@@ -1,7 +1,7 @@
 import express from 'express';
 import authRouter from './auth';
 import requestRouter from './request';
-import checkToken from '../../middlewares/auth';
+import { checkToken } from '../../middlewares';
 
 const router = express.Router();
 

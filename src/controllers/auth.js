@@ -44,8 +44,7 @@ class AuthController extends CommonHelper {
 
         const payload = {
           email,
-          password,
-          isVerified: newUser.isVerified
+          password
         };
         const token = generateToken(payload);
         const location = process.env.FRONTEND_URL;
@@ -90,8 +89,8 @@ class AuthController extends CommonHelper {
       user.update({ isVerified: true });
 
       user = user.dataValues;
-      const { id, email, isVerified } = user;
-      const payload = { id, email, isVerified };
+      const { id, email } = user;
+      const payload = { id, email };
       const newToken = generateToken(payload);
 
       return res.status(200).json({
@@ -126,11 +125,10 @@ class AuthController extends CommonHelper {
         return res.status(400).json({ status: 400, error: 'Invalid password' });
       }
 
-      const { id, isVerified } = user;
+      const { id } = user;
       const payload = {
         id,
-        email,
-        isVerified
+        email
       };
       const token = generateToken(payload);
 
@@ -218,6 +216,34 @@ class AuthController extends CommonHelper {
           data: `Successfully signed out user with email ${user.email}`
         });
       }
+    } catch (error) {
+      res.status(500).json({
+        status: 500,
+        error
+      });
+    }
+  }
+
+  /**
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @returns {Promise<void>} edits user's profile
+   */
+  static async editProfile(req, res) {
+    try {
+      const { body, user, file } = req;
+      const { id } = user;
+      body.picture = file;
+      await UserModel.findByIdAndEdit(
+        id,
+        body
+      );
+      const data = await UserModel.findByPk(id);
+      res.status(200).json({
+        status: 200,
+        data
+      });
     } catch (error) {
       res.status(500).json({
         status: 500,

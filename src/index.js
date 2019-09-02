@@ -9,13 +9,10 @@ import cors from 'cors';
 import expressValidator from 'express-validator';
 import swaggerDocument from './docs/swagger';
 import routes from './routes';
-import db from './models';
 
 const app = express();
-const { sequelize } = db;
 
 const isProduction = process.env.NODE_ENV === 'production';
-const isTest = process.env.NODE_ENV === 'test';
 
 const logger = winston.createLogger({
   level: 'info',
