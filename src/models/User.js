@@ -123,7 +123,7 @@ const UserDefinition = (sequelize, DataTypes) => {
     const user = this;
     user.belongsTo(models.User, {
       as: 'lineManager',
-      onDelete: 'CASCADE',
+      onDelete: 'SET NULL',
       onUpdate: 'CASCADE'
     });
     user.hasMany(models.Request, {

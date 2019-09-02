@@ -61,7 +61,7 @@ module.exports = {
     },
     lineManagerId: {
       type: Sequelize.INTEGER,
-      onDelete: 'CASCADE',
+      onDelete: 'SET NULL',
       onUpdate: 'CASCADE',
       references: {
         model: 'Users',
