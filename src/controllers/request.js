@@ -19,7 +19,11 @@ export default class RequestController {
    */
   static async getAllRequests(req, res) {
     try {
-      const allRequests = await Request.findAll();
+      const allRequests = await Request.findAll({
+        where: {
+          userId: req.user.id
+        }
+      });
       return res.status(200).json({ status: 200, data: allRequests });
     } catch (error) {
       res.status(500).json({ status: 500, error });

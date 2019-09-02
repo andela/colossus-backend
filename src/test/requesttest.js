@@ -71,7 +71,6 @@ describe('GET /api/v1/request', () => {
         .set('Authorization', `Bearer ${token}`)
         .end((err, res) => {
           // eslint-disable-next-line no-unused-expressions
-          console.log('RES==REQUEST', res.body);
           expect(err).to.be.null;
           expect(res).to.has.status(200);
           expect(res.body).to.be.a('object');
