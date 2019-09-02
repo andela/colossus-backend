@@ -1,6 +1,5 @@
 import authController from './auth';
+import requestController from './request';
 
 export const AuthController = authController;
-
-// An example for subsequent controller imports
-export const xController = 'xController';
+export const RequestController = requestController;
