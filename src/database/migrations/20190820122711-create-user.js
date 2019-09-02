@@ -60,7 +60,13 @@ module.exports = {
       type: Sequelize.JSON
     },
     lineManagerId: {
-      type: Sequelize.INTEGER
+      type: Sequelize.INTEGER,
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+      references: {
+        model: 'Users',
+        key: 'id'
+      }
     },
     createdAt: {
       allowNull: false,

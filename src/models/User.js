@@ -122,7 +122,9 @@ const UserDefinition = (sequelize, DataTypes) => {
     // Associations can be defined here
     const user = this;
     user.belongsTo(models.User, {
-      as: 'lineManager'
+      as: 'lineManager',
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
     });
     user.hasMany(models.Request, {
       foreignKey: 'userId',
