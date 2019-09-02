@@ -14,7 +14,7 @@ export default (sequelize, DataTypes) => {
     },
     arrivalDate: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: true,
     },
     accommodation: {
       type: DataTypes.STRING,

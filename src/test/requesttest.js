@@ -7,6 +7,9 @@ import helper from '../helpers/jwtHelper';
 
 const { generateToken } = helper;
 
+let userId;
+let token;
+
 dotenv.config();
 
 const {
@@ -19,7 +22,6 @@ chai.should();
 chai.use(chaiHttp);
 
 describe('GET /api/v1/request', () => {
-  let token;
   describe('Tests for for getting requests', () => {
     before((done) => {
       // Sign up a user to get a token to use for the protected route
@@ -39,6 +41,7 @@ describe('GET /api/v1/request', () => {
             email: res.body.data.email,
             isVerified: true
           });
+          userId = res.body.data.id;
           // create a request and trip by adding values to the tables
           Request.create({
             userId: res.body.data.id,
@@ -88,3 +91,4 @@ describe('GET /api/v1/request', () => {
     });
   });
 });
+
