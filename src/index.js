@@ -1,12 +1,15 @@
 import '@babel/polyfill';
 import express from 'express';
-import passport from 'passport';
-import session from 'express-session';
+import path from 'path';
 import winston from 'winston';
 import swaggerUi from 'swagger-ui-express';
+import session from 'express-session';
+import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import socketIo from 'socket.io';
 import expressValidator from 'express-validator';
+import passport from 'passport';
 import swaggerDocument from './docs/swagger';
 import routes from './routes';
 
@@ -27,7 +30,10 @@ const logger = winston.createLogger({
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(express.static(`${__dirname}/public`));
+// app.use(express.static('../public'));
+// app.use('/getDocument', express.static(path.join(__dirname, '../public')));
+// app.use('/api/v1/trips/create', express.static(path.join(__dirname, '../public')));
+
 app.use(expressValidator());
 
 app.use(require('morgan')('dev'));
@@ -41,17 +47,22 @@ app.get('/', (req, res) => res.status(200).json({
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(express.static(`${__dirname}/public`));
+app.use('/api/v1/trips/create', express.static(`${__dirname}/public`));
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.use(session({
-  secret: 'authorshaven',
-  cookie: { maxAge: 60000 },
-  resave: false,
-  saveUninitialized: false
-}));
+app.use(require('method-override')());
 
+app.use(cookieParser());
+app.use(
+  session({
+    secret: 'authorshaven',
+    cookie: { maxAge: 60000 },
+    resave: false,
+    saveUninitialized: false
+  })
+);
+// Passport Middleware
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -102,8 +113,19 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   logger.info(`Listening on PORT ${PORT}`);
+});
+
+export const io = socketIo(server);
+
+io.on('connection', (client) => {
+  console.log(`A client connected ${client.id}`);
+  client.emit('confirmation', 'We are successfully connected');
+
+  client.on('disconnect', () => {
+    console.log(`A user connected ${client.id}`);
+  });
 });
 
 export default app;

@@ -12,7 +12,7 @@ const transport = nodemailer.createTransport({
 });
 
 
-const sendVerificationMail = async (clientMail, subject, html) => {
+export const sendVerificationMail = async (clientMail, subject, html) => {
   await transport.sendMail({
     to: clientMail,
     from: 'no-reply@barefoot.com',
