@@ -235,7 +235,7 @@ class AuthController extends CommonHelper {
       const { body, user, file } = req;
       const { id } = user;
       body.picture = file;
-      UserModel.findByIdAndEdit(
+      await UserModel.findByIdAndEdit(
         id,
         body
       );
