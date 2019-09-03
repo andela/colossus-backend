@@ -122,7 +122,7 @@ const UserDefinition = (sequelize, DataTypes) => {
     // Associations can be defined here
     const user = this;
     user.belongsTo(models.User, {
-      as: 'lineManager',
+      as: 'managerId', // changed from lineManager to managerId
       onDelete: 'SET NULL',
       onUpdate: 'CASCADE'
     });

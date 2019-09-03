@@ -26,7 +26,13 @@ module.exports = {
     },
     managerId: {
       type: Sequelize.INTEGER,
+      onDelete: 'SET NULL',
       allowNull: true,
+      references: {
+        model: 'Users',
+        key: 'id',
+        as: 'managerId',
+      },
     },
     status: {
       type: Sequelize.STRING,

@@ -59,7 +59,7 @@ module.exports = {
     picture: {
       type: Sequelize.JSON
     },
-    lineManagerId: {
+    managerId: {
       type: Sequelize.INTEGER,
       onDelete: 'SET NULL',
       onUpdate: 'CASCADE',

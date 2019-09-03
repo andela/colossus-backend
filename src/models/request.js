@@ -31,6 +31,10 @@ export default (sequelize, DataTypes) => {
       foreignKey: 'userId',
       onDelete: 'CASCADE',
     });
+    Request.belongsTo(models.User, {
+      foreignKey: 'managerId',
+      onDelete: 'SET NULL',
+    });
   };
   return Request;
 };
