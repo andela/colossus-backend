@@ -40,6 +40,46 @@ const AccommodationDefinition = (sequelize, DataTypes) => {
       onUpdate: 'CASCADE'
     });
   };
+
+  // eslint-disable-next-line func-names
+  Accommodation.book = function (id, bookedBy, movingIn, movingOut) {
+    const accommodation = this;
+    return accommodation.update({
+      bookedBy,
+      movingIn,
+      movingOut,
+      booked: true
+    }, {
+      where: {
+        id
+      }
+    });
+  };
+
+  // eslint-disable-next-line func-names
+  Accommodation.findWhereBookedBy = function (bookedBy) {
+    const accommodation = this;
+    return accommodation.findOne({
+      where: {
+        bookedBy
+      }
+    });
+  };
+
+  // eslint-disable-next-line func-names
+  Accommodation.rescind = function (bookedBy) {
+    const accommodation = this;
+    return accommodation.update({
+      bookedBy: null,
+      movingIn: null,
+      movingOut: null,
+      booked: false
+    }, {
+      where: {
+        bookedBy
+      }
+    });
+  };
   return Accommodation;
 };
 
