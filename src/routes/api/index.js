@@ -1,6 +1,7 @@
 import express from 'express';
 import authRouter from './auth';
 import requestRouter from './request';
+import accommodationRouter from './accommodation';
 import { checkToken } from '../../middlewares';
 
 const router = express.Router();
@@ -8,6 +9,8 @@ const router = express.Router();
 router.use('/auth', authRouter);
 
 router.use('/request', checkToken, requestRouter);
+
+router.use('/accommodation', accommodationRouter);
 
 router.use((err, req, res, next) => {
   if (err.name === 'ValidationError') {
