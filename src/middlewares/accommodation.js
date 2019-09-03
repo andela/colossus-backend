@@ -19,7 +19,7 @@ export const checkIfAlreadyBooked = async (req, res, next) => {
   if (accommodation) {
     res.status(400).json({
       status: 400,
-      error: `You have already booked an accommodation with id ${accommodation.id}`
+      error: `You already booked an accommodation with id ${accommodation.id}`
     });
     return;
   }
