@@ -60,4 +60,26 @@ export default class AccommodationController {
       });
     }
   }
+
+  /**
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @returns {Promise<void>} rescinds a booking for accommodation
+   */
+  static async rescindOne(req, res) {
+    try {
+      const { user } = req;
+      await Accommodation.rescind(user.id);
+      res.status(200).json({
+        status: 200,
+        data: 'Successfully rescinded booking for accommodation'
+      });
+    } catch (error) {
+      res.status(500).json({
+        status: 500,
+        error
+      });
+    }
+  }
 }
