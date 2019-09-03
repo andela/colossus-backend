@@ -1,3 +1,4 @@
+/* eslint-disable no-dupe-keys */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import dotenv from 'dotenv';
@@ -136,7 +137,7 @@ describe('POST /api/v1/request', () => {
         done();
       });
   });
-  it('Should return an error if a one-way has more than one FROM entry' , (done) => {
+  it('Should return an error if a one-way has more than one FROM entry', (done) => {
     chai
       .request(server)
       .post('/api/v1/request')
@@ -159,7 +160,7 @@ describe('POST /api/v1/request', () => {
         done();
       });
   });
-  it('Should return an error if a round-trip has more than one FROM entry' , (done) => {
+  it('Should return an error if a round-trip has more than one FROM entry', (done) => {
     chai
       .request(server)
       .post('/api/v1/request')
@@ -183,7 +184,7 @@ describe('POST /api/v1/request', () => {
         done();
       });
   });
-  it('Should return an error if a one-way trip has more than one TO entry' , (done) => {
+  it('Should return an error if a one-way trip has more than one TO entry', (done) => {
     chai
       .request(server)
       .post('/api/v1/request')
@@ -206,7 +207,7 @@ describe('POST /api/v1/request', () => {
         done();
       });
   });
-  it('Should return an error if a round-trip has more than one TO entry' , (done) => {
+  it('Should return an error if a round-trip has more than one TO entry', (done) => {
     chai
       .request(server)
       .post('/api/v1/request')
@@ -230,7 +231,7 @@ describe('POST /api/v1/request', () => {
         done();
       });
   });
-  it('Should return an error if a one-way  has more than one DEPARTURE DATE entry' , (done) => {
+  it('Should return an error if a one-way  has more than one DEPARTURE DATE entry', (done) => {
     chai
       .request(server)
       .post('/api/v1/request')
@@ -253,7 +254,7 @@ describe('POST /api/v1/request', () => {
         done();
       });
   });
-   it('Should return an error if a round-trip has more than one DEPARTURE DATE entry' , (done) => {
+  it('Should return an error if a round-trip has more than one DEPARTURE DATE entry', (done) => {
     chai
       .request(server)
       .post('/api/v1/request')
@@ -277,7 +278,7 @@ describe('POST /api/v1/request', () => {
         done();
       });
   });
-  it('Should return an error if a one-way trip has an ARRIVALDATE entry' , (done) => {
+  it('Should return an error if a one-way trip has an ARRIVALDATE entry', (done) => {
     chai
       .request(server)
       .post('/api/v1/request')
@@ -300,7 +301,7 @@ describe('POST /api/v1/request', () => {
         done();
       });
   });
-  it('Should return an error if a round trip has more than one ARRIVALDATE entry' , (done) => {
+  it('Should return an error if a round trip has more than one ARRIVALDATE entry', (done) => {
     chai
       .request(server)
       .post('/api/v1/request')
@@ -324,7 +325,7 @@ describe('POST /api/v1/request', () => {
         done();
       });
   });
-  it('Should return an error if a round trip has no ARRIVALDATE entry' , (done) => {
+  it('Should return an error if a round trip has no ARRIVALDATE entry', (done) => {
     chai
       .request(server)
       .post('/api/v1/request')
@@ -346,7 +347,7 @@ describe('POST /api/v1/request', () => {
         done();
       });
   });
-  it('Should return an error if a multi-city trip has less than 2 FROM entries' , (done) => {
+  it('Should return an error if a multi-city trip has less than 2 FROM entries', (done) => {
     chai
       .request(server)
       .post('/api/v1/request')
@@ -371,7 +372,7 @@ describe('POST /api/v1/request', () => {
         done();
       });
   });
-   it('Should return an error if a multi-city trip has less than 2 TO entries' , (done) => {
+  it('Should return an error if a multi-city trip has less than 2 TO entries', (done) => {
     chai
       .request(server)
       .post('/api/v1/request')
@@ -396,7 +397,7 @@ describe('POST /api/v1/request', () => {
         done();
       });
   });
-   it('Should return an error if a multi-city trip has less than 2 DAPARTURE-DATE entries' , (done) => {
+  it('Should return an error if a multi-city trip has less than 2 DAPARTURE-DATE entries', (done) => {
     chai
       .request(server)
       .post('/api/v1/request')
@@ -410,7 +411,7 @@ describe('POST /api/v1/request', () => {
         from: 'Lagos',
         from: 'warri',
         to: 'warri',
-        to : 'togo',
+        to: 'togo',
         departureDate: '2018-03-29T13:34:00.000',
         accommodation: 'hotel presidential',
         accommodation: 'my house',
