@@ -10,6 +10,23 @@ module.exports = {
     type: {
       type: Sequelize.STRING
     },
+    movingIn: {
+      type: Sequelize.DATE,
+      allowNull: true,
+      defaultValue: null
+    },
+    movingOut: {
+      type: Sequelize.DATE,
+      allowNull: true,
+      defaultValue: null
+    },
+    booked: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false
+    },
+    picture: {
+      type: Sequelize.JSON
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE
