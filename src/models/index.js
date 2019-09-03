@@ -2,6 +2,8 @@ import { Sequelize, DataTypes } from 'sequelize';
 import configuration from '../database/config/config';
 import User from './User';
 import InvalidToken from './InvalidToken';
+import resource from './resource';
+import permission from './permission';
 
 const env = process.env.NODE_ENV || 'development';
 const config = configuration[env];
@@ -18,5 +20,7 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 db.User = User(sequelize, DataTypes);
 db.InvalidToken = InvalidToken(sequelize, DataTypes);
+db.resource = resource(sequelize, DataTypes);
+db.permission = permission(sequelize, DataTypes);
 
 export default db;

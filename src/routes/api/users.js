@@ -1,6 +1,8 @@
 import express from 'express';
 import passport from 'passport';
 
+import Role from '../../controllers/role';
+import authorize from '../../middlewares/authorize';
 import User from '../../models/User';
 
 const router = express.Router();
@@ -81,4 +83,6 @@ router.post('/users', (req, res, next) => {
     .catch(next);
 });
 
-module.exports = router;
+router.patch('/user/roles', authorize, Role.assignRole);
+
+export default router;

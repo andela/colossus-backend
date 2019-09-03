@@ -44,6 +44,9 @@ const UserDefinition = (sequelize, DataTypes) => {
     isVerified: {
       defaultValue: false,
       type: DataTypes.BOOLEAN
+    },
+    roleId: {
+      type: DataTypes.INTEGER
     }
   },
   {
@@ -64,6 +67,13 @@ const UserDefinition = (sequelize, DataTypes) => {
       where: {
         email
       }
+    });
+  };
+  User.associate = (models) => {
+    // associations can be defined here
+    User.belongTo(models.roles, {
+      foreignKey: 'roleId',
+      as: 'roles', // alias
     });
   };
   return User;

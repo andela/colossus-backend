@@ -1,9 +1,13 @@
 import express from 'express';
 import authRouter from './auth';
+import permissionRouter from './permission';
+import roleRouter from './role';
 
 const router = express.Router();
 
 router.use('/auth', authRouter);
+router.use('/', roleRouter);
+router.use('/', permissionRouter);
 
 router.use((err, req, res, next) => {
   if (err.name === 'ValidationError') {
