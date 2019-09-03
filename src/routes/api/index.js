@@ -1,11 +1,18 @@
 import express from 'express';
 import authRouter from './auth';
+<<<<<<< HEAD
 import requestRouter from './request';
 import checkToken from '../../middlewares/auth';
+=======
+import permissionRouter from './permission';
+import roleRouter from './role';
+>>>>>>> feature(user-role): setup endpoints to assign roles and permissions
 
 const router = express.Router();
 
 router.use('/auth', authRouter);
+router.use('/', roleRouter);
+router.use('/', permissionRouter);
 
 router.use('/request', checkToken, requestRouter);
 

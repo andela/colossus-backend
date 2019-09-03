@@ -2,6 +2,10 @@ import fs from 'fs';
 import path from 'path';
 import Sequelize from 'sequelize';
 import configuration from '../database/config/config';
+import User from './User';
+import InvalidToken from './InvalidToken';
+import resource from './resource';
+import permission from './permission';
 
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
@@ -27,4 +31,9 @@ Object.keys(db).forEach((modelName) => {
 });
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
-module.exports = db;
+db.User = User(sequelize, DataTypes);
+db.InvalidToken = InvalidToken(sequelize, DataTypes);
+db.resource = resource(sequelize, DataTypes);
+db.permission = permission(sequelize, DataTypes);
+
+export default db;

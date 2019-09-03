@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   up: (queryInterface, Sequelize) => queryInterface.createTable('Users', {
     id: {
       allowNull: false,
@@ -24,6 +24,10 @@ module.exports = {
     },
     isVerified: {
       type: Sequelize.BOOLEAN
+    },
+    roleId: {
+      allowNull: true,
+      type: Sequelize.INTEGER
     },
     createdAt: {
       allowNull: false,

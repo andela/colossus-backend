@@ -44,6 +44,9 @@ const UserDefinition = (sequelize, DataTypes) => {
     isVerified: {
       defaultValue: false,
       type: DataTypes.BOOLEAN
+    },
+    roleId: {
+      type: DataTypes.INTEGER
     }
   },
   {
@@ -71,6 +74,10 @@ const UserDefinition = (sequelize, DataTypes) => {
     User.hasMany(models.Request, {
       foreignKey: 'userId',
       as: 'requests'
+    });
+    User.belongTo(models.roles, {
+      foreignKey: 'roleId',
+      as: 'roles', // alias
     });
   };
   return User;
