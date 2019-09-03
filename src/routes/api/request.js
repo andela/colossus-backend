@@ -5,9 +5,14 @@ import validateTripRequest from '../../middlewares/Validations/validateTripReque
 
 const router = Router();
 
+const foo = (io = null) => {
+  const notifyUs = new RequestController(io);
+  router.get('/', RequestController.getAllRequests);
 
-router.get('/', RequestController.getAllRequests);
+  router.post('/', validateTripRequest, notifyUs.createTrip);
 
-router.post('/', validateTripRequest, RequestController.createTrip);
+  return router;
+};
 
-export default router;
+
+export default foo;

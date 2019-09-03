@@ -22,7 +22,7 @@ router.post('/logout', checkToken, AuthController.logout);
 router.patch(
   '/edit',
   checkToken,
-  // checkVerified,
+  checkVerified,
   multipart.single('picture'),
   blob,
   AuthController.editProfile

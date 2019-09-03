@@ -1,8 +1,6 @@
 /* eslint-disable import/named */
 /* eslint-disable require-jsdoc */
 import CommonHelper from '../helpers/commonHelper';
-import { onEvent, eventEmitter } from '../services/websocket';
-
 
 class ProfileController extends CommonHelper {
   /**
@@ -23,31 +21,28 @@ class ProfileController extends CommonHelper {
       <title>Chat App</title>
       <script src="/socket.io/socket.io.js"></script>
       <script>
-        console.log('we made it so far');
+        const appendMessage = (message) => {
+          const div = document.getElementById('message-container');
+          let para = document.createElement('p');
+          para.appendChild(document.createTextNode(message));
+          div.appendChild(para);
+        };
         const socket = io();
-        socket.on('message', (data) => { 
-          console.log(data, 'here');
+        socket.on('${userId}', (data) => { 
+          appendMessage(data);
         })
-        socket.on('4', (data) => { 
-          console.log(data, 'This is ned');
-        })
-        socket.on('confirmation', (data) => { 
-          console.log(data, 'here is the confirmation of the connection');
-        })
-        socket.emit('great guy', 'how are you sugar ban')
       </script>
     </head>
     <body>
-      <div id="message-container"></div>
-      <form id="message-container">
-        <input type="text" id="message-input">
-        <button type="submit" id="send-button">Send</button>
-      </form>
+      <div id="message-container">
+        <h3>Notify User Trips</h3>
+        
+      </div>
+      
     </body>
     </html>
     
     `;
-    console.log();
 
     res.send(message);
   }

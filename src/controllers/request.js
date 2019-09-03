@@ -1,7 +1,8 @@
+import autoBind from 'auto-bind';
 import models from '../models';
 import generateTripDetails from '../helpers/commonHelper';
 import { sendVerificationMail } from '../services/email';
-import { eventEmitter, onEvent } from '../services/websocket';
+// import { eventEmitter, onEvent } from '../services/websocket';
 
 
 const { generateTrips, generatesingleTrip } = generateTripDetails;
@@ -13,6 +14,16 @@ const { Request, Trip } = models;
 *
 */
 export default class RequestController {
+  /**
+  * @param {Object} io
+  * @returns {Object} res (server response)
+  * @description get all travel requests
+  */
+  constructor(io) {
+    this.io = io;
+    autoBind(this);
+  }
+
   /**
   * @param {Object} req
   * @param {Object} res
@@ -38,7 +49,7 @@ export default class RequestController {
   * @returns {Object} res (server response)
   * @description Creates a new request with the associated trips
   */
-  static async createTrip(req, res) {
+  async createTrip(req, res) {
     const { email, firstName, lastName } = req.user;
 
     try {
@@ -54,10 +65,6 @@ export default class RequestController {
         departureDate,
         accommodation
       } = req.body;
-      eventEmitter('4', 'Hi');
-      onEvent('great guy', (data) => {
-        console.log(data);
-      });
 
       const userId = req.user.id;
       const request = await Request.create({
@@ -87,11 +94,16 @@ export default class RequestController {
 
       const message = `
       <h2>Hi, ${firstName} ${lastName},</h2>
-      <p>Your trip from ${to} to ${from} has been created</p>&nbsp;
+      <p>Your trip from ${from} to ${to} has been created</p>&nbsp;
       <p>Thank you for using our app</p>
      `;
-      console.log(typeof managerId);
+      const emitMessage = `${firstName} ${lastName} Created a trip from ${from} to ${to}`;
       await sendVerificationMail(email, 'Trip request details', message);
+      if (this.io) {
+        this.io.emit(`${managerId}`, emitMessage);
+      } else {
+        console.log('I cannot can');
+      }
       res.status(201).json({ status: 201, data: requestSummary });
     } catch (error) {
       console.log('REQUES=>', error);

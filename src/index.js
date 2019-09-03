@@ -1,6 +1,5 @@
 import '@babel/polyfill';
 import express from 'express';
-import path from 'path';
 import winston from 'winston';
 import swaggerUi from 'swagger-ui-express';
 import session from 'express-session';
@@ -8,12 +7,15 @@ import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import socketIo from 'socket.io';
+import http from 'http';
 import expressValidator from 'express-validator';
 import passport from 'passport';
 import swaggerDocument from './docs/swagger';
 import routes from './routes';
 
 const app = express();
+const server = http.Server(app);
+const io = socketIo(server);
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -66,7 +68,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/', routes);
+app.use('/', routes(io));
 
 app.get('/', (req, res) => res.status(200).json({
   status: 200,
@@ -113,19 +115,17 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 3000;
-const server = app.listen(PORT, () => {
+server.listen(PORT, () => {
   logger.info(`Listening on PORT ${PORT}`);
 });
 
-export const io = socketIo(server);
 
 io.on('connection', (client) => {
-  console.log(`A client connected ${client.id}`);
+  logger(`A client connected ${client.id}`);
   client.emit('confirmation', 'We are successfully connected');
 
   client.on('disconnect', () => {
-    console.log(`A user connected ${client.id}`);
+    logger(`A user connected ${client.id}`);
   });
 });
-
-export default app;
+export default server;
