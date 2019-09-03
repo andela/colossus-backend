@@ -44,14 +44,13 @@ export default class RequestController {
         passportName,
         managerId,
         type,
-        userId,
         from,
         to,
         arrivalDate,
         departureDate,
         accommodation
       } = req.body;
-
+      const userId = req.user.id;
       const request = await Request.create({
         reason,
         type,
