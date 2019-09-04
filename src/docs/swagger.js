@@ -520,7 +520,7 @@ module.exports = {
                   type: 'date',
                   example: '2018-03-29T13:34:00.000'
                 },
-                 accommodation: {
+                accommodation: {
                   type: 'string',
                   example: 'hotel presidential'
                 }
@@ -568,7 +568,7 @@ module.exports = {
                       type: 'date',
                       example: '2018-03-29T13:34:00.000'
                     },
-                     accommodation: {
+                    accommodation: {
                       type: 'string',
                       example: 'hotel presidential'
                     }
