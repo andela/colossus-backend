@@ -1,5 +1,5 @@
 /* eslint-disable no-mixed-operators */
-import errorResponse from '../../utils/index';
+import errorResponse from '../utils/index';
 
 export default (req, res, next) => {
   /**

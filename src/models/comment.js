@@ -11,6 +11,10 @@ export default (sequelize, DataTypes) => {
       foreignKey: 'requestId',
       onDelete: 'CASCADE',
     });
+    Comment.belongsTo(models.User, {
+      foreignKey: 'userId',
+      onDelete: 'CASCADE',
+    });
   };
 
   return Comment;
