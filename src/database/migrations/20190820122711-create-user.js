@@ -59,13 +59,15 @@ module.exports = {
     picture: {
       type: Sequelize.JSON
     },
-    managerId: {
+    lineManagerId: {
       type: Sequelize.INTEGER,
+      allowNull: true,
       onDelete: 'SET NULL',
       onUpdate: 'CASCADE',
       references: {
         model: 'Users',
-        key: 'id'
+        key: 'id',
+        as: 'lineManagerId',
       }
     },
     createdAt: {

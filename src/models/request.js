@@ -8,10 +8,6 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    managerId: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
     status: {
       type: DataTypes.STRING,
       defaultValue: 'Open',
@@ -32,7 +28,7 @@ export default (sequelize, DataTypes) => {
       onDelete: 'CASCADE',
     });
     Request.belongsTo(models.User, {
-      foreignKey: 'managerId',
+      foreignKey: 'lineManagerId',
       onDelete: 'SET NULL',
     });
   };

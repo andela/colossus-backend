@@ -42,7 +42,7 @@ export default class RequestController {
       const {
         reason,
         passportName,
-        managerId,
+        lineManagerId,
         type,
         from,
         to,
@@ -55,7 +55,7 @@ export default class RequestController {
         reason,
         type,
         passportName,
-        managerId,
+        lineManagerId,
         userId
       });
 
@@ -105,14 +105,14 @@ export default class RequestController {
           id: requestId
         }
       });
-      if (request.managerId === requestingManagerId) {
-        const status = req.body.approved ? 'accepted' : 'rejected';
-        const updatedRequest = await Request.update({ status }, {
+      if (request.lineManagerId === requestingManagerId) {
+        const status = req.body.approved ? 'approved' : 'rejected';
+        await Request.update({ status }, {
           where: {
             id: requestId
           }
         });
-        res.status(200).json({ status: 200, data: updatedRequest });
+        res.status(200).json({ status: 200, data: status });
       } else {
         res.status(401).json({ status: 401, error: 'You are not the manager of the user' });
       }

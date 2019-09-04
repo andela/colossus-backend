@@ -12,7 +12,7 @@ export default (req, res, next) => {
 
   try {
     const errors = [];
-    if (!approved) errors.push('The parameter "approved" is missing');
+    if (!Object.prototype.hasOwnProperty.call(req.body, 'approved')) errors.push('The parameter "approved" is missing');
     if (typeof approved !== 'boolean') errors.push('The parameter "approved" must be a boolean');
     if (errors.length > 0) throw new Error(errors);
     return next();
