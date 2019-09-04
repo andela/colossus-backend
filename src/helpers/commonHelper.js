@@ -1,4 +1,10 @@
+/* eslint-disable prefer-destructuring */
 /* eslint-disable require-jsdoc */
+import models from '../models';
+import { eventEmitter } from '../services/websocket';
+import sendVerificationMail from '../services/email';
+
+const { Notification } = models;
 
 class CommonHelper {
   /**
@@ -15,52 +21,54 @@ class CommonHelper {
 
   /**
      * @param {String} request request body
-     * @param {String} id id of the created request
+     * @param {Number} id id of the created request
+     * @param {String} type type of the created request
+     * @param {Boolean} bool true or false
      * @returns {Array} array containing all trip information
-     * @description Generates trip information for a multi-city request
+     * @description Generates trip information for a creating and updating trips
   */
-  static generateTrips(request, id) {
+  static generateTrips(request, id, type, bool) {
     const body = Object.entries(request);
     const Trips = [];
+
     const multiCity = body.filter(el => el[0] === 'from'
-    || el[0] === 'to'
-    || el[0] === 'departureDate'
-    || el[0] === 'accommodation');
+  || el[0] === 'to'
+  || el[0] === 'departureDate'
+  || el[0] === 'arrivalDate'
+  || el[0] === 'accommodation'
+  || el[0] === 'id');
 
     while (multiCity[0][1].length > 0) {
       const obj = {};
       multiCity.map(el => {
-        // eslint-disable-next-line prefer-destructuring
         obj[el[0]] = el[1][0];
         el[1].splice(0, 1);
+        if (!bool) delete obj.id;
         return null;
       });
-      obj.arrivalDate = null;
+      if (type === 'one-way' || type === 'multi-city') obj.arrivalDate = null;
       obj.requestId = id;
       Trips.push(obj);
     }
     return Trips;
   }
 
-  /**
-     * @param {String} from location user is coming from
-     * @param {String} to location user is going to
-     * @param {String} arrivalDate expected return date
-     * @param {String} departureDate expected departure date
-     * @param {String} accommodation accomodation for a trip
-     * @param {Object} id id of the created request
-     * @returns {Array} array containing all trip information
-     * @description Generates a trip's information for a one-way or round-trip
-  */
-  static generatesingleTrip(from, to, arrivalDate, departureDate, accommodation, id) {
-    const obj = {};
-    obj.from = from;
-    obj.to = to;
-    obj.arrivalDate = arrivalDate;
-    obj.departureDate = departureDate;
-    obj.accommodation = accommodation;
-    obj.requestId = id;
-    return obj;
+  static async NotifyManagerForNewRequest(from, to, firstName, lastName, lineManagerId, type, appNotify, emailNotify, email) {
+    const emitMessage = `New trip request from ${firstName} ${lastName}`;
+
+    await Notification.create({
+      receiver: lineManagerId,
+      content: emitMessage,
+      type: 'trip'
+    });
+
+    const emailMessage = `
+    <h2>Hi, ${firstName} ${lastName},</h2>
+    <p>Your ${type === 'one-way' ? `${type} trip` : type} to ${to} ${`from ${from}` || ''} has been created</p>&nbsp;
+    <p> You can view the  details on your <a href=${'ceratenotification'}>request page</a> </p>
+   `;
+    if (emailNotify) await sendVerificationMail(email, 'Trip Request Details', emailMessage);
+    if (appNotify) eventEmitter(`tripCreated${lineManagerId}`, emitMessage);
   }
 }
 

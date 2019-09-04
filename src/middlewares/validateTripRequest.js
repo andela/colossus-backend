@@ -19,6 +19,7 @@ export default (req, res, next) => {
     const errors = [];
     if (!reason) errors.push('reason for travel is required');
     if (!passportName) errors.push('Your passport Name is required');
+    if (!userId) errors.push('user Id is required');
     if (!type) errors.push('you must specify type of trip; one-way or round-trip or multi-city');
     if (!from) errors.push('origin of travel is request required');
     if (!to) errors.push('destination of travel request is required');
