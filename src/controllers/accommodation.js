@@ -82,4 +82,29 @@ export default class AccommodationController {
       });
     }
   }
+
+  /**
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @returns {Promise<void>} gets all accommodations available for booking
+   */
+  static async getAll(req, res) {
+    try {
+      const data = await Accommodation.find({
+        where: {
+          booked: false
+        }
+      });
+      res.status(200).json({
+        status: 200,
+        data
+      });
+    } catch (error) {
+      res.status(500).json({
+        status: 500,
+        error
+      });
+    }
+  }
 }

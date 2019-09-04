@@ -29,5 +29,10 @@ router.patch(
   checkVerified,
   AccommodationController.rescindOne
 );
+router.get(
+  '/all',
+  checkToken,
+  AccommodationController.getAll
+);
 
 export default router;
