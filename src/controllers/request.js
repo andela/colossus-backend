@@ -42,7 +42,7 @@ export default class RequestController {
       const {
         reason,
         passportName,
-        managerId,
+        lineManagerId,
         type,
         from,
         to,
@@ -55,7 +55,7 @@ export default class RequestController {
         reason,
         type,
         passportName,
-        managerId,
+        lineManagerId,
         userId
       });
 
@@ -85,7 +85,38 @@ export default class RequestController {
 
       res.status(201).json({ status: 201, data: requestSummary });
     } catch (error) {
-      console.log('REQUES=>', error);
+      res.status(500).json({ status: 500, error });
+    }
+  }
+
+  /**
+   * @param {Object} req
+   * @param {Object} res
+   * @returns {Object} res (server response)
+   * @description rejects/approves a travel request
+   */
+  static async updateStatus(req, res) {
+    const requestingManagerId = req.user.id;
+    const { requestId } = req.params;
+    try {
+      // Check if the person making the update is the manager tied to the request
+      const request = await Request.findOne({
+        where: {
+          id: requestId
+        }
+      });
+      if (request.lineManagerId === requestingManagerId) {
+        const status = req.body.approved ? 'approved' : 'rejected';
+        await Request.update({ status }, {
+          where: {
+            id: requestId
+          }
+        });
+        res.status(200).json({ status: 200, data: status });
+      } else {
+        res.status(401).json({ status: 401, error: 'You are not the manager of the user' });
+      }
+    } catch (error) {
       res.status(500).json({ status: 500, error });
     }
   }
