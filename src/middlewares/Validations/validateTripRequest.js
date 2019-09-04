@@ -9,6 +9,7 @@ export default (req, res, next) => {
      * @description Validate the user's inputs and selections
      */
   const {
+    // eslint-disable-next-line no-unused-vars
     reason, passportName, type, userId,
     from, to, arrivalDate, departureDate, accommodation
   } = req.body;
@@ -50,8 +51,7 @@ export default (req, res, next) => {
       if (from.length < 2) errors.push('You need to specify all destinations of your multicity travel request');
       if (to.length < 2) errors.push('You need to specify all destinations of your multicity travel request');
       if (from.length !== to.length) errors.push('All origins and destinations of your multicity request must be complete');
-      if (departureDate.length !== from.length || departureDate.length !== to.length) 
-        { errors.push('departure dates does not correspond with origins or destinations of travel'); }
+      if (departureDate.length !== from.length || departureDate.length !== to.length) { errors.push('departure dates does not correspond with origins or destinations of travel'); }
       if (arrivalDate) errors.push('arrival date is not required for multi-city trips');
     }
 
