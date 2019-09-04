@@ -1,85 +1,54 @@
 const validateEditRequest = (req, res, next) => {
   const {
     type, reason, passportName,
-    from, to, arrivalDate,
-    departureDate, accommodation, id
+    managerId, from, to, arrivalDate,
+    departureDate, accommodation, tripId
   } = req.body;
 
-<<<<<<< HEAD
   const specialCharaceterRegex = /^(?=.*[!@#$%^.,&*])/;
-=======
-  let stringValues = [reason, from, to, type, passportName, accommodation];
-
-  try {
-    const errors = [];
-    if (!reason) errors.push('reason for travel is required');
-    if (!passportName) errors.push('Your passport Name is required');
-    if (!userId) errors.push('user Id is required');
-    if (!type) errors.push('you must specify type of trip; one-way or round-trip or multi-city');
-    if (!from) errors.push('origin of travel is request required');
-    if (!to) errors.push('destination of travel request is required');
-    if (!departureDate) errors.push('departure Date for travel request is required');
-    if (!accommodation) errors.push('accommodation arrangement for travel must be specified');
->>>>>>> feat(edit-request): Create Endpoint To Update Requests
 
   const errors = [];
 
   const validtypes = ['one-way', 'multi-city', 'round-trip'];
 
-  if (!passportName) errors.push('a passport name is required');
-  if (!reason) errors.push('a reason for your request is required');
-  if (!type) errors.push('a request type is required');
-  if (!from) errors.push('at least one origin is required');
-  if (!to) errors.push('at least one destination is required');
-  if (!departureDate) errors.push('at least one departure date is required');
-  if (!accommodation) errors.push('at least one accommodation is required');
-  if ((type && type === 'round-trip') && !arrivalDate) errors.push('at least one arrival date is required');
-  if (from && !Array.isArray(from)) errors.push('origin must be an array');
-  if (to && !Array.isArray(to)) errors.push('destination must be an array');
-  if (accommodation && !Array.isArray(accommodation)) errors.push('origin must be an array');
-  if (accommodation && !Array.isArray(accommodation)) errors.push('accomodation must be an array');
-  if (arrivalDate && !Array.isArray(arrivalDate)) errors.push('return date must be an array');
-  if (departureDate && !Array.isArray(departureDate)) errors.push('travel date must be an array');
-  if (id && !Array.isArray(id)) errors.push('trip ids must be an array');
-
-  if (from && Array.isArray(from)) {
+  if (from) {
     from.forEach(origin => {
       if (typeof origin !== 'string' || specialCharaceterRegex.test(origin)) {
         errors.push('A valid origin must be a string without special characters');
       }
     });
   }
-  if (to && Array.isArray(to)) {
+  if (to) {
     to.forEach(destination => {
       if (typeof destination !== 'string' || specialCharaceterRegex.test(destination)) {
         errors.push('A valid destination must be a string without special characters');
       }
     });
   }
-  if (accommodation && Array.isArray(accommodation)) {
+  if (accommodation) {
     accommodation.forEach(facility => {
       if (typeof facility !== 'string' || specialCharaceterRegex.test(facility) || facility.length < 5) {
         errors.push('A valid accommodation must be a string without special characters and must be at least 5 characters long');
       }
     });
   }
-  if (departureDate && Array.isArray(departureDate)) {
+  if (departureDate) {
     departureDate.forEach(date => {
       if (typeof date !== 'string') {
         errors.push('Invalid date selected');
       }
     });
   }
-  if (arrivalDate && Array.isArray(arrivalDate)) {
+  if (arrivalDate) {
     arrivalDate.forEach(date => {
       if (typeof date !== 'string') {
         errors.push('Invalid date selected');
       }
     });
   }
-  if (id && Array.isArray(id)) {
-    id.forEach(tripId => {
-      if (!Number.isInteger(tripId)) {
+  if (tripId) {
+    tripId.forEach(id => {
+      if (!Number.isInteger(id)) {
         errors.push('one of your trip IDs is not a valid integer');
       }
     });
@@ -87,6 +56,7 @@ const validateEditRequest = (req, res, next) => {
   if (type && !validtypes.includes(type)) errors.push('A valid request type is either \'one-way\', \'round-trip\', \'multi-city\'');
   if (reason && reason.trim().length <= 5) errors.push('reason cannot be less then 5 characters');
   if (passportName && passportName.trim().length <= 5) errors.push('passport name cannot be less then 5 characters');
+  if (managerId && !Number.isInteger(managerId)) errors.push('Manager id must be an integer');
   if (type && type === 'multi-city' && from && from.length < 2) errors.push('multi city request must contain more than one origin');
   if (type && type === 'multi-city' && to && to.length < 2) errors.push('multi city request must contain more than one destination');
   if (type && type === 'multi-city' && accommodation && accommodation.length < 2) errors.push('multi city request must contain more than one accomodation');
@@ -97,9 +67,15 @@ const validateEditRequest = (req, res, next) => {
   if (type && (type === 'one-way' || type === 'round-trip') && accommodation && accommodation.length > 1) errors.push('only one accommodation is allowed');
   if (type && (type === 'one-way' || type === 'round-trip') && departureDate && departureDate.length > 1) errors.push('only one departure date is allowed');
   if (type && (type === 'multi-city' || type === 'one-way') && arrivalDate) errors.push('irrelevant field \'arrivalDate\'');
+  if (from && !Array.isArray(from)) errors.push('origin must be an array');
+  if (to && !Array.isArray(to)) errors.push('destination must be an array');
+  if (accommodation && !Array.isArray(accommodation)) errors.push('origin must be an array');
+  if (accommodation && !Array.isArray(accommodation)) errors.push('accomodation must be an array');
+  if (arrivalDate && !Array.isArray(arrivalDate)) errors.push('return date must be an array');
+  if (departureDate && !Array.isArray(departureDate)) errors.push('travel date must be an array');
   if (errors.length > 0) {
     return res.status(400).json({
-      status: 400,
+      status: 'error',
       error: errors
     });
   }
