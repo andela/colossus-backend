@@ -11,12 +11,11 @@ const UserModel = models.User;
 // eslint-disable-next-line import/no-extraneous-dependencies
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
-
 passport.use(
   new GoogleStrategy({
     clientID: process.env.googleClientID,
     clientSecret: process.env.googleClientSecret,
-    callbackURL: 'http://localhost:3000/api/v1/auth/google/api/v1/auth/google/callback',
+    callbackURL: 'http://localhost:3000/api/v1/auth/google/callback',
     proxy: true
   }, async (accessToken, refreshToken, profile, done) => {
     try {
@@ -30,9 +29,8 @@ passport.use(
         password: genPassword
       };
       // eslint-disable-next-line no-undef
-      user = await UserModel.create(data, err);
+      user = await UserModel.create(data);
       // eslint-disable-next-line no-undef
-      if (err) return done(err);
       return done(null, user);
     } catch (err) {
       console.log(err);

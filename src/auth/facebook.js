@@ -14,7 +14,7 @@ passport.use(
   new FacebookStrategy({
     clientID: process.env.AppID,
     clientSecret: process.env.AppSecret,
-    callbackURL: 'http://localhost:3000/api/v1/auth/google/api/v1/auth/facebook/callback',
+    callbackURL: 'http://localhost:3000/api/v1/auth/facebook/callback',
     proxy: true,
     profileFields: ['id', 'emails', 'name']
   }, async (accessToken, refreshToken, profile, done) => {
@@ -29,9 +29,8 @@ passport.use(
         password: genPassword
       };
       // eslint-disable-next-line no-undef
-      user = await UserModel.create(data, err);
+      user = await UserModel.create(data);
       // eslint-disable-next-line no-undef
-      if (err) return done(err);
       return done(null, user);
     } catch (err) {
       console.log(err);
