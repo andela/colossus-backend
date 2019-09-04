@@ -193,7 +193,7 @@ describe('POST /api/v1/request', () => {
         managerId: 2,
         userId,
         type: 'multi-city',
-        from: ['Lagos','warri'],
+        from: ['Lagos', 'warri'],
         to: ['warri', 'kogi'],
         departureDate: ['2018-03-29T13:34:00.000', '2019-03-29T13:20:00.000'],
         accommodation: ['hotel presidential', 'my house']
@@ -215,7 +215,7 @@ describe('POST /api/v1/request', () => {
         managerId: 2,
         userId,
         type: 'multi-city',
-        from: ['Lagos','warri'],
+        from: ['Lagos', 'warri'],
         to: ['warri', 'kogi'],
         departureDate: ['2018-03-29T13:34:00.000'],
         accommodation: ['hotel presidential', 'my house']
@@ -226,7 +226,7 @@ describe('POST /api/v1/request', () => {
         done();
       });
   });
-   it('Should return an error if a multi-city trip has less than 2 FROM entries', (done) => {
+  it('Should return an error if a multi-city trip has less than 2 FROM entries', (done) => {
     chai
       .request(server)
       .post('/api/v1/request')
@@ -248,7 +248,7 @@ describe('POST /api/v1/request', () => {
         done();
       });
   });
-   it('Should return an error if a multi-city trip has less than 2 TO entries', (done) => {
+  it('Should return an error if a multi-city trip has less than 2 TO entries', (done) => {
     chai
       .request(server)
       .post('/api/v1/request')
@@ -259,7 +259,7 @@ describe('POST /api/v1/request', () => {
         managerId: 2,
         userId,
         type: 'multi-city',
-        from: ['Lagos','warri'],
+        from: ['Lagos', 'warri'],
         to: ['warri'],
         departureDate: ['2018-03-29T13:34:00.000', '2019-03-29T13:20:00.000'],
         accommodation: ['hotel presidential', 'my house']
@@ -270,7 +270,7 @@ describe('POST /api/v1/request', () => {
         done();
       });
   });
-    it('Should return an error if a multi-city trip has an ARRIVALDATE entry', (done) => {
+  it('Should return an error if a multi-city trip has an ARRIVALDATE entry', (done) => {
     chai
       .request(server)
       .post('/api/v1/request')
@@ -281,7 +281,7 @@ describe('POST /api/v1/request', () => {
         managerId: 2,
         userId,
         type: 'multi-city',
-        from: ['Lagos','warri'],
+        from: ['Lagos', 'warri'],
         to: ['warri', 'togo'],
         departureDate: ['2018-03-29T13:34:00.000', '2019-03-29T13:20:00.000'],
         arrivalDate: '2019-03-29T13:20:00.000',
@@ -293,5 +293,4 @@ describe('POST /api/v1/request', () => {
         done();
       });
   });
-});    
-   
+});

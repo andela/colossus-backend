@@ -8,15 +8,15 @@ dotenv.config();
 
 const UserModel = models.User;
 
-// eslint-disable-next-line import/no-extraneous-dependencies
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
 
 passport.use(
-  new GoogleStrategy({
-    clientID: process.env.googleClientID,
-    clientSecret: process.env.googleClientSecret,
-    callbackURL: 'http://localhost:3000/api/v1/auth/google/callback',
-    proxy: true
+  new FacebookStrategy({
+    clientID: process.env.AppID,
+    clientSecret: process.env.AppSecret,
+    callbackURL: 'https://barefoot-nomad.herokuapp.com/api/v1/auth/facebook/callback',
+    proxy: true,
+    profileFields: ['id', 'emails', 'name']
   }, async (accessToken, refreshToken, profile, done) => {
     try {
       let user = await UserModel.findOne({ where: { email: profile.emails[0].value } });
@@ -47,9 +47,7 @@ passport.deserializeUser(async (id, done) => {
     const user = await UserModel.findOne({ where: { id, } });
     if (user) return done(null, user);
   } catch (err) {
-    // eslint-disable-next-line no-console
     console.log(err);
   }
 });
-
 export default passport;

@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import passportFacebook from '../../auth/facebook';
-import passportGoogle from '../../auth/google';
+import passportFacebook from '../../middlewares/facebook';
+import passportGoogle from '../../middlewares/google';
 import { AuthController } from '../../controllers';
 import AuthValidator from '../../middlewares/inputVaidator';
 import emailValidation from '../../middlewares/emailValidation';
