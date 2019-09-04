@@ -23,6 +23,10 @@ export default (sequelize, DataTypes) => {
       foreignKey: 'requestId',
       as: 'trips'
     });
+    Request.hasMany(models.Comment, {
+      foreignKey: 'requestId',
+      as: 'comments'
+    });
     Request.belongsTo(models.User, {
       foreignKey: 'userId',
       onDelete: 'CASCADE',
