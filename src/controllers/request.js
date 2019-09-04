@@ -1,9 +1,10 @@
 import models from '../models';
 import Helper from '../helpers/commonHelper';
 import errorResponse from '../utils/index';
+import { eventEmitter } from '../services/websocket';
 
 const { generateTrips, NotifyManagerForNewRequest } = Helper;
-const { Request, Trip } = models;
+const { Request, Trip, Notification } = models;
 
 /**
  *
