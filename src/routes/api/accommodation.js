@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { AccommodationController } from '../../controllers';
 import {
-  blob, checkToken, checkVerified, checkIfAlreadyBooked, checkIfBooked
+  blob, checkToken, checkVerified, checkIfAlreadyBooked, checkIfBooked, checkIfOwner
 } from '../../middlewares';
 import multipart from '../../helpers/multipartHelper';
 
@@ -33,6 +33,13 @@ router.get(
   '/all',
   checkToken,
   AccommodationController.getAll
+);
+router.delete(
+  '/drop/:id',
+  checkToken,
+  checkVerified,
+  checkIfOwner,
+  AccommodationController.deleteOne
 );
 
 export default router;
