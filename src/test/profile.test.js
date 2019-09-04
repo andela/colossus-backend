@@ -56,7 +56,8 @@ describe('PATCH /api/v1/auth/edit', () => {
         .send({
           gender: 'male',
           currency: 'GBP',
-          language: 'ESP'
+          language: 'ESP',
+          department: 'Information technology'
         })
         .end((err, res) => {
           const { status, body } = res;
