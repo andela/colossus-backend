@@ -57,6 +57,7 @@ module.exports = {
         'travel_team_member',
         'manager',
         'requester',
+        'supplier',
         'user'
       ),
       defaultValue: 'user'
