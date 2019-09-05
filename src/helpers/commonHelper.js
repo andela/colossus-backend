@@ -22,13 +22,13 @@ class CommonHelper {
   static generateTrips(request, id) {
     const body = Object.entries(request);
     const Trips = [];
-    const obj = {};
     const multiCity = body.filter(el => el[0] === 'from'
     || el[0] === 'to'
     || el[0] === 'departureDate'
     || el[0] === 'accommodation');
 
     while (multiCity[0][1].length > 0) {
+      const obj = {};
       multiCity.map(el => {
         // eslint-disable-next-line prefer-destructuring
         obj[el[0]] = el[1][0];

@@ -42,6 +42,14 @@ module.exports = {
     address: {
       type: Sequelize.STRING
     },
+    emailNotify: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: true
+    },
+    appNotify: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: true
+    },
     role: {
       type: Sequelize.ENUM(
         'super_admin',
@@ -61,11 +69,13 @@ module.exports = {
     },
     lineManagerId: {
       type: Sequelize.INTEGER,
+      allowNull: true,
       onDelete: 'SET NULL',
       onUpdate: 'CASCADE',
       references: {
         model: 'Users',
-        key: 'id'
+        key: 'id',
+        as: 'lineManagerId',
       }
     },
     createdAt: {

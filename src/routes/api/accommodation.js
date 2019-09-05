@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { AccommodationController } from '../../controllers';
 import {
-  blob, checkToken, checkVerified, checkIfAlreadyBooked, checkIfBooked
+  blob, checkToken, checkVerified, checkIfBooked
 } from '../../middlewares';
 import multipart from '../../helpers/multipartHelper';
 
@@ -19,7 +19,6 @@ router.post(
   '/book',
   checkToken,
   checkVerified,
-  checkIfAlreadyBooked,
   checkIfBooked,
   AccommodationController.bookOne
 );

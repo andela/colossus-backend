@@ -5,6 +5,7 @@ import session from 'express-session';
 import winston from 'winston';
 import swaggerUi from 'swagger-ui-express';
 import bodyParser from 'body-parser';
+import socketIo from 'socket.io';
 import cors from 'cors';
 import expressValidator from 'express-validator';
 import swaggerDocument from './docs/swagger';
@@ -37,11 +38,6 @@ app.get('/', (req, res) => res.status(200).json({
   status: 200,
   message: 'Welcome To Barefoot nomad',
 }));
-
-app.use(cors());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(express.static(`${__dirname}/public`));
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
@@ -102,8 +98,16 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   logger.info(`Listening on PORT ${PORT}`);
+});
+
+export const io = socketIo(server);
+io.on('connection', (client) => {
+  logger.info(`New connection, form client ${client.id}`);
+});
+io.on('disconnet', (client) => {
+  logger.info(`Disconnection, form client ${client.id}`);
 });
 
 export default app;

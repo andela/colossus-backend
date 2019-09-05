@@ -81,6 +81,14 @@ const UserDefinition = (sequelize, DataTypes) => {
     department: {
       type: DataTypes.STRING
     },
+    emailNotify: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
+    },
+    appNotify: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
+    },
     picture: {
       type: DataTypes.JSON
     }
@@ -122,7 +130,7 @@ const UserDefinition = (sequelize, DataTypes) => {
     // Associations can be defined here
     const user = this;
     user.belongsTo(models.User, {
-      as: 'lineManager',
+      foreignKey: 'lineManagerId', // changed from lineManager to lineManagerId
       onDelete: 'SET NULL',
       onUpdate: 'CASCADE'
     });
