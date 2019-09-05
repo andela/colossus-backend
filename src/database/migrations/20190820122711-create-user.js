@@ -42,6 +42,14 @@ module.exports = {
     address: {
       type: Sequelize.STRING
     },
+    emailNotify: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: true
+    },
+    appNotify: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: true
+    },
     role: {
       type: Sequelize.ENUM(
         'super_admin',

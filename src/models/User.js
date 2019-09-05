@@ -81,6 +81,14 @@ const UserDefinition = (sequelize, DataTypes) => {
     department: {
       type: DataTypes.STRING
     },
+    emailNotify: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
+    },
+    appNotify: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
+    },
     picture: {
       type: DataTypes.JSON
     }

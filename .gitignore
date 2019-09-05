@@ -92,8 +92,11 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 
+
+# Seed Data
+src/database/seeders/20190904145236-demo-user.js
+
 # Ignore Winston(logger) log Files
 combined.log
 error.log
 # End of https://www.gitignore.io/api/node
- 
