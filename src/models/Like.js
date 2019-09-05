@@ -5,8 +5,8 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true
-    },
-  }, {});
+    }
+  });
 
   // eslint-disable-next-line func-names
   Like.associate = function ({ User }) {
@@ -24,6 +24,28 @@ export default (sequelize, DataTypes) => {
     const like = this;
     return like.count({
       where: {
+        accommodationId
+      }
+    });
+  };
+
+  // eslint-disable-next-line func-names
+  Like.deleteByUserAndAccommodation = function (likedBy, accommodationId) {
+    const like = this;
+    return like.destroy({
+      where: {
+        likedBy,
+        accommodationId
+      }
+    });
+  };
+
+  // eslint-disable-next-line func-names
+  Like.findByUserAndAccommodation = function (likedBy, accommodationId) {
+    const like = this;
+    return like.findOne({
+      where: {
+        likedBy,
         accommodationId
       }
     });
