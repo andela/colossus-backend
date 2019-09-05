@@ -218,6 +218,7 @@ describe('POST /api/v1/request', () => {
       .send({
         passportName: 'John Doe',
         reason: 'Work leave',
+        lineManagerId: 2,
         type: 'one-way',
         from: 'New york',
         to: 'London',
