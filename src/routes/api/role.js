@@ -9,6 +9,6 @@ const { assignRole } = Role;
 
 const router = Router();
 
-router.patch('/role', [checkToken, authorize], validateRole, assignRole);
+router.patch('/role', checkToken, authorize, validateRole, assignRole);
 
 export default router;
