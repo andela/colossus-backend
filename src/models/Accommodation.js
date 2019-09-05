@@ -39,6 +39,11 @@ const AccommodationDefinition = (sequelize, DataTypes) => {
       onDelete: 'SET NULL',
       onUpdate: 'CASCADE'
     });
+    accommodation.belongsTo(models.User, {
+      foreignKey: 'startedBy',
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE'
+    });
   };
 
   // eslint-disable-next-line func-names
@@ -62,6 +67,16 @@ const AccommodationDefinition = (sequelize, DataTypes) => {
     return accommodation.findOne({
       where: {
         bookedBy
+      }
+    });
+  };
+
+  // eslint-disable-next-line func-names
+  Accommodation.findWhereStartedBy = function (startedBy) {
+    const accommodation = this;
+    return accommodation.find({
+      where: {
+        startedBy
       }
     });
   };

@@ -107,4 +107,30 @@ export default class AccommodationController {
       });
     }
   }
+
+  /**
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @returns {Promise<void>} deletes an accommodation service
+   */
+  static async deleteOne(req, res) {
+    try {
+      const { id } = req.params;
+      await Accommodation.destroy({
+        where: {
+          id
+        }
+      });
+      res.status(200).json({
+        status: 200,
+        data: 'Successfully deleted accommodation service'
+      });
+    } catch (error) {
+      res.status(500).json({
+        status: 500,
+        error
+      });
+    }
+  }
 }

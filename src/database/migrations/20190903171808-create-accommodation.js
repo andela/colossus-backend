@@ -36,6 +36,15 @@ module.exports = {
         key: 'id'
       }
     },
+    startedBy: {
+      type: Sequelize.INTEGER,
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE',
+      references: {
+        model: 'Users',
+        key: 'id'
+      }
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE
