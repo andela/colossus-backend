@@ -1,7 +1,7 @@
 /* eslint-disable require-jsdoc */
 import models from '../models';
 
-const { Comment, Request } = models;
+const { Comment } = models;
 
 export default class CommentController {
   /**
@@ -10,22 +10,14 @@ export default class CommentController {
      * @returns {Object} details of the posted comment
      * @description Post a new comment about a trip request made
      */
-  static async createComment(req, res) {
+  static async postComment(req, res) {
     const { commentBody } = req.body;
-    const userId = req.user.id;
     try {
-      const request = await Request.findAll(
-        where: {
-            userId
-          }
-      );
-      if (!request) {
-        res.status(404).json({ status: 'error', message: 'This request does not exist' });
-      }
-      const { id } = request;
+      const userId = req.user.id;
+      const { requestId } = req.params;
 
       const newComment = await Comment.create({
-        commentBody, userId, id
+        commentBody, requestId, userId
       });
       res.status(201).json({
         status: 'success',
@@ -34,7 +26,7 @@ export default class CommentController {
         }
       });
     } catch (error) {
-      res.status(500).json({ status: 500, error });
+      res.status(500).json({ status: 'error', error: error.message });
     }
   }
 }
