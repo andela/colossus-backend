@@ -3,7 +3,9 @@ import authRouter from './auth';
 import requestRouter from './request';
 import accommodationRouter from './accommodation';
 import profileRouter from './profile';
-import { checkToken } from '../../middlewares';
+import permissionRouter from './permission';
+import roleRouter from './role';
+import { checkToken } from '../../middlewares/auth';
 
 const router = express.Router();
 
@@ -11,6 +13,8 @@ router.use('/auth', authRouter);
 router.use('/profile', profileRouter);
 
 router.use('/request', checkToken, requestRouter);
+router.use('/', roleRouter);
+router.use('/', permissionRouter);
 
 router.use('/accommodation', accommodationRouter);
 
