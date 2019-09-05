@@ -11,4 +11,5 @@ router.post('/', validateTripRequest, RequestController.createTrip);
 
 router.patch('/:requestId/status', validateTripStatus, RequestController.updateStatus);
 
+
 export default router;
