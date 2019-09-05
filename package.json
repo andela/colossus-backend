@@ -4,7 +4,8 @@
   "description": "A Social platform for the creative at heart",
   "main": "index.js",
   "scripts": {
-    "test": "npm run undo-migration && npm run migration && nyc mocha './src/**/**test.js' --require @babel/polyfill --require @babel/register --timeout 30000 --exit",
+    "test-single": "mocha $1",
+    "test": "npm run undo-migration && npm run migration && nyc mocha './src/**/**test.js' --require @babel/polyfill --require @babel/register --timeout 30000 --exit && npm run undo-seeder",
     "test-local:windows": "set NODE_ENV=test&& npm test",
     "test-local:linux": "export NODE_ENV=test && npm test",
     "test-travis": "export NODE_ENV=test && npm test",
@@ -16,8 +17,10 @@
     "clean": "rm -rf dist && mkdir dist",
     "build": "npm run clean && npm run babel-build",
     "heroku-postbuild": "npm run build && export NODE_ENV=production && npm run migration && npm start",
-    "migration": "npx sequelize-cli db:migrate",
-    "undo-migration": "npx sequelize-cli db:migrate:undo:all"
+    "migration": "npx sequelize-cli db:migrate & npm run seeder",
+    "undo-migration": "npx sequelize-cli db:migrate:undo:all",
+    "seeder": "npx sequelize db:seed:all",
+    "undo-seeder": "npx sequelize db:seed:undo:all"
   },
   "author": "Andela Simulations Programme",
   "license": "MIT",

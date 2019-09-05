@@ -10,7 +10,7 @@ module.exports = {
     'http'
   ],
   // Uncomment for testing purposes
-  // host: 'localhost:3000',
+  // host: 'localhost:5500',
   host: 'barefoot-nomad.herokuapp.com/',
   basePath: '/api/v1',
   securityDefinitions: {
@@ -584,6 +584,204 @@ module.exports = {
               properties: {
                 status: {
                   type: 'integer'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    '/role': {
+      patch: {
+        tags: ['role & permissions'],
+        summary: 'Assigns roles to users',
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'Authorization',
+            in: 'headers',
+            description: 'Bearer token',
+            type: 'string'
+          },
+          {
+            in: 'body',
+            name: 'body',
+            description: 'body',
+            schema: {
+              type: 'object',
+              properties: {
+                email: {
+                  type: 'string',
+                  example: 'JDoe@email.com'
+                },
+                role: {
+                  type: 'string',
+                  example: 'manager'
+                }
+              }
+            }
+          }
+        ],
+        responses: {
+          200: {
+            description: 'User has been assigned a role',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                data: {
+                  type: 'object'
+                }
+              }
+            }
+          },
+          400: {
+            description: 'Bad request',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          },
+          401: {
+            description: 'Unauthorized',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'integer'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    '/role/permissions': {
+      patch: {
+        tags: ['role & permissions'],
+        summary: 'Sets permissions for roles targeting particular resource endpoints',
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'Authorization',
+            in: 'headers',
+            description: 'Bearer token',
+            type: 'string'
+          },
+          {
+            in: 'body',
+            name: 'body',
+            description: 'body',
+            schema: {
+              type: 'object',
+              properties: {
+                role: {
+                  type: 'string',
+                  example: 'manager'
+                },
+                resource: {
+                  type: 'string',
+                  example: 'accomodation'
+                },
+                create: {
+                  type: 'boolean',
+                  example: 'false'
+                },
+                read: {
+                  type: 'boolean',
+                  example: 'true'
+                },
+                update: {
+                  type: 'boolean',
+                  example: 'false'
+                },
+                delete: {
+                  type: 'boolean',
+                  example: 'false'
+                }
+              }
+            }
+          }
+        ],
+        responses: {
+          200: {
+            description: 'Permissions have been set for a role',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                data: {
+                  type: 'object'
+                }
+              }
+            }
+          },
+          400: {
+            description: 'Bad request',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          },
+          401: {
+            description: 'Unauthorized',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'integer'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          },
+          403: {
+            description: 'Forbidden request',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          },
+          404: {
+            description: 'Resource endpoint does not exist',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
                 },
                 error: {
                   type: 'string'

@@ -67,6 +67,12 @@ const UserDefinition = (sequelize, DataTypes) => {
     address: {
       type: DataTypes.STRING
     },
+    department: {
+      type: DataTypes.STRING
+    },
+    picture: {
+      type: DataTypes.JSON
+    },
     role: {
       type: DataTypes.ENUM(
         'super_admin',
@@ -74,16 +80,11 @@ const UserDefinition = (sequelize, DataTypes) => {
         'travel_team_member',
         'manager',
         'requester',
+        'supplier',
         'user'
       ),
-      defaultValue: 'user'
+      defaultValue: 'user',
     },
-    department: {
-      type: DataTypes.STRING
-    },
-    picture: {
-      type: DataTypes.JSON
-    }
   },
   {
     hooks: {
@@ -129,6 +130,10 @@ const UserDefinition = (sequelize, DataTypes) => {
     user.hasMany(models.Request, {
       foreignKey: 'userId',
       as: 'requests'
+    });
+    User.belongsTo(models.Role, {
+      targetKey: 'name',
+      foreignKey: 'role'
     });
   };
   return User;

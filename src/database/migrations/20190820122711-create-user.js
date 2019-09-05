@@ -49,9 +49,24 @@ module.exports = {
         'travel_team_member',
         'manager',
         'requester',
+        'supplier',
         'user'
       ),
       defaultValue: 'user'
+      // validate: {
+      //   isIn: {
+      //     args: [[
+      //       'super_admin',
+      //       'travel_admin',
+      //       'travel_team_member',
+      //       'manager',
+      //       'requester',
+      //       'supplier',
+      //       'user'
+      //     ]],
+      //     msg: 'Invalid role'
+      // }
+      // }
     },
     department: {
       type: Sequelize.STRING
