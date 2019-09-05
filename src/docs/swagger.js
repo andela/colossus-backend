@@ -9,8 +9,6 @@ module.exports = {
     'https',
     'http'
   ],
-  // Uncomment for testing purposes
-  // host: 'localhost:5500',
   host: 'barefoot-nomad.herokuapp.com/',
   basePath: '/api/v1',
   securityDefinitions: {
