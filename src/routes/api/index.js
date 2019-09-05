@@ -3,16 +3,20 @@ import authRouter from './auth';
 import requestRouter from './request';
 import accommodationRouter from './accommodation';
 import profileRouter from './profile';
+import likeRouter from './like';
 import { checkToken } from '../../middlewares';
 
 const router = express.Router();
 
 router.use('/auth', authRouter);
+
 router.use('/profile', profileRouter);
 
 router.use('/request', checkToken, requestRouter);
 
 router.use('/accommodation', accommodationRouter);
+
+router.use('/like', likeRouter);
 
 router.use((err, req, res, next) => {
   if (err.name === 'ValidationError') {
