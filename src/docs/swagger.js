@@ -636,7 +636,6 @@ module.exports = {
                 },
                 data: {
                   type: 'object'
-                  type: 'integer'
                 },
                 data: {
                   type: 'object',
@@ -710,7 +709,7 @@ module.exports = {
         }
       }
     },
-  },
+    },
     '/role': {
       patch: {
         tags: ['role & permissions'],
@@ -830,7 +829,13 @@ module.exports = {
                 delete: {
                   type: 'boolean',
                   example: 'false'
-                },             
+                }, 
+              },
+            },
+          },
+        ],
+      },
+    },            
   definitions: {
     SendEmail: {
       type: 'object',
@@ -942,5 +947,6 @@ module.exports = {
         }
       },
     },
+  },
   }
 };

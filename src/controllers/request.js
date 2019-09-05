@@ -99,6 +99,7 @@ export default class RequestController {
       if (appNotify) eventEmitter(`tripCreated${lineManagerId}`, emitMessage);
       res.status(201).json({ status: 201, data: requestSummary });
     } catch (error) {
+      console.log('req-err>>>>>', error.message);
       res.status(500).json({ status: 500, error });
     }
   }

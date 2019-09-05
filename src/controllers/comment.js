@@ -22,7 +22,8 @@ export default class CommentController {
       res.status(201).json({
         status: 'success',
         data: {
-          newComment: newComment.commentBody
+          newComment: newComment.commentBody,
+          'User ID': newComment.userId
         }
       });
     } catch (error) {
