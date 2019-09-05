@@ -30,8 +30,6 @@ class AuthController extends CommonHelper {
         password,
       } = req.body;
 
-      console.log('TEST<=>REQ<<<>>>', req.body);
-
       const user = await UserModel.findOne({ where: { email, } });
       if (user) {
         res.status(400).json({ status: 400, error: 'Email already exists', });
