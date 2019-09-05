@@ -206,6 +206,8 @@ describe('PATCH /api/v1/request/:requestId/status', () => {
           done();
         });
     });
+  });
+});
 
 describe('POST /api/v1/request', () => {
   it('Should successfully create a request', (done) => {
