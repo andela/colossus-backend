@@ -44,6 +44,10 @@ const AccommodationDefinition = (sequelize, DataTypes) => {
       onDelete: 'SET NULL',
       onUpdate: 'CASCADE'
     });
+    accommodation.hasMany(models.Like, {
+      foreignKey: 'accommodationId',
+      as: 'likes'
+    });
   };
 
   // eslint-disable-next-line func-names
