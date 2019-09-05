@@ -218,7 +218,7 @@ describe('POST /api/v1/request', () => {
       .send({
         passportName: 'okon chinedu',
         reason: 'to enjoy myself',
-        managerId: 2,
+        lineManagerId: 2,
         userId,
         type: 'one-way',
         from: 'Lagos',
@@ -227,6 +227,7 @@ describe('POST /api/v1/request', () => {
         accommodation: 'hotel presidential',
       })
       .end((err, res) => {
+        console.log(res.body);
         expect(res).to.have.status(201);
         expect(res.body.status).to.be.equal(201);
         expect(res.body.data.trips).to.be.an('array');
