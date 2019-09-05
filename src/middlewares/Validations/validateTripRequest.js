@@ -13,7 +13,7 @@ export default (req, res, next) => {
     reason, passportName, type, userId,
     from, to, arrivalDate, departureDate, accommodation
   } = req.body;
-  
+
   let stringValues = [reason, from, to, type, passportName, accommodation];
 
   try {
