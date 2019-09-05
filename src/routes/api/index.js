@@ -1,11 +1,13 @@
 import express from 'express';
 import authRouter from './auth';
 import requestRouter from './request';
+import profileRouter from './profile';
 import { checkToken } from '../../middlewares';
 
 const router = express.Router();
 
 router.use('/auth', authRouter);
+router.use('/profile', profileRouter);
 
 router.use('/request', checkToken, requestRouter);
 

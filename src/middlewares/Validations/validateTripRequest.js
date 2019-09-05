@@ -20,7 +20,7 @@ export default (req, res, next) => {
     const errors = [];
     if (!reason) errors.push('reason for travel is required');
     if (!passportName) errors.push('Your passport Name is required');
-    if (!userId) errors.push('user Id is required');
+    // if (!userId) errors.push('user Id is required');
     if (!type) errors.push('you must specify type of trip; one-way or round-trip or multi-city');
     if (!from) errors.push('origin of travel is request required');
     if (!to) errors.push('destination of travel request is required');
@@ -58,9 +58,9 @@ export default (req, res, next) => {
       if (arrivalDate) errors.push('arrival date is not required for multi-city trips');
     }
 
-    if (type === 'one-way' || type === 'round-trip' && from.length > 1) errors.push('only one origin of trip is required');
-    if (type === 'one-way' || type === 'round-trip' && to.length > 1) errors.push('only one destination of trip is required');
-    if (type === 'one-way' || type === 'round-trip' && departureDate.length > 1) errors.push('only one departure date is required');
+    // if (type === 'one-way' || type === 'round-trip' && from.length > 1) errors.push('only one origin of trip is required');
+    // if (type === 'one-way' || type === 'round-trip' && to.length > 1) errors.push('only one destination of trip is required');
+    // if (type === 'one-way' || type === 'round-trip' && departureDate.length > 1) errors.push('only one departure date is required');
     if (type === 'one-way' && arrivalDate) errors.push('arrival date is NOT required for one way trip');
     if (type === 'round-trip' && arrivalDate.length > 1) errors.push('only one arrival date required');
     if (type === 'round-trip' && !arrivalDate) errors.push('arrival date is required');

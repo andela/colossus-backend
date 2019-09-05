@@ -1,8 +1,10 @@
 import models from '../models';
 import generateTripDetails from '../helpers/commonHelper';
+import { eventEmitter } from '../services/websocket';
+import sendVerificationMail from '../services/email';
 
 const { generateTrips, generatesingleTrip } = generateTripDetails;
-const { Request, Trip } = models;
+const { Request, Trip, Notification } = models;
 
 /**
  *
@@ -38,7 +40,6 @@ export default class RequestController {
       const {
         reason,
         passportName,
-        lineManagerId,
         type,
         from,
         to,
@@ -47,6 +48,9 @@ export default class RequestController {
         accommodation
       } = req.body;
       const userId = req.user.id;
+      const {
+        lineManagerId, firstName, lastName, appNotify, emailNotify, email
+      } = req.user;
       const request = await Request.create({
         reason,
         type,
@@ -78,7 +82,21 @@ export default class RequestController {
         where: { id },
         include: { model: Trip, as: 'trips' }
       });
+      const emitMessage = `New trip request from ${firstName} ${lastName}`;
 
+      await Notification.create({
+        receiver: lineManagerId,
+        content: emitMessage,
+        type: 'trip'
+      });
+
+      const emailMessage = `
+      <h2>Hi, ${firstName} ${lastName},</h2>
+      <p>Your ${type === 'one-way' ? `${type} trip` : type} to ${to} ${`from ${from}` || ''} has been created</p>&nbsp;
+      <p> You can view the  details on your <a href=${'ceratenotification'}>request page</a> </p>
+     `;
+      if (emailNotify) await sendVerificationMail(email, 'Trip Request Details', emailMessage);
+      if (appNotify) eventEmitter(`tripCreated${lineManagerId}`, emitMessage);
       res.status(201).json({ status: 201, data: requestSummary });
     } catch (error) {
       res.status(500).json({ status: 500, error });
