@@ -216,18 +216,15 @@ describe('POST /api/v1/request', () => {
       .post('/api/v1/request')
       .set('Authorization', `Bearer ${token}`)
       .send({
-        passportName: 'okon chinedu',
-        reason: 'to enjoy myself',
-        lineManagerId: 2,
-        userId,
+        passportName: 'John Doe',
+        reason: 'Work leave',
         type: 'one-way',
-        from: 'Lagos',
-        to: 'calabar',
+        from: 'New york',
+        to: 'London',
         departureDate: '2018-03-29T13:34:00.000',
-        accommodation: 'hotel presidential',
+        accommodation: 'Burj Al-Arab'
       })
       .end((err, res) => {
-        console.log(res.body);
         expect(res).to.have.status(201);
         expect(res.body.status).to.be.equal(201);
         expect(res.body.data.trips).to.be.an('array');
