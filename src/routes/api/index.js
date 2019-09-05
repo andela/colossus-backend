@@ -17,6 +17,9 @@ router.use('/', roleRouter);
 router.use('/', permissionRouter);
 
 router.use('/accommodation', accommodationRouter);
+router.use('/request', checkToken, requestRouter);
+router.use('/', roleRouter);
+router.use('/', permissionRouter);
 
 router.use((err, req, res, next) => {
   if (err.name === 'ValidationError') {
