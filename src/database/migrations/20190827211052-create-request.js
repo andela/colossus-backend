@@ -24,9 +24,15 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    managerId: {
+    lineManagerId: {
       type: Sequelize.INTEGER,
+      onDelete: 'SET NULL',
       allowNull: true,
+      references: {
+        model: 'Users',
+        key: 'id',
+        as: 'lineManagerId',
+      },
     },
     status: {
       type: Sequelize.STRING,

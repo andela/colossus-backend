@@ -69,11 +69,13 @@ module.exports = {
     },
     lineManagerId: {
       type: Sequelize.INTEGER,
+      allowNull: true,
       onDelete: 'SET NULL',
       onUpdate: 'CASCADE',
       references: {
         model: 'Users',
-        key: 'id'
+        key: 'id',
+        as: 'lineManagerId',
       }
     },
     createdAt: {
