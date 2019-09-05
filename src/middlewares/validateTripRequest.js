@@ -56,7 +56,6 @@ export default (req, res, next) => {
       { errors.push('departure dates does not correspond with origins or destinations of travel'); }
       if (arrivalDate) errors.push('arrival date is not required for multi-city trips');
     }
-      
     if (errors.length > 0) throw new Error(errors);
     return next();
   } catch (error) {
