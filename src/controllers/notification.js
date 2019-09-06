@@ -10,8 +10,8 @@ class NotificationController {
   /**
        * @param {Object} req
        * @param {Object} res
-       * @returns {Object} the new user
-       * @description register a new client
+       * @returns {Object} the all requests
+       * @description get all notification
        */
   static async getAllNotification(req, res) {
     try {
