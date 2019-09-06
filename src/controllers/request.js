@@ -92,8 +92,8 @@ export default class RequestController {
 
       const emailMessage = `
       <h2>Hi, ${firstName} ${lastName},</h2>
-      <p>Your ${type === 'one-way' ? `${type} trip` : type} to ${to} ${`from ${from}` || ''} has been created</p>&nbsp;
-      <p> You can view the  details on your <a href=${'ceratenotification'}>request page</a> </p>
+      <p>Your ${type === 'one-way' ? `${type} trip` : type} to ${to.join()} ${`from ${from.join()}` || ''} has been created</p>&nbsp;
+      <p> You can view the  details on your <a href=${'cerate notification'}>request page</a> </p>
      `;
       if (emailNotify) await sendVerificationMail(email, 'Trip Request Details', emailMessage);
       if (appNotify) eventEmitter(`tripCreated${lineManagerId}`, emitMessage);
