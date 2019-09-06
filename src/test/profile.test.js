@@ -39,7 +39,6 @@ describe('PATCH /api/v1/auth/edit', () => {
         .set('Authorization', 'Bearer')
         .send({
           gender: 'male',
-          role: 'super_admin',
           lineManagerId: 1
         })
         .end((err, res) => {
@@ -56,9 +55,9 @@ describe('PATCH /api/v1/auth/edit', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({
           gender: 'male',
-          role: 'travel_admin',
           currency: 'GBP',
-          language: 'ESP'
+          language: 'ESP',
+          department: 'Information technology'
         })
         .end((err, res) => {
           const { status, body } = res;
