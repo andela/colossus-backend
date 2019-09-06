@@ -91,3 +91,23 @@ export const checkVerified = (req, res, next) => {
   }
   next();
 };
+
+/**
+ *
+ * @param {Request} req
+ * @param {Response} res
+ * @param {*} next
+ * @returns {Promise<void>} checks if the user is trying to edit their role and prevents them
+ */
+export const checkRoleChange = (req, res, next) => {
+  const { body } = req;
+  const containsRole = Object.keys(body).some((val) => val === 'role');
+  if (containsRole) {
+    res.status(400).json({
+      status: 400,
+      error: 'You are not allowed to change roles'
+    });
+    return;
+  }
+  next();
+};
