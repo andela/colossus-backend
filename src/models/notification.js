@@ -11,7 +11,7 @@ const newNotification = (sequelize, DataTypes) => {
     },
     receiver: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       validate: {
         notEmpty: {
           msg: 'notification receiver cannot be empty'
