@@ -218,6 +218,7 @@ describe('POST /api/v1/request', () => {
       .send({
         passportName: 'John Doe',
         reason: 'Work leave',
+        lineManagerId: 2,
         type: 'one-way',
         from: 'New york',
         to: 'London',
@@ -311,7 +312,7 @@ describe('POST /api/v1/request', () => {
         from: ['Lagos', 'warri'],
         to: ['warri', 'kogi'],
         departureDate: ['2018-03-29T13:34:00.000', '2019-03-29T13:20:00.000'],
-        accommodation: ['hotel presidential', 'my house']
+        accommodation: ['hotel presidential']
       })
       .end((err, res) => {
         expect(res).to.have.status(400);
