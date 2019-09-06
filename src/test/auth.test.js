@@ -1,5 +1,4 @@
 /* eslint-env mocha */
-
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable linebreak-style */
 import chai from 'chai';

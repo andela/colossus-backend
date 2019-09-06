@@ -7,6 +7,7 @@ import notificationRouter from './notification';
 import { checkToken } from '../../middlewares';
 import permissionRouter from './permission';
 import roleRouter from './role';
+import commentRouter from './comment';
 
 const router = express.Router();
 
@@ -15,13 +16,15 @@ router.use('/profile', profileRouter);
 router.use('/notification', checkToken, notificationRouter);
 
 router.use('/request', checkToken, requestRouter);
+router.use('/request', commentRouter);
+
 router.use('/', roleRouter);
 router.use('/', permissionRouter);
 
 router.use('/accommodation', accommodationRouter);
-router.use('/request', checkToken, requestRouter);
 router.use('/', roleRouter);
 router.use('/', permissionRouter);
+
 
 router.use((err, req, res, next) => {
   if (err.name === 'ValidationError') {
