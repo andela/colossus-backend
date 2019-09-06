@@ -78,7 +78,7 @@ const AccommodationDefinition = (sequelize, DataTypes) => {
   // eslint-disable-next-line func-names
   Accommodation.findWhereStartedBy = function (startedBy) {
     const accommodation = this;
-    return accommodation.find({
+    return accommodation.findAll({
       where: {
         startedBy
       }
