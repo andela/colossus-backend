@@ -86,7 +86,7 @@ const AccommodationDefinition = (sequelize, DataTypes) => {
   };
 
   // eslint-disable-next-line func-names
-  Accommodation.rescind = function (bookedBy) {
+  Accommodation.rescind = function (bookedBy, id) {
     const accommodation = this;
     return accommodation.update({
       bookedBy: null,
@@ -95,7 +95,8 @@ const AccommodationDefinition = (sequelize, DataTypes) => {
       booked: false
     }, {
       where: {
-        bookedBy
+        bookedBy,
+        id
       }
     });
   };

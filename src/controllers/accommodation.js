@@ -69,8 +69,8 @@ export default class AccommodationController {
    */
   static async rescindOne(req, res) {
     try {
-      const { user } = req;
-      await Accommodation.rescind(user.id);
+      const { user, query } = req;
+      await Accommodation.rescind(user.id, query.id);
       res.status(200).json({
         status: 200,
         data: 'Successfully rescinded booking for accommodation'
