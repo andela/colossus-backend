@@ -3,15 +3,18 @@ import authRouter from './auth';
 import requestRouter from './request';
 import accommodationRouter from './accommodation';
 import profileRouter from './profile';
+import notificationRouter from './notification';
+import { checkToken } from '../../middlewares';
 import permissionRouter from './permission';
 import roleRouter from './role';
 import commentRouter from './comment';
-import { checkToken } from '../../middlewares';
 
 const router = express.Router();
 
 router.use('/auth', authRouter);
 router.use('/profile', profileRouter);
+router.use('/notification', checkToken, notificationRouter);
+
 router.use('/request', checkToken, requestRouter);
 router.use('/request', commentRouter);
 
