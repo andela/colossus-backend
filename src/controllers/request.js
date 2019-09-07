@@ -44,18 +44,14 @@ export default class RequestController {
       } = req.user;
 
       const request = await Request.create({
-        reason,
-        type,
-        passportName,
-        lineManagerId,
-        userId: id
+        reason, type, passportName, lineManagerId, userId: id
       });
 
       const Trips = generateTrips(req.body, request.id, type);
 
       await Trip.bulkCreate(Trips, { returning: true });
 
-      const requestSummary = await Request.findOne({ where: { id }, include: { model: Trip, as: 'trips' } });
+      const requestSummary = await Request.findOne({ where: { id: request.id }, include: { model: Trip, as: 'trips' } });
 
       await NotifyManagerForNewRequest(from, to, firstName, lastName, lineManagerId, type, appNotify, emailNotify, email);
 

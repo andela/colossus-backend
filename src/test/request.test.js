@@ -210,6 +210,30 @@ describe('PATCH /api/v1/request/:requestId/status', () => {
 });
 
 describe('POST /api/v1/request', () => {
+  before((done) => {
+    // Verify the newly created user
+    chai.request(server)
+      .get(`/api/v1/auth/verifyuser?query=${token}`)
+      .end((err, res) => {
+        token = res.body.token;
+        done();
+      });
+  });
+  before((done) => {
+    // Edit the line manager id of the new user
+    chai.request(server)
+      .patch('/api/v1/auth/edit')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        gender: 'male',
+        lineManagerId: 1
+      })
+      .end((err, res) => {
+        if (err) console.log(err);
+        if (res) console.log(res);
+        done();
+      });
+  });
   it('Should successfully create a request', (done) => {
     chai
       .request(server)
@@ -218,12 +242,11 @@ describe('POST /api/v1/request', () => {
       .send({
         passportName: 'John Doe',
         reason: 'Work leave',
-        lineManagerId: 2,
         type: 'one-way',
-        from: 'New york',
-        to: 'London',
-        departureDate: '2018-03-29T13:34:00.000',
-        accommodation: 'Burj Al-Arab'
+        from: ['New york'],
+        to: ['London'],
+        departureDate: ['2018-03-29T13:34:00.000'],
+        accommodation: ['Burj Al-Arab']
       })
       .end((err, res) => {
         expect(res).to.have.status(201);
