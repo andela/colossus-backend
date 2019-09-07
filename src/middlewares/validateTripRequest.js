@@ -5,22 +5,7 @@ const validateEditRequest = (req, res, next) => {
     departureDate, accommodation, id
   } = req.body;
 
-<<<<<<< HEAD
   const specialCharaceterRegex = /^(?=.*[!@#$%^.,&*])/;
-=======
-  let stringValues = [reason, from, to, type, passportName, accommodation];
-
-  try {
-    const errors = [];
-    if (!reason) errors.push('reason for travel is required');
-    if (!passportName) errors.push('Your passport Name is required');
-    if (!userId) errors.push('user Id is required');
-    if (!type) errors.push('you must specify type of trip; one-way or round-trip or multi-city');
-    if (!from) errors.push('origin of travel is request required');
-    if (!to) errors.push('destination of travel request is required');
-    if (!departureDate) errors.push('departure Date for travel request is required');
-    if (!accommodation) errors.push('accommodation arrangement for travel must be specified');
->>>>>>> feat(edit-request): Create Endpoint To Update Requests
 
   const errors = [];
 
