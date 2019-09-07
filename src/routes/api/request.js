@@ -5,6 +5,7 @@ import validateTripRequest from '../../middlewares/validateTripRequest';
 
 const router = Router();
 
+
 router.get('/', RequestController.getAllRequests);
 
 router.post('/', checkLineManagerId, validateTripRequest, RequestController.createTrip);
