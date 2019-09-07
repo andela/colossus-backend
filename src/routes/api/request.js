@@ -1,7 +1,13 @@
 import { Router } from 'express';
 import { RequestController } from '../../controllers';
+<<<<<<< HEAD
 import { tripStatus as validateTripStatus, checkLineManagerId } from '../../middlewares/index';
 import validateTripRequest from '../../middlewares/validateTripRequest';
+=======
+import { tripStatus as validateTripStatus } from '../../middlewares/index';
+import validateTripRequest from '../../middlewares/validateTripRequest';
+import validateEditRequest from '../../middlewares/editRequestValidation';
+>>>>>>> feat(edit-request)
 
 const router = Router();
 
