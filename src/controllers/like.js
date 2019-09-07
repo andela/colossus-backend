@@ -21,12 +21,12 @@ export default class LikeController {
         accommodationId: params.id
       });
       res.status(201).json({
-        status: 201,
+        status: 'success',
         data
       });
     } catch (error) {
       res.status(500).json({
-        status: 500,
+        status: 'error',
         error
       });
     }
@@ -46,12 +46,12 @@ export default class LikeController {
         params.id
       );
       res.status(200).json({
-        status: 200,
+        status: 'success',
         data: `${deleteCount} item(s) deleted`
       });
     } catch (error) {
       res.status(500).json({
-        status: 500,
+        status: 'error',
         error
       });
     }
@@ -68,12 +68,12 @@ export default class LikeController {
       const { id } = req.params;
       const data = await Like.countByAccommodation(id);
       res.status(200).json({
-        status: 200,
+        status: 'success',
         data
       });
     } catch (error) {
       res.status(500).json({
-        status: 500,
+        status: 'error',
         error
       });
     }

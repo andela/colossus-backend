@@ -18,7 +18,7 @@ export const checkIfBooked = async (req, res, next) => {
   });
   if (accommodation.booked) {
     res.status(400).json({
-      status: 400,
+      status: 'error',
       error: 'This accommodation has already been booked'
     });
     return;
@@ -43,7 +43,7 @@ export const checkIfOwner = async (req, res, next) => {
   });
   if (accommodation.startedBy !== user.id) {
     res.status(400).json({
-      status: 400,
+      status: 'error',
       error: 'You can only delete accommodation services started by you'
     });
     return;

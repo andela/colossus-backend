@@ -19,7 +19,7 @@ export const checkIfPreviouslyLiked = async (req, res, next) => {
   });
   if (like) {
     res.status(400).json({
-      status: 400,
+      status: 'error',
       error: 'You previously liked this facility'
     });
     return;
@@ -44,7 +44,7 @@ export const checkIfUnlikeable = async (req, res, next) => {
   });
   if (!like) {
     res.status(400).json({
-      status: 400,
+      status: 'error',
       error: 'You have not previously liked this facility'
     });
     return;

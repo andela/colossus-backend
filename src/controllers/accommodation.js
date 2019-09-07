@@ -22,12 +22,12 @@ export default class AccommodationController {
         picture
       });
       res.status(201).json({
-        status: 201,
+        status: 'success',
         data
       });
     } catch (error) {
       res.status(500).json({
-        status: 500,
+        status: 'error',
         error
       });
     }
@@ -50,12 +50,12 @@ export default class AccommodationController {
       );
       const data = await Accommodation.findByPk(query.id);
       res.status(200).json({
-        status: 200,
+        status: 'success',
         data
       });
     } catch (error) {
       res.status(500).json({
-        status: 500,
+        status: 'error',
         error
       });
     }
@@ -72,12 +72,12 @@ export default class AccommodationController {
       const { user, query } = req;
       await Accommodation.rescind(user.id, query.id);
       res.status(200).json({
-        status: 200,
+        status: 'success',
         data: 'Successfully rescinded booking for accommodation'
       });
     } catch (error) {
       res.status(500).json({
-        status: 500,
+        status: 'error',
         error
       });
     }
@@ -91,18 +91,18 @@ export default class AccommodationController {
    */
   static async getAll(req, res) {
     try {
-      const data = await Accommodation.find({
+      const data = await Accommodation.findAll({
         where: {
           booked: false
         }
       });
       res.status(200).json({
-        status: 200,
+        status: 'success',
         data
       });
     } catch (error) {
       res.status(500).json({
-        status: 500,
+        status: 'error',
         error
       });
     }
@@ -123,12 +123,12 @@ export default class AccommodationController {
         }
       });
       res.status(200).json({
-        status: 200,
+        status: 'success',
         data: 'Successfully deleted accommodation service'
       });
     } catch (error) {
       res.status(500).json({
-        status: 500,
+        status: 'error',
         error
       });
     }
