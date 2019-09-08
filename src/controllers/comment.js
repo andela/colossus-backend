@@ -30,4 +30,42 @@ export default class CommentController {
       res.status(500).json({ status: 'error', error: error.message });
     }
   }
+
+  /**
+   * @param {Object} req the unwanted comment to be removed
+   * @param {Object} res successfully deleted comment or failure object
+   * @returns {void}
+   * @description gives a user ability to delete THEIR unwanted comment(s) about a request.
+   */
+  static async pseudoDeleteComment(req, res) {
+    const { commentId } = req.params;
+    const commentOwner = req.user.id;
+    try {
+      const comment = await Comment.findOne({
+        where: {
+          id: commentId
+        }
+      });
+      if (comment.userId !== commentOwner) {
+        return res.status(401).json({
+          status: 'error',
+          message: 'you are not the owner of this comment'
+        });
+      }
+      const deletedAt = Date.now();
+      await Comment.update({ deletedAt }, {
+        where: {
+          id: commentId
+        }
+      });
+      res.status(200).json({
+        status: 'success',
+        data: {
+          message: 'Comment succesfully deleted'
+        }
+      });
+    } catch (error) {
+      res.status(500).json({ status: 'error', error: error.message });
+    }
+  }
 }
