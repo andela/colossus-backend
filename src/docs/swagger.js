@@ -690,7 +690,6 @@ module.exports = {
             },
             404: {
               description: 'Resource endpoint does not exist',
-              description: 'Bad Request: Some fields are empty or invalid data format',
               schema: {
                 type: 'object',
                 properties: {
@@ -706,6 +705,49 @@ module.exports = {
           }
         }
       },
+      get: {
+        tags: ['comment'],
+        summary: 'Allows a user to view all comment(s) related to a request',
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'Authorization',
+            in: 'headers',
+            description: 'Bearer token',
+            type: 'string'
+          }
+        ],
+        responses: {
+          200: {
+            description: 'An array of all comment(s) related to  request',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                data: {
+                  type: 'array'
+                }
+              }
+            }
+          },
+          401: {
+            description: 'Unauthorized, "no token provided"',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          }
+        }
+      }
     },
     '/request/requestId/comment/:commentId': {
       delete: {
