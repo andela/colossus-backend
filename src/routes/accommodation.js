@@ -8,6 +8,7 @@ import ValidateAccommodation from '../middlewares/validateAccommodation';
 import CloudinaryConfig from '../middlewares/cloudinaryConfig';
 import ImageHandler from '../middlewares/imageHandler';
 import { authorize } from '../middlewares/authorize';
+import checkAccommodationOwner from '../middlewares/checkAccommodationOwner';
 
 const router = Router();
 
@@ -26,6 +27,23 @@ router.post(
   imageHandler,
   AccommodationController.create
 );
+
+router.get(
+  '/accommodation',
+  checkToken,
+  checkVerified,
+  AccommodationController.findAll
+);
+
+router.delete(
+  '/accommodation/:accommodationId',
+  checkToken,
+  checkVerified,
+  authorize,
+  checkAccommodationOwner,
+  AccommodationController.destroyOne
+);
+
 // router.post(
 //   '/book',
 //   checkToken,
@@ -39,18 +57,5 @@ router.post(
 //   checkVerified,
 //   AccommodationController.rescindOne
 // );
-// router.get(
-//   '/all',
-//   checkToken,
-//   AccommodationController.getAll
-// );
-// router.delete(
-//   '/drop/:id',
-//   checkToken,
-//   checkVerified,
-//   checkIfOwner,
-//   AccommodationController.deleteOne
-// );
-
 
 export default router;

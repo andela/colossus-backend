@@ -8,6 +8,17 @@ export default (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING
     },
+    accommodationId: {
+      allowNull: false,
+      type: DataTypes.INTEGER
+    },
   }, {});
+
+  Room.associate = (models) => {
+    // associations can be defined here
+    Room.belongsTo(models.Accommodation, {
+      foreignKey: 'accommodationId'
+    });
+  };
   return Room;
 };

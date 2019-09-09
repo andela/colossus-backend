@@ -14,6 +14,10 @@ export default {
       allowNull: false,
       type: Sequelize.STRING
     },
+    accommodationId: {
+      allowNull: false,
+      type: Sequelize.INTEGER
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE

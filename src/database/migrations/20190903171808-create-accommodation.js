@@ -18,6 +18,10 @@ module.exports = {
       allowNull: false,
       type: Sequelize.STRING
     },
+    owner: {
+      type: Sequelize.INTEGER,
+      allowNull: false
+    },
     movingIn: {
       type: Sequelize.DATE,
       allowNull: true,

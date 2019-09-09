@@ -12,6 +12,10 @@ const AccommodationDefinition = (sequelize, DataTypes) => {
     image: {
       type: DataTypes.STRING,
     },
+    owner: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
   }, {});
   Accommodation.associate = (models) => {
     // associations can be defined here
