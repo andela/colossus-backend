@@ -6,5 +6,6 @@ import validateComment from '../../middlewares/validateComment';
 const router = Router();
 
 router.post('/:requestId/comment', validateComment, CommentController.postComment);
+router.delete('/:requestId/comment/:commentId', CommentController.pseudoDeleteComment);
 
 export default router;
