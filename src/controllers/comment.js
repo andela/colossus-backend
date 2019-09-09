@@ -45,9 +45,12 @@ export default class CommentController {
           requestId
         }
       });
+
+      const commentRes = allComments.length === 0 ? 'No comments yet on this request' : allComments;
+
       res.status(200).json({
         status: 'success',
-        data: allComments
+        data: commentRes
       });
     } catch (error) {
       res.status(500).json({ status: 'error', error: error.message });
