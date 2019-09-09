@@ -901,81 +901,82 @@ module.exports = {
         }
       },
     },
-    '/role': {
-      patch: {
-        tags: ['role & permissions'],
-        summary: 'Assigns roles to users',
-        produces: ['application/json'],
-        parameters: [
-          {
-            name: 'Authorization',
-            in: 'headers',
-            description: 'Bearer token',
-            type: 'string'
-          },
-          {
-            in: 'body',
-            name: 'body',
-            description: 'body',
-            schema: {
-              type: 'object',
-              properties: {
-                email: {
-                  type: 'string',
-                  example: 'JDoe@email.com'
-                },
-                role: {
-                  type: 'string',
-                  example: 'manager'
-                }
-              }
-            }
-          }
-        ],
-        responses: {
-          200: {
-            description: 'User has been assigned a role',
-            schema: {
-              type: 'object',
-              properties: {
-                status: {
-                  type: 'string'
-                },
-                data: {
-                  type: 'object'
-                }
-              }
-            }
-          },
-          400: {
-            description: 'Bad request',
-            schema: {
-              type: 'object',
-              properties: {
-                status: {
-                  type: 'string'
-                },
-                error: {
-                  type: 'string'
-                }
-              }
-            }
-          },
-          401: {
-            description: 'Unauthorized',
-            schema: {
-              type: 'object',
-              properties: {
-                status: {
-                  type: 'integer'
-                },
-                error: {
-                  type: 'string'
-                }
+  },
+  '/role': {
+    patch: {
+      tags: ['role & permissions'],
+      summary: 'Assigns roles to users',
+      produces: ['application/json'],
+      parameters: [
+        {
+          name: 'Authorization',
+          in: 'headers',
+          description: 'Bearer token',
+          type: 'string'
+        },
+        {
+          in: 'body',
+          name: 'body',
+          description: 'body',
+          schema: {
+            type: 'object',
+            properties: {
+              email: {
+                type: 'string',
+                example: 'JDoe@email.com'
+              },
+              role: {
+                type: 'string',
+                example: 'manager'
               }
             }
           }
         }
+      ],
+      responses: {
+        200: {
+          description: 'User has been assigned a role',
+          schema: {
+            type: 'object',
+            properties: {
+              status: {
+                type: 'string'
+              },
+              data: {
+                type: 'object'
+              }
+            }
+          }
+        },
+        400: {
+          description: 'Bad request',
+          schema: {
+            type: 'object',
+            properties: {
+              status: {
+                type: 'string'
+              },
+              error: {
+                type: 'string'
+              }
+            }
+          }
+        },
+        401: {
+          description: 'Unauthorized',
+          schema: {
+            type: 'object',
+            properties: {
+              status: {
+                type: 'integer'
+              },
+              error: {
+                type: 'string'
+              }
+            }
+          }
+        }
+<<<<<<< HEAD
       },
     },
     '/role/permissions': {
@@ -1091,10 +1092,123 @@ module.exports = {
                   type: 'string'
                 }
               }
+=======
+      }
+    }
+  },
+  '/role/permissions': {
+    patch: {
+      tags: ['role & permissions'],
+      summary: 'Sets permissions for roles targeting particular resource endpoints',
+      produces: ['application/json'],
+      parameters: [
+        {
+          name: 'Authorization',
+          in: 'headers',
+          description: 'Bearer token',
+          type: 'string'
+        },
+        {
+          in: 'body',
+          name: 'body',
+          description: 'body',
+          schema: {
+            type: 'object',
+            properties: {
+              role: {
+                type: 'string',
+                example: 'manager'
+              },
+              resource: {
+                type: 'string',
+                example: 'accomodation'
+              },
+              create: {
+                type: 'boolean',
+                example: 'false'
+              },
+              read: {
+                type: 'boolean',
+                example: 'true'
+              },
+              update: {
+                type: 'boolean',
+                example: 'false'
+              },
+              delete: {
+                type: 'boolean',
+                example: 'false'
+              },
+            },
+          },
+        },
+      ],
+    },
+  },
+  definitions: {
+    SendEmail: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          example: 'fergusoniyara@gmail.com',
+        }
+      },
+    },
+    ResetPassword: {
+      type: 'object',
+      properties: {
+        password: {
+          type: 'string',
+          example: 'Password@2018',
+        },
+        confirmPassword: {
+          type: 'string',
+          example: 'Password@2018',
+        }
+      },
+    },
+    MessageSentResponse: {
+      type: 'object',
+      properties: {
+        status: {
+          type: 'integer',
+          example: 200,
+        },
+        data: {
+          type: 'object',
+          properties: {
+            message: {
+              type: 'string',
+              example: 'A verification has been sent to your email. Kindly follow that link to reset your password',
+            },
+            token: {
+              type: 'string',
+              example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Iml5YXJhZmVyZ3Vzb25AZ21haWwuY29tIiwiaWF0IjoxNTY2NDAzMTA3LCJleHAiOjE1NjY0ODk1MDd9.jDq8clsqJtTBN0-PKLJdu0U2GihHDCtn5P90aO0CHAs',
+            },
+          },
+        },
+      },
+    },
+    PasswordResetResponse: {
+      type: 'object',
+      properties: {
+        status: {
+          type: 'integer',
+          example: 200,
+        },
+        data: {
+          type: 'object',
+          properties: {
+            message: {
+              type: 'string',
+              example: 'Password reset successful',
+>>>>>>> feat(edit-request): Create and endpoint for a user to edit the details of a request
             }
           },
         },
       },
+<<<<<<< HEAD
       get: {
         tags: ['accommodation & rooms'],
         summary: 'View all accommodation facilities',
@@ -1814,5 +1928,209 @@ module.exports = {
         }
       },
     },
+=======
+    },
+    EmailNotFoundResponse: {
+      type: 'object',
+      properties: {
+        status: {
+          type: 'integer',
+          example: 200,
+        },
+        data: {
+          type: 'object',
+          properties: {
+            message: {
+              type: 'string',
+              example: 'Password reset successful',
+            }
+          },
+        },
+      },
+    },
+    error: {
+      type: 'string',
+      example: 'No User with the provided email'
+    },
+  },
+  TripValidationResponse: {
+    type: 'object',
+    properties: {
+      status: {
+        type: 'integer',
+        example: 400,
+      },
+      error: {
+        type: 'string',
+        example: 'Invalid id supplied'
+      },
+    },
+  },
+  TripDeletedResponse: {
+    type: 'object',
+    properties: {
+      status: {
+        type: 'integer',
+        example: 200,
+      },
+      message: {
+        type: 'string',
+        example: 'Trip successfully deleted'
+      },
+    },
+  },
+  RequestNotFoundResponse: {
+    type: 'object',
+    properties: {
+      status: {
+        type: 'integer',
+        example: 404,
+      },
+      error: {
+        type: 'string',
+        example: 'Invalid requset Id/ No trip with the stated id'
+      },
+    },
+  },
+  PasswordResetValidationResponse: {
+    type: 'object',
+    properties: {
+      status: {
+        type: 'integer',
+        example: 400,
+      },
+      error: {
+        type: 'string',
+        example: 'Password must contain at least one number'
+      },
+    },
+  },
+  RequestValidationResponse: {
+    type: 'object',
+    properties: {
+      status: {
+        type: 'integer',
+        example: 400,
+      },
+      error: {
+        type: 'array',
+        example: ['Invalid date selected']
+      },
+    },
+  },
+  CreateRequest: {
+    type: 'object',
+    properties: {
+      passportName: {
+        type: 'string',
+        example: 'Iyara Ferguson'
+      },
+      reason: {
+        type: 'string',
+        example: 'Pilgrimage'
+      },
+      type: {
+        type: 'string',
+        example: 'round-trip'
+      },
+      from: {
+        type: 'array',
+        example: ['Dubai']
+      },
+      to: {
+        type: 'array',
+        example: ['Seychelles']
+      },
+      departureDate: {
+        type: 'array',
+        example: ['2018-03-29T13:34:00.000']
+      },
+      arrivalDate: {
+        type: 'array',
+        example: ['2018-03-29T13:34:00.000']
+      },
+      accommodation: {
+        type: 'array',
+        example: ['Four Points']
+      },
+    }
+  },
+  UpdateSuccessful: {
+    type: 'object',
+    properties: {
+      status: {
+        type: 'integer',
+        example: 200,
+      },
+      data: {
+        type: 'object',
+        properties: {
+          id: {
+            type: 'integer',
+            example: 1,
+          },
+          passportName: {
+            type: 'string',
+            example: 'Iyara Ferguson',
+          },
+          reason: {
+            type: 'string',
+            example: 'Pilgrimage',
+          },
+          type: {
+            type: 'string',
+            example: 'one-way',
+          },
+          trips: {
+            type: 'array',
+            example: [
+              {
+                from: 'Dubai',
+                to: 'Lagos',
+                departureDate: '2018-03-29T13:34:00.000',
+                arrivalDate: '2018-03-29T13:34:00.000',
+                accommodation: 'Four Points'
+              }
+            ],
+          }
+        },
+      },
+    },
+  },
+  EmailInvalidResponse: {
+    type: 'object',
+    properties: {
+      status: {
+        type: 'integer',
+        example: 400,
+      },
+      error: {
+        type: 'string',
+        example: 'Invalid email supplied'
+      },
+    },
+  },
+  UserRightsResponse: {
+    type: 'object',
+    properties: {
+      status: {
+        type: 'integer',
+        example: 403,
+      },
+      error: {
+        type: 'string',
+        example: 'You do not have rights to this resource'
+      },
+    },
+  },
+  Comment: {
+    type: 'object',
+    properties: {
+      commentBody: {
+        type: 'string',
+        example: 'I just have to be granted this request, let me go and chill',
+      }
+    },
+>>>>>>> feat(edit-request): Create and endpoint for a user to edit the details of a request
   },
 };

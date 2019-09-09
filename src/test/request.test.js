@@ -230,6 +230,7 @@ describe('POST /api/v1/request', () => {
         lineManagerId: 1
       })
 <<<<<<< HEAD
+<<<<<<< HEAD
       // eslint-disable-next-line no-unused-vars
       .end((err, res) => {
 =======
@@ -237,6 +238,10 @@ describe('POST /api/v1/request', () => {
         if (err) console.log(err);
         if (res) console.log(res);
 >>>>>>> feat(edit-request)
+=======
+      // eslint-disable-next-line no-unused-vars
+      .end((err, res) => {
+>>>>>>> feat(edit-request): Create and endpoint for a user to edit the details of a request
         done();
       });
   });

@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { RequestController } from '../../controllers';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { tripStatus as validateTripStatus, checkLineManagerId } from '../../middlewares/index';
 import validateTripRequest from '../../middlewares/validateTripRequest';
 =======
@@ -8,6 +9,11 @@ import { tripStatus as validateTripStatus } from '../../middlewares/index';
 import validateTripRequest from '../../middlewares/validateTripRequest';
 import validateEditRequest from '../../middlewares/editRequestValidation';
 >>>>>>> feat(edit-request)
+=======
+import { tripStatus as validateTripStatus, checkLineManagerId } from '../../middlewares/index';
+import validateTripRequest from '../../middlewares/validateTripRequest';
+// import validateEditRequest from '../../middlewares/editRequestValidation';
+>>>>>>> feat(edit-request): Create and endpoint for a user to edit the details of a request
 
 const router = Router();
 
