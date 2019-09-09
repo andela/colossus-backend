@@ -10,6 +10,7 @@ const { generateToken } = helper;
 
 let userId;
 let token;
+let oneTimeToken;
 
 dotenv.config();
 
@@ -228,9 +229,8 @@ describe('POST /api/v1/request', () => {
         gender: 'male',
         lineManagerId: 1
       })
+      // eslint-disable-next-line no-unused-vars
       .end((err, res) => {
-        if (err) console.log(err);
-        if (res) console.log(res);
         done();
       });
   });
@@ -250,8 +250,109 @@ describe('POST /api/v1/request', () => {
       })
       .end((err, res) => {
         expect(res).to.have.status(201);
+        userId = res.body.data.id;
         expect(res.body.status).to.be.equal(201);
         expect(res.body.data.trips).to.be.an('array');
+        done();
+      });
+  });
+  it('Should return an error if the user does not include any of the required information', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/request')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body.status).to.be.equal(400);
+        expect(res.body.error).to.be.an('array');
+        done();
+      });
+  });
+  it('Should return an error if any of the trip\'s details is not an array', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/request')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        passportName: 'John',
+        reason: 'Work',
+        type: 'round-trip',
+        from: 'Dubai',
+        to: 'London',
+        departureDate: '2018-03-29T13:34:00.000',
+        arrivalDate: '2018-03-29T13:34:00.000',
+        accommodation: 'Burj Al-Arab'
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body.status).to.be.equal(400);
+        expect(res.body.error).to.be.an('array');
+        done();
+      });
+  });
+  it('Should return an error if the user does not include an arrival date for a round-trip request', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/request')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        passportName: 'John Doe',
+        reason: 'Work leave',
+        type: 'round-trip',
+        from: ['London'],
+        to: ['Dubai'],
+        departureDate: ['2018-03-29T13:34:00.000'],
+        accommodation: ['Burj Al-Arab']
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body.status).to.be.equal(400);
+        expect(res.body.error).to.be.an('array');
+        done();
+      });
+  });
+  it('Should return an error if the type is not valid', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/request')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        passportName: 'John Doe',
+        reason: 'Work leave',
+        type: 'two-cities',
+        from: ['London'],
+        to: ['Dubai'],
+        departureDate: ['2018-03-29T13:34:00.000'],
+        arrivalDate: ['2018-03-29T13:34:00.000'],
+        accommodation: ['Burj Al-Arab']
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body.status).to.be.equal(400);
+        expect(res.body.error).to.be.an('array');
+        done();
+      });
+  });
+  it('Should return an error if any of the trip\'s details is incorrect', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/request')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        passportName: 'John Doe',
+        reason: 'Work leave',
+        type: 'one-way',
+        from: [2],
+        to: [2],
+        departureDate: [2],
+        accommodation: ['Burj']
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body.status).to.be.equal(400);
+        expect(res.body.error).to.be.an('array');
         done();
       });
   });
@@ -263,7 +364,6 @@ describe('POST /api/v1/request', () => {
       .send({
         passportName: '',
         reason: '',
-        managerId: 2,
         userId,
         type: '',
         from: '',
@@ -272,7 +372,8 @@ describe('POST /api/v1/request', () => {
         accommodation: '',
       })
       .end((err, res) => {
-        expect(res).to.have.status(400);
+        expect(res.body.status).to.be.equal(400);
+        expect(res.body.error).to.be.an('array');
         done();
       });
   });
@@ -287,11 +388,11 @@ describe('POST /api/v1/request', () => {
         managerId: 2,
         userId,
         type: 'one-way',
-        from: 'Lagos',
-        to: 'warri',
-        departureDate: '2018-03-29T13:34:00.000',
-        arrivalDate: '2019-03-29T13:20:00.000',
-        accommodation: 'hotel presidential',
+        from: ['Lagos'],
+        to: ['warri'],
+        departureDate: ['2018-03-29T13:34:00.000'],
+        arrivalDate: ['2019-03-29T13:20:00.000'],
+        accommodation: ['hotel presidential'],
       })
       .end((err, res) => {
         expect(res).to.have.status(400);
@@ -310,14 +411,37 @@ describe('POST /api/v1/request', () => {
         managerId: 2,
         userId,
         type: 'round-trip',
-        from: 'Lagos',
-        to: 'warri',
-        departureDate: '2018-03-29T13:34:00.000',
-        accommodation: 'hotel presidential',
+        from: ['Lagos'],
+        to: ['warri'],
+        departureDate: ['2018-03-29T13:34:00.000'],
+        accommodation: ['hotel presidential'],
       })
       .end((err, res) => {
-        expect(res).to.have.status(400);
-        expect(res.body).to.haveOwnProperty('error');
+        expect(res.body.status).to.be.equal(400);
+        expect(res.body.error).to.be.an('array');
+        done();
+      });
+  });
+  it('Should return an error if the round-trip arrival date is invalid', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/request')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        passportName: 'ngozi bayo',
+        reason: 'to charge my phone',
+        managerId: 2,
+        userId,
+        type: 'round-trip',
+        from: ['Lagos'],
+        to: ['warri'],
+        departureDate: ['2018-03-29T13:34:00.000'],
+        arrivalDate: [20],
+        accommodation: ['hotel presidential'],
+      })
+      .end((err, res) => {
+        expect(res.body.status).to.be.equal(400);
+        expect(res.body.error).to.be.an('array');
         done();
       });
   });
@@ -338,8 +462,8 @@ describe('POST /api/v1/request', () => {
         accommodation: ['hotel presidential']
       })
       .end((err, res) => {
-        expect(res).to.have.status(400);
-        expect(res.body).to.haveOwnProperty('error');
+        expect(res.body.status).to.be.equal(400);
+        expect(res.body.error).to.be.an('array');
         done();
       });
   });
@@ -360,8 +484,8 @@ describe('POST /api/v1/request', () => {
         accommodation: ['hotel presidential', 'my house']
       })
       .end((err, res) => {
-        expect(res).to.have.status(400);
-        expect(res.body).to.haveOwnProperty('error');
+        expect(res.body.status).to.be.equal(400);
+        expect(res.body.error).to.be.an('array');
         done();
       });
   });
@@ -382,8 +506,8 @@ describe('POST /api/v1/request', () => {
         accommodation: ['hotel presidential', 'my house']
       })
       .end((err, res) => {
-        expect(res).to.have.status(400);
-        expect(res.body).to.haveOwnProperty('error');
+        expect(res.body.status).to.be.equal(400);
+        expect(res.body.error).to.be.an('array');
         done();
       });
   });
@@ -404,8 +528,8 @@ describe('POST /api/v1/request', () => {
         accommodation: ['hotel presidential', 'my house']
       })
       .end((err, res) => {
-        expect(res).to.have.status(400);
-        expect(res.body).to.haveOwnProperty('error');
+        expect(res.body.status).to.be.equal(400);
+        expect(res.body.error).to.be.an('array');
         done();
       });
   });
@@ -423,12 +547,119 @@ describe('POST /api/v1/request', () => {
         from: ['Lagos', 'warri'],
         to: ['warri', 'togo'],
         departureDate: ['2018-03-29T13:34:00.000', '2019-03-29T13:20:00.000'],
-        arrivalDate: '2019-03-29T13:20:00.000',
+        arrivalDate: ['2019-03-29T13:20:00.000'],
         accommodation: ['hotel presidential', 'my house']
       })
       .end((err, res) => {
         expect(res).to.have.status(400);
         expect(res.body).to.haveOwnProperty('error');
+        done();
+      });
+  });
+  before((done) => {
+    // Sign up a user to get a token to use for the protected route
+    chai.request(server)
+      .post('/api/v1/auth/signup')
+      .type('form')
+      .send({
+        firstName: 'Iyara',
+        lastName: 'Ferguson',
+        email: 'fegzyson@colossus.com',
+        password: 'expeliamus',
+      })
+      .end((err, res) => {
+        oneTimeToken = res.body.data.token;
+        done();
+      });
+  });
+  it('Should return an error if the line manager ID is not found ', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/request')
+      .set('Authorization', `Bearer ${oneTimeToken}`)
+      .send({
+        passportName: 'John Doe',
+        reason: 'Work leave',
+        type: 'one-way',
+        from: ['New york'],
+        to: ['London'],
+        departureDate: ['2018-03-29T13:34:00.000'],
+        accommodation: ['Burj Al-Arab']
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body.status).to.be.equal(400);
+        expect(res.body.error).to.be.a('string');
+        expect(res.body.error).to.be.equal('Line manager not found, edit your profile and try again');
+        done();
+      });
+  });
+});
+
+describe('PATCH /api/v1/request/:id', () => {
+  it('Should successfully edit a request with a status of open', (done) => {
+    chai
+      .request(server)
+      .patch(`/api/v1/request/${userId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        passportName: 'John Doe',
+        reason: 'Pilgrimage',
+        type: 'one-way',
+        from: ['Dubai'],
+        to: ['London'],
+        departureDate: ['2018-03-29T13:34:00.000'],
+        accommodation: ['Burj Al-Arab'],
+        id: [userId]
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body.status).to.be.equal(200);
+        expect(res.body.data.trips).to.be.an('array');
+        done();
+      });
+  });
+  it('Should return an error if the id to be edited is not a valid id', (done) => {
+    chai
+      .request(server)
+      .patch(`/api/v1/request/${userId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        passportName: 'John Doe',
+        reason: 'Pilgrimage',
+        type: 'one-way',
+        from: ['Dubai'],
+        to: ['London'],
+        departureDate: ['2018-03-29T13:34:00.000'],
+        accommodation: ['Burj Al-Arab'],
+        id: ['fake id']
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body.status).to.be.equal(400);
+        expect(res.body.error).to.be.an('array');
+        done();
+      });
+  });
+  it('Should return an error if the id to be edited is not an array', (done) => {
+    chai
+      .request(server)
+      .patch(`/api/v1/request/${userId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        passportName: 'John Doe',
+        reason: 'Pilgrimage',
+        type: 'one-way',
+        from: ['Dubai'],
+        to: ['London'],
+        departureDate: ['2018-03-29T13:34:00.000'],
+        accommodation: ['Burj Al-Arab'],
+        id: 2
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body.status).to.be.equal(400);
+        expect(res.body.error).to.be.an('array');
         done();
       });
   });
