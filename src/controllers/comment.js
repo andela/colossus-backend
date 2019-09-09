@@ -27,6 +27,8 @@ export default class CommentController {
         }
       });
 
+      const { lineManagerId: managerId, userId: id } = request;
+
       const emitMessage = 'New Comment';
 
       const notificationData = {
@@ -35,7 +37,7 @@ export default class CommentController {
         type: 'comment'
       };
 
-      if (userId === request.lineManagerId) { notificationData.receiver = request.userId; } else { notificationData.receiver = lineManagerId; }
+      if (userId === managerId) { notificationData.receiver = id; } else { notificationData.receiver = lineManagerId; }
 
       await Notification.create(notificationData);
 
