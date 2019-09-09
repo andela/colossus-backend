@@ -592,6 +592,94 @@ module.exports = {
         }
       }
     },
+    '/request/:id': {
+      patch: {
+        tags: [
+          'request'
+        ],
+        summary: 'Edit a created request',
+        description: '',
+        consumes: [
+          'application/json',
+        ],
+        parameters: [
+          {
+            in: 'path',
+            name: 'id',
+            required: true,
+          },
+          {
+            in: 'body',
+            name: 'body',
+            description: 'body',
+            required: true,
+            schema: {
+              $ref: '#definitions/CreateRequest',
+            },
+          },
+        ],
+        responses: {
+          200: {
+            description: 'successful operation',
+            schema: {
+              $ref: '#definitions/UpdateSuccessful',
+            },
+          },
+          400: {
+            description: 'Validation error',
+            schema: {
+              $ref: '#definitions/RequestValidationResponse',
+            },
+          },
+          403: {
+            description: 'Validation error',
+            schema: {
+              $ref: '#definitions/UserRightsResponse',
+            },
+          },
+          404: {
+            description: 'Validation error',
+            schema: {
+              $ref: '#definitions/RequestNotFoundResponse',
+            },
+          }
+        }
+      }
+    },
+    '/trip/:id': {
+      delete: {
+        tags: [
+          'trip'
+        ],
+        parameters: [
+          {
+            in: 'path',
+            name: 'id',
+            required: true,
+          },
+        ],
+        responses: {
+          200: {
+            description: 'successful operation',
+            schema: {
+              $ref: '#definitions/TripDeletedResponse',
+            },
+          },
+          400: {
+            description: 'Invalid trip id supplied',
+            schema: {
+              $ref: '#definitions/TripValidationResponse',
+            },
+          },
+          404: {
+            description: 'Validation error',
+            schema: {
+              $ref: '#definitions/RequestNotFoundResponse',
+            },
+          }
+        },
+      }
+    },
     '/request/:requestId/comment': {
       post: {
         tags: [
@@ -626,89 +714,85 @@ module.exports = {
         responses: {
           200: {
             description: 'Permissions have been set for a role',
-          201: {
-            description: 'successful operation; comment created',
-            schema: {
-              type: 'object',
-              properties: {
-                status: {
-                  type: 'string'
-                },
-                data: {
-                  type: 'object'
-                },
-                data: {
-                  type: 'object',
-                  properties: {
-                    commentBody: {
-                      type: 'string',
-                      example: 'test commentitis'
+            201: {
+              description: 'successful operation; comment created',
+              schema: {
+                type: 'object',
+                properties: {
+                  status: {
+                    type: 'string'
+                  },
+                  data: {
+                    type: 'object',
+                    properties: {
+                      commentBody: {
+                        type: 'string',
+                        example: 'test commentitis'
+                      }
                     }
                   }
                 }
               }
-            }
-          },
-          400: {
-            description: 'Bad request',
-            schema: {
-              type: 'object',
-              properties: {
-                status: {
-                  type: 'string'
-                },
-                error: {
-                  type: 'string'
+            },
+            400: {
+              description: 'Bad request',
+              schema: {
+                type: 'object',
+                properties: {
+                  status: {
+                    type: 'string'
+                  },
+                  error: {
+                    type: 'string'
+                  }
                 }
               }
-            }
-          },
-          401: {
-            description: 'Unauthorized',
-            schema: {
-              type: 'object',
-              properties: {
-                status: {
-                  type: 'integer'
-                },
-                error: {
-                  type: 'string'
+            },
+            401: {
+              description: 'Unauthorized',
+              schema: {
+                type: 'object',
+                properties: {
+                  status: {
+                    type: 'integer'
+                  },
+                  error: {
+                    type: 'string'
+                  }
                 }
               }
-            }
-          },
-          403: {
-            description: 'Forbidden request',
-            schema: {
-              type: 'object',
-              properties: {
-                status: {
-                  type: 'string'
-                },
-                error: {
-                  type: 'string'
+            },
+            403: {
+              description: 'Forbidden request',
+              schema: {
+                type: 'object',
+                properties: {
+                  status: {
+                    type: 'string'
+                  },
+                  error: {
+                    type: 'string'
+                  }
                 }
               }
-            }
-          },
-          404: {
-            description: 'Resource endpoint does not exist',
-            description: 'Bad Request: Some fields are empty or invalid data format',
-            schema: {
-              type: 'object',
-              properties: {
-                status: {
-                  type: 'string'
-                },
-                error: {
-                  type: 'string'
+            },
+            404: {
+              description: 'Resource endpoint does not exist',
+              schema: {
+                type: 'object',
+                properties: {
+                  status: {
+                    type: 'string'
+                  },
+                  error: {
+                    type: 'string'
+                  }
                 }
               }
             }
           }
         }
-      }
-    },
+      },
     },
     '/role': {
       patch: {
@@ -829,124 +913,268 @@ module.exports = {
                 delete: {
                   type: 'boolean',
                   example: 'false'
-                }, 
+                },
               },
             },
           },
         ],
       },
-    },            
-  definitions: {
-    SendEmail: {
-      type: 'object',
-      properties: {
-        email: {
-          type: 'string',
-          example: 'fergusoniyara@gmail.com',
-        }
-      },
     },
-    ResetPassword: {
-      type: 'object',
-      properties: {
-        password: {
-          type: 'string',
-          example: 'Password@2018',
+    definitions: {
+      SendEmail: {
+        type: 'object',
+        properties: {
+          email: {
+            type: 'string',
+            example: 'fergusoniyara@gmail.com',
+          }
         },
-        confirmPassword: {
-          type: 'string',
-          example: 'Password@2018',
-        }
       },
-    },
-    MessageSentResponse: {
-      type: 'object',
-      properties: {
-        status: {
-          type: 'integer',
-          example: 200,
+      ResetPassword: {
+        type: 'object',
+        properties: {
+          password: {
+            type: 'string',
+            example: 'Password@2018',
+          },
+          confirmPassword: {
+            type: 'string',
+            example: 'Password@2018',
+          }
         },
-        data: {
-          type: 'object',
-          properties: {
-            message: {
-              type: 'string',
-              example: 'A verification has been sent to your email. Kindly follow that link to reset your password',
-            },
-            token: {
-              type: 'string',
-              example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Iml5YXJhZmVyZ3Vzb25AZ21haWwuY29tIiwiaWF0IjoxNTY2NDAzMTA3LCJleHAiOjE1NjY0ODk1MDd9.jDq8clsqJtTBN0-PKLJdu0U2GihHDCtn5P90aO0CHAs',
+      },
+      MessageSentResponse: {
+        type: 'object',
+        properties: {
+          status: {
+            type: 'integer',
+            example: 200,
+          },
+          data: {
+            type: 'object',
+            properties: {
+              message: {
+                type: 'string',
+                example: 'A verification has been sent to your email. Kindly follow that link to reset your password',
+              },
+              token: {
+                type: 'string',
+                example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Iml5YXJhZmVyZ3Vzb25AZ21haWwuY29tIiwiaWF0IjoxNTY2NDAzMTA3LCJleHAiOjE1NjY0ODk1MDd9.jDq8clsqJtTBN0-PKLJdu0U2GihHDCtn5P90aO0CHAs',
+              },
             },
           },
         },
       },
-    },
-    PasswordResetResponse: {
-      type: 'object',
-      properties: {
-        status: {
-          type: 'integer',
-          example: 200,
-        },
-        data: {
-          type: 'object',
-          properties: {
-            message: {
-              type: 'string',
-              example: 'Password reset successful',
-            }
+      PasswordResetResponse: {
+        type: 'object',
+        properties: {
+          status: {
+            type: 'integer',
+            example: 200,
+          },
+          data: {
+            type: 'object',
+            properties: {
+              message: {
+                type: 'string',
+                example: 'Password reset successful',
+              }
+            },
           },
         },
       },
-    },
-    EmailNotFoundResponse: {
-      type: 'object',
-      properties: {
-        status: {
-          type: 'integer',
-          example: 404,
-        },
-        error: {
-          type: 'string',
-          example: 'No User with the provided email'
-        },
-      },
-    },
-    PasswordResetValidationResponse: {
-      type: 'object',
-      properties: {
-        status: {
-          type: 'integer',
-          example: 400,
-        },
-        error: {
-          type: 'string',
-          example: 'Password must contain at least one number'
+      EmailNotFoundResponse: {
+        type: 'object',
+        properties: {
+          status: {
+            type: 'integer',
+            example: 404,
+          },
+          error: {
+            type: 'string',
+            example: 'No User with the provided email'
+          },
         },
       },
-    },
-    EmailInvalidResponse: {
-      type: 'object',
-      properties: {
-        status: {
-          type: 'integer',
-          example: 400,
-        },
-        error: {
-          type: 'string',
-          example: 'Invalid email supplied'
+      TripValidationResponse: {
+        type: 'object',
+        properties: {
+          status: {
+            type: 'integer',
+            example: 400,
+          },
+          error: {
+            type: 'string',
+            example: 'Invalid id supplied'
+          },
         },
       },
-    },
-    Comment: {
-      type: 'object',
-      properties: {
-        commentBody: {
-          type: 'string',
-          example: 'I just have to be granted this request, let me go and chill',
+      TripDeletedResponse: {
+        type: 'object',
+        properties: {
+          status: {
+            type: 'integer',
+            example: 200,
+          },
+          message: {
+            type: 'string',
+            example: 'Trip successfully deleted'
+          },
+        },
+      },
+      RequestNotFoundResponse: {
+        type: 'object',
+        properties: {
+          status: {
+            type: 'integer',
+            example: 404,
+          },
+          error: {
+            type: 'string',
+            example: 'Invalid requset Id/ No trip with the stated id'
+          },
+        },
+      },
+      PasswordResetValidationResponse: {
+        type: 'object',
+        properties: {
+          status: {
+            type: 'integer',
+            example: 400,
+          },
+          error: {
+            type: 'string',
+            example: 'Password must contain at least one number'
+          },
+        },
+      },
+      RequestValidationResponse: {
+        type: 'object',
+        properties: {
+          status: {
+            type: 'integer',
+            example: 400,
+          },
+          error: {
+            type: 'array',
+            example: ['Invalid date selected']
+          },
+        },
+      },
+      CreateRequest: {
+        type: 'object',
+        properties: {
+          passportName: {
+            type: 'string',
+            example: 'Iyara Ferguson'
+          },
+          reason: {
+            type: 'string',
+            example: 'Pilgrimage'
+          },
+          type: {
+            type: 'string',
+            example: 'round-trip'
+          },
+          from: {
+            type: 'array',
+            example: ['Dubai']
+          },
+          to: {
+            type: 'array',
+            example: ['Seychelles']
+          },
+          departureDate: {
+            type: 'array',
+            example: ['2018-03-29T13:34:00.000']
+          },
+          arrivalDate: {
+            type: 'array',
+            example: ['2018-03-29T13:34:00.000']
+          },
+          accommodation: {
+            type: 'array',
+            example: ['Four Points']
+          },
         }
       },
+      UpdateSuccessful: {
+        type: 'object',
+        properties: {
+          status: {
+            type: 'integer',
+            example: 200,
+          },
+          data: {
+            type: 'object',
+            properties: {
+              id: {
+                type: 'integer',
+                example: 1,
+              },
+              passportName: {
+                type: 'string',
+                example: 'Iyara Ferguson',
+              },
+              reason: {
+                type: 'string',
+                example: 'Pilgrimage',
+              },
+              type: {
+                type: 'string',
+                example: 'one-way',
+              },
+              trips: {
+                type: 'array',
+                example: [
+                  {
+                    from: 'Dubai',
+                    to: 'Lagos',
+                    departureDate: '2018-03-29T13:34:00.000',
+                    arrivalDate: '2018-03-29T13:34:00.000',
+                    accommodation: 'Four Points'
+                  }
+                ],
+              }
+            },
+          },
+        },
+      },
+      EmailInvalidResponse: {
+        type: 'object',
+        properties: {
+          status: {
+            type: 'integer',
+            example: 400,
+          },
+          error: {
+            type: 'string',
+            example: 'Invalid email supplied'
+          },
+        },
+      },
+      UserRightsResponse: {
+        type: 'object',
+        properties: {
+          status: {
+            type: 'integer',
+            example: 403,
+          },
+          error: {
+            type: 'string',
+            example: 'You do not have rights to this resource'
+          },
+        },
+      },
+      Comment: {
+        type: 'object',
+        properties: {
+          commentBody: {
+            type: 'string',
+            example: 'I just have to be granted this request, let me go and chill',
+          }
+        },
+      },
     },
-  },
   }
 };
