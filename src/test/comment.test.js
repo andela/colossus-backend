@@ -1,6 +1,5 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import dotenv from 'dotenv';
 import server from '../index';
 import models from '../models';
 import helper from '../helpers/jwtHelper';
@@ -8,12 +7,9 @@ import helper from '../helpers/jwtHelper';
 const { generateToken } = helper;
 
 let userId;
-// let secondUserId;
 let requestId;
 let firstToken;
 let secondToken;
-
-dotenv.config();
 
 const {
   Request,
@@ -33,13 +29,12 @@ const secondSignup = {
   isVerified: true
 };
 
-
 before((done) => {
   // Create lineManager user
   User.create({
     firstName: 'John',
     lastName: 'Neo',
-    email: 'test@domain.com',
+    email: 'testy@domain.com',
     password: 'tester123',
     isVerified: true
   }).then((user) => {
@@ -86,6 +81,27 @@ describe('POST /request/:requestId/comment, Creating a new newcomment', () => {
       .set('Authorization', `Bearer ${firstToken}`)
       .send({
         commentBody: 'This is the comment',
+        userId,
+        requestId
+      })
+      .end((err, res) => {
+        // eslint-disable-next-line no-unused-expressions
+        expect(err).to.be.null;
+        expect(res).to.has.status(201);
+        expect(res.body).to.haveOwnProperty('status');
+        expect(res.body.status).to.equal('success');
+        expect(res.body).to.haveOwnProperty('data');
+        done();
+      });
+  });
+
+  // send a second comment
+  it('Should return details of the second comment on a request', (done) => {
+    chai.request(server)
+      .post('/api/v1/request/1/comment')
+      .set('Authorization', `Bearer ${firstToken}`)
+      .send({
+        commentBody: 'second comment, this comment\'s deleted-at column sould be null ',
         userId,
         requestId
       })
@@ -163,6 +179,30 @@ describe('PSEUDO-delete /request/:requestId/comment/commentId', () => {
         expect(res.body).to.haveOwnProperty('status');
         expect(res.body.status).to.equal('success');
         expect(res.body).to.haveOwnProperty('data');
+        done();
+      });
+  });
+});
+
+describe('GET /request/:requestId/comment', () => {
+  it('Should return all comments in the database related to a request', (done) => {
+    chai.request(server)
+      .get('/api/v1/request/1/comment')
+      .set('Authorization', `Bearer ${firstToken}`)
+      .end((err, res) => {
+        // eslint-disable-next-line no-unused-expressions
+        const notdeleted = res.body.data[0].deletedAt;
+        // eslint-disable-next-line no-unused-expressions
+        expect(err).to.be.null;
+        expect(res).to.has.status(200);
+        expect(res.body).to.haveOwnProperty('status');
+        expect(res.body.status).to.equal('success');
+        expect(notdeleted).to.equal(null);
+        expect(res.body).to.haveOwnProperty('data');
+        expect(res.body.data).to.be.a('array');
+        expect(res.body.data[0]).to.haveOwnProperty('commentBody');
+        expect(res.body.data[0]).to.haveOwnProperty('requestId');
+        expect(res.body.data[0]).to.haveOwnProperty('userId');
         done();
       });
   });

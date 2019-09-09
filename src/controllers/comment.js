@@ -32,6 +32,29 @@ export default class CommentController {
   }
 
   /**
+   * @param {Object} req
+   * @param {Object} res the response on failure object
+   * @returns {Array} the array of comments
+   * @description view all comment(s) relating to a request
+   */
+  static async getComments(req, res) {
+    const { requestId } = req.params;
+    try {
+      const allComments = await Comment.findAll({
+        where: {
+          requestId
+        }
+      });
+      res.status(200).json({
+        status: 'success',
+        data: allComments
+      });
+    } catch (error) {
+      res.status(500).json({ status: 'error', error: error.message });
+    }
+  }
+
+  /**
    * @param {Object} req the unwanted comment to be removed
    * @param {Object} res successfully deleted comment or failure object
    * @returns {void}
