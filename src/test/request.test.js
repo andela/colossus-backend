@@ -229,14 +229,8 @@ describe('POST /api/v1/request', () => {
         gender: 'male',
         lineManagerId: 1
       })
-<<<<<<< HEAD
       // eslint-disable-next-line no-unused-vars
       .end((err, res) => {
-=======
-      .end((err, res) => {
-        if (err) console.log(err);
-        if (res) console.log(res);
->>>>>>> feat(edit-request)
         done();
       });
   });
