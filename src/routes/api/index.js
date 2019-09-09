@@ -23,13 +23,9 @@ router.use('/request', commentRouter);
 
 router.use('/', roleRouter);
 router.use('/', permissionRouter);
-<<<<<<< HEAD
 router.use('/like', likeRouter);
-=======
 
-router.use('/accommodation', accommodationRouter);
 router.use('/', roleRouter);
 router.use('/', permissionRouter);
->>>>>>> feat(edit-request): Create and endpoint for a user to edit the details of a request
 
 module.exports = router;

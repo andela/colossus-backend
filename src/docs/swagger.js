@@ -1394,18 +1394,18 @@ module.exports = {
                   type: 'string'
                 }
               }
-            }
-          },
-          401: {
-            description: 'Unauthorized',
-            schema: {
-              type: 'object',
-              properties: {
-                status: {
-                  type: 'integer'
-                },
-                error: {
-                  type: 'string'
+            },
+            401: {
+              description: 'Unauthorized',
+              schema: {
+                type: 'object',
+                properties: {
+                  status: {
+                    type: 'integer'
+                  },
+                  error: {
+                    type: 'string'
+                  }
                 }
               }
             }
@@ -1564,55 +1564,92 @@ module.exports = {
         }
       },
     },
-    ResetPassword: {
-      type: 'object',
-      properties: {
-        password: {
-          type: 'string',
-          example: 'Password@2018',
+    definitions: {
+      SendEmail: {
+        type: 'object',
+        properties: {
+          email: {
+            type: 'string',
+            example: 'fergusoniyara@gmail.com',
+          }
         },
-        confirmPassword: {
-          type: 'string',
-          example: 'Password@2018',
-        }
       },
-    },
-    MessageSentResponse: {
-      type: 'object',
-      properties: {
-        status: {
-          type: 'integer',
-          example: 200,
+      ResetPassword: {
+        type: 'object',
+        properties: {
+          password: {
+            type: 'string',
+            example: 'Password@2018',
+          },
+          confirmPassword: {
+            type: 'string',
+            example: 'Password@2018',
+          }
         },
-        data: {
-          type: 'object',
-          properties: {
-            message: {
-              type: 'string',
-              example: 'A verification has been sent to your email. Kindly follow that link to reset your password',
-            },
-            token: {
-              type: 'string',
-              example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Iml5YXJhZmVyZ3Vzb25AZ21haWwuY29tIiwiaWF0IjoxNTY2NDAzMTA3LCJleHAiOjE1NjY0ODk1MDd9.jDq8clsqJtTBN0-PKLJdu0U2GihHDCtn5P90aO0CHAs',
+      },
+      MessageSentResponse: {
+        type: 'object',
+        properties: {
+          status: {
+            type: 'integer',
+            example: 200,
+          },
+          data: {
+            type: 'object',
+            properties: {
+              message: {
+                type: 'string',
+                example: 'A verification has been sent to your email. Kindly follow that link to reset your password',
+              },
+              token: {
+                type: 'string',
+                example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Iml5YXJhZmVyZ3Vzb25AZ21haWwuY29tIiwiaWF0IjoxNTY2NDAzMTA3LCJleHAiOjE1NjY0ODk1MDd9.jDq8clsqJtTBN0-PKLJdu0U2GihHDCtn5P90aO0CHAs',
+              },
             },
           },
         },
       },
-    },
-    PasswordResetResponse: {
-      type: 'object',
-      properties: {
-        status: {
-          type: 'integer',
-          example: 200,
+      PasswordResetResponse: {
+        type: 'object',
+        properties: {
+          status: {
+            type: 'integer',
+            example: 200,
+          },
+          data: {
+            type: 'object',
+            properties: {
+              message: {
+                type: 'string',
+                example: 'Password reset successful',
+              }
+            },
+          },
         },
-        data: {
-          type: 'object',
-          properties: {
-            message: {
-              type: 'string',
-              example: 'Password reset successful',
-            }
+      },
+      EmailNotFoundResponse: {
+        type: 'object',
+        properties: {
+          status: {
+            type: 'integer',
+            example: 404,
+          },
+          error: {
+            type: 'string',
+            example: 'No User with the provided email'
+          },
+        },
+      },
+      TripValidationResponse: {
+        type: 'object',
+        properties: {
+          status: {
+            type: 'integer',
+            example: 400,
+          },
+          error: {
+            type: 'string',
+            example: 'Invalid id supplied'
           },
         },
       },
@@ -1673,17 +1710,30 @@ module.exports = {
           example: 'Invalid requset Id/ No trip with the stated id'
         },
       },
-    },
-    PasswordResetValidationResponse: {
-      type: 'object',
-      properties: {
-        status: {
-          type: 'integer',
-          example: 400,
+      PasswordResetValidationResponse: {
+        type: 'object',
+        properties: {
+          status: {
+            type: 'integer',
+            example: 400,
+          },
+          error: {
+            type: 'string',
+            example: 'Password must contain at least one number'
+          },
         },
-        error: {
-          type: 'string',
-          example: 'Password must contain at least one number'
+      },
+      RequestValidationResponse: {
+        type: 'object',
+        properties: {
+          status: {
+            type: 'integer',
+            example: 400,
+          },
+          error: {
+            type: 'array',
+            example: ['Invalid date selected']
+          },
         },
       },
     },
@@ -1786,9 +1836,18 @@ module.exports = {
           type: 'integer',
           example: 400,
         },
-        error: {
-          type: 'string',
-          example: 'Invalid email supplied'
+      },
+      EmailInvalidResponse: {
+        type: 'object',
+        properties: {
+          status: {
+            type: 'integer',
+            example: 400,
+          },
+          error: {
+            type: 'string',
+            example: 'Invalid email supplied'
+          },
         },
       },
     },
