@@ -1,7 +1,6 @@
 import express from 'express';
 import authRouter from './auth';
 import requestRouter from './request';
-import accommodationRouter from './accommodation';
 import profileRouter from './profile';
 import notificationRouter from './notification';
 import { checkToken } from '../../middlewares';
@@ -21,7 +20,6 @@ router.use('/request', commentRouter);
 router.use('/', roleRouter);
 router.use('/', permissionRouter);
 
-router.use('/accommodation', accommodationRouter);
 router.use('/', roleRouter);
 router.use('/', permissionRouter);
 

@@ -3,32 +3,32 @@ import models from '../models';
 const { Accommodation } = models;
 
 /**
- * Controller for CRUD operations related to accommodation
- * @author Kingsley Victor
+ * Controller class for accommodation operations
  */
-export default class AccommodationController {
+export default class AccomodationController {
   /**
-   *
    * @param {Request} req
    * @param {Response} res
-   * @returns {Promise<void>} creates an accommodation service
+   * @returns {Promise<void>} creates an accommodation
    */
   static async create(req, res) {
     try {
-      const { type } = req.body;
-      const picture = req.file;
+      const { name, location, image } = req.body;
+      // const image = req.file;
+      // console.log('Req.file::----------------->>>', req.file);
       const data = await Accommodation.create({
-        type,
-        picture
+        name,
+        location,
+        image
       });
       res.status(201).json({
-        status: 201,
+        status: 'success',
         data
       });
     } catch (error) {
       res.status(500).json({
-        status: 500,
-        error
+        status: error,
+        error: error.message
       });
     }
   }
@@ -50,12 +50,12 @@ export default class AccommodationController {
       );
       const data = await Accommodation.findByPk(query.id);
       res.status(200).json({
-        status: 200,
+        status: 'success',
         data
       });
     } catch (error) {
       res.status(500).json({
-        status: 500,
+        status: 'error',
         error
       });
     }
@@ -72,13 +72,13 @@ export default class AccommodationController {
       const { user } = req;
       await Accommodation.rescind(user.id);
       res.status(200).json({
-        status: 200,
+        status: 'success',
         data: 'Successfully rescinded booking for accommodation'
       });
     } catch (error) {
       res.status(500).json({
-        status: 500,
-        error
+        status: 'error',
+        error: error.message
       });
     }
   }
@@ -89,24 +89,24 @@ export default class AccommodationController {
    * @param {Response} res
    * @returns {Promise<void>} gets all accommodations available for booking
    */
-  static async getAll(req, res) {
-    try {
-      const data = await Accommodation.find({
-        where: {
-          booked: false
-        }
-      });
-      res.status(200).json({
-        status: 200,
-        data
-      });
-    } catch (error) {
-      res.status(500).json({
-        status: 500,
-        error
-      });
-    }
-  }
+  // static async getAll(req, res) {
+  //   try {
+  //     const data = await Accommodation.find({
+  //       where: {
+  //         booked: false
+  //       }
+  //     });
+  //     res.status(200).json({
+  //       status: 'success',
+  //       data
+  //     });
+  //   } catch (error) {
+  //     res.status(500).json({
+  //       status: 'error',
+  //       error: error.message
+  //     });
+  //   }
+  // }
 
   /**
    *
@@ -114,23 +114,23 @@ export default class AccommodationController {
    * @param {Response} res
    * @returns {Promise<void>} deletes an accommodation service
    */
-  static async deleteOne(req, res) {
-    try {
-      const { id } = req.params;
-      await Accommodation.destroy({
-        where: {
-          id
-        }
-      });
-      res.status(200).json({
-        status: 200,
-        data: 'Successfully deleted accommodation service'
-      });
-    } catch (error) {
-      res.status(500).json({
-        status: 500,
-        error
-      });
-    }
-  }
+  // static async deleteOne(req, res) {
+  //   try {
+  //     const { id } = req.params;
+  //     await Accommodation.destroy({
+  //       where: {
+  //         id
+  //       }
+  //     });
+  //     res.status(200).json({
+  //       status: 'success',
+  //       data: 'Successfully deleted accommodation service'
+  //     });
+  //   } catch (error) {
+  //     res.status(500).json({
+  //       status: 'error',
+  //       error: error.message
+  //     });
+  //   }
+  // }
 }
