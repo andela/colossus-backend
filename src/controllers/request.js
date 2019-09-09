@@ -122,6 +122,8 @@ export default class RequestController {
 
       if (!request) return errorResponse(new Error('Invalid requset Id'), res, 404);
 
+      if (request.userId !== req.user.id) return errorResponse(new Error('You are not authorized to edit this request'), res, 403);
+
       if (request.status !== 'Open') return errorResponse(new Error('Only open requests can be edited'), res, 400);
 
       const Trips = generateTrips(req.body, request.id, type, true);
@@ -136,7 +138,7 @@ export default class RequestController {
 
       const updateSummary = await Request.findOne({ where: { id: params.id }, include: { model: Trip, as: 'trips' } });
 
-      res.status(201).json({ status: 201, data: updateSummary });
+      res.status(200).json({ status: 200, data: updateSummary });
     } catch (error) {
       return errorResponse(error, res, 500);
     }
