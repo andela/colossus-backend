@@ -44,18 +44,4 @@ router.delete(
   AccommodationController.destroyOne
 );
 
-// router.post(
-//   '/book',
-//   checkToken,
-//   checkVerified,
-//   checkIfBooked,
-//   AccommodationController.bookOne
-// );
-// router.patch(
-//   '/rescind',
-//   checkToken,
-//   checkVerified,
-//   AccommodationController.rescindOne
-// );
-
 export default router;
