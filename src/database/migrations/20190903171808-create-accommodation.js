@@ -7,8 +7,20 @@ module.exports = {
       primaryKey: true,
       type: Sequelize.INTEGER
     },
-    type: {
+    name: {
+      allowNull: false,
       type: Sequelize.STRING
+    },
+    image: {
+      type: Sequelize.STRING
+    },
+    location: {
+      allowNull: false,
+      type: Sequelize.STRING
+    },
+    owner: {
+      type: Sequelize.INTEGER,
+      allowNull: false
     },
     movingIn: {
       type: Sequelize.DATE,
@@ -23,9 +35,6 @@ module.exports = {
     booked: {
       type: Sequelize.BOOLEAN,
       defaultValue: false
-    },
-    picture: {
-      type: Sequelize.JSON
     },
     bookedBy: {
       type: Sequelize.INTEGER,

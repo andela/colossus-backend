@@ -8,56 +8,94 @@ import app from '..';
 dotenv.config();
 
 const { User } = models;
-const root = '/api/v1/accommodation';
+const root = '/api/v1';
 
 chai.use(chaiHttp);
 
 let token = null;
-let id = null;
+let accommodationId = null;
+let roomId = null;
 
 describe('Accommodation test suites', () => {
   before((done) => {
     User.create({
-      firstName: 'Jeremy',
-      lastName: 'Gray',
-      email: 'jGrayson@app.com',
+      firstName: 'Travel',
+      lastName: 'Admin',
+      email: 'traveladmin1@barefootnomad.com',
       password: 'password',
-      gender: 'male',
-      isVerified: true
+      isVerified: true,
+      role: 'travel_admin'
     })
       .then((user) => {
         token = jwt.sign({
           email: user.email,
           id: user.id
         }, process.env.JWT_SECRET);
+
+        User.create({
+          firstName: 'Travel',
+          lastName: 'Admin',
+          email: 'traveladmin2@barefootnomad.com',
+          password: 'password',
+          isVerified: true,
+          role: 'travel_admin'
+        })
+          .then((user2) => {
+            token = jwt.sign({
+              email: user2.email,
+              id: user2.id
+            }, process.env.JWT_SECRET);
+          });
         done();
       });
   });
   describe('Main tests', () => {
+    it('should throw validation errors when request body is empty', (done) => {
+      chai.request(app)
+        .post(`${root}/accommodation`)
+        .set('Authorization', `Bearer ${token}`)
+        .end((err, res) => {
+          const { status } = res;
+          expect(status).to.be.eql(400);
+          done();
+        });
+    });
     it('should create an accommodation', (done) => {
       chai.request(app)
-        .post(`${root}/create`)
+        .post(`${root}/accommodation`)
         .set('Authorization', `Bearer ${token}`)
         .send({
-          type: 'villa'
+          name: 'Kampala',
+          location: 'Southern Uganda'
         })
         .end((err, res) => {
           const { status, body } = res;
-          id = body.data.id;
-          const isTrueAboutBody = Object.keys(body).some((value) => value === 'data');
-          expect(isTrueAboutBody).to.be.eql(true);
+          const { data } = body;
+          accommodationId = data.id;
           expect(status).to.be.eql(201);
           done();
         });
     });
-    it('should book an accommodation', (done) => {
+    it('should create a room', (done) => {
       chai.request(app)
-        .post(`${root}/book?id=${id}`)
+        .post(`${root}/accommodation/${accommodationId}/room`)
         .set('Authorization', `Bearer ${token}`)
         .send({
-          movingIn: '2019-09-04',
-          movingOut: '2019-10-04'
+          name: 'Colony',
+          type: 'Broad'
         })
+        .end((err, res) => {
+          const { status, body } = res;
+          const { data } = body;
+          roomId = data.id;
+          expect(status).to.be.eql(201);
+          done();
+        });
+    });
+    it('should book a room', (done) => {
+      chai.request(app)
+        .patch(`${root}/room/book/${roomId}`)
+        .set('Authorization', `Bearer ${token}`)
         .end((err, res) => {
           const { status } = res;
           expect(status).to.be.eql(200);

@@ -95,4 +95,7 @@ typings/
 # Ignore Winston(logger) log Files
 combined.log
 error.log
+
+# Editor settings
+.vscode/
 # End of https://www.gitignore.io/api/node
