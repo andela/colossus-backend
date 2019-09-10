@@ -8,7 +8,11 @@ import permissionRouter from './permission';
 import roleRouter from './role';
 import notificationRouter from './notification';
 import commentRouter from './comment';
+<<<<<<< HEAD
 import tripRouter from './trip';
+=======
+import ratingRouter from './rating';
+>>>>>>> save unstaged changes before rebase
 
 const router = express.Router();
 
@@ -25,7 +29,25 @@ router.use('/', roleRouter);
 router.use('/', permissionRouter);
 router.use('/like', likeRouter);
 
+<<<<<<< HEAD
 router.use('/', roleRouter);
 router.use('/', permissionRouter);
+=======
+router.user('/rating', checkToken, ratingRouter);
+
+
+router.use((err, req, res, next) => {
+  if (err.name === 'ValidationError') {
+    return res.status(422).json({
+      errors: Object.keys(err.errors).reduce((errors, key) => {
+        errors[key] = err.errors[key].message;
+        return errors;
+      }, {})
+    });
+  }
+
+  return next(err);
+});
+>>>>>>> save unstaged changes before rebase
 
 module.exports = router;
