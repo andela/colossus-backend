@@ -9,6 +9,7 @@ import CloudinaryConfig from '../middlewares/cloudinaryConfig';
 import ImageHandler from '../middlewares/imageHandler';
 import { authorize } from '../middlewares/authorize';
 import checkAccommodationOwner from '../middlewares/checkAccommodationOwner';
+import findAccommodation from '../middlewares/findAccommodation';
 
 const router = Router();
 
@@ -35,11 +36,19 @@ router.get(
   AccommodationController.findAll
 );
 
+router.get(
+  '/accommodation/:accommodationId',
+  checkToken,
+  checkVerified,
+  AccommodationController.findOne
+);
+
 router.delete(
   '/accommodation/:accommodationId',
   checkToken,
   checkVerified,
   authorize,
+  findAccommodation,
   checkAccommodationOwner,
   AccommodationController.destroyOne
 );

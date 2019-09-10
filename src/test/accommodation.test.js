@@ -31,10 +31,35 @@ describe('Accommodation test suites', () => {
           email: user.email,
           id: user.id
         }, process.env.JWT_SECRET);
+
+        User.create({
+          firstName: 'Travel',
+          lastName: 'Admin',
+          email: 'traveladmin2@barefootnomad.com',
+          password: 'password',
+          isVerified: true,
+          role: 'travel_admin'
+        })
+          .then((user2) => {
+            token = jwt.sign({
+              email: user2.email,
+              id: user2.id
+            }, process.env.JWT_SECRET);
+          });
         done();
       });
   });
   describe('Main tests', () => {
+    it('should throw validation errors when request body is empty', (done) => {
+      chai.request(app)
+        .post(`${root}/accommodation`)
+        .set('Authorization', `Bearer ${token}`)
+        .end((err, res) => {
+          const { status } = res;
+          expect(status).to.be.eql(400);
+          done();
+        });
+    });
     it('should create an accommodation', (done) => {
       chai.request(app)
         .post(`${root}/accommodation`)

@@ -20,12 +20,12 @@ export default class RoomController {
         type,
         accommodationId,
       });
-      res.status(201).json({
+      return res.status(201).json({
         status: 'success',
         data
       });
     } catch (error) {
-      res.status(500).json({
+      return res.status(500).json({
         status: error,
         error: error.message
       });
@@ -45,12 +45,12 @@ export default class RoomController {
           accommodationId
         }
       });
-      res.status(200).json({
+      return res.status(200).json({
         status: 'success',
         data
       });
     } catch (error) {
-      res.status(500).json({
+      return res.status(500).json({
         status: error,
         error: error.message
       });
@@ -62,6 +62,39 @@ export default class RoomController {
    * @param {Response} res
    * @returns {Promise<void>} retrieves all rooms in an accommodation
    */
+  static async updateRoom(req, res) {
+    try {
+      const { accommodationId, roomId } = req.params;
+      const { ...body } = req.body;
+      const room = await Room.findOne({
+        where: {
+          id: roomId,
+          accommodationId
+        }
+      });
+      const data = await room.update({ ...body }, {
+        where: {
+          id: roomId,
+          accommodationId
+        }
+      });
+      return res.status(200).json({
+        status: 'success',
+        data
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: error,
+        error: error.message
+      });
+    }
+  }
+
+  /**
+   * @param {Request} req
+   * @param {Response} res
+   * @returns {Promise<void>} deletes one room in an accommodation
+   */
   static async destroyOne(req, res) {
     try {
       const { accommodationId } = req.params;
@@ -70,12 +103,12 @@ export default class RoomController {
           id: accommodationId
         }
       });
-      res.status(200).json({
+      return res.status(200).json({
         status: 'success',
         data: 'Successfully deleted room'
       });
     } catch (error) {
-      res.status(500).json({
+      return res.status(500).json({
         status: error,
         error: error.message
       });

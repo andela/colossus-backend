@@ -30,11 +30,17 @@ class ProfileController {
           socket.on('tripCreated${userId}', (data) => { 
             appendMessage(data);
           })
+          socket.on('commentAdded${userId}', (data) => { 
+            appendMessage(data);
+          })
+          socket.on('requestStatus${userId}', (data) => { 
+            appendMessage(data);
+          })
         </script>
       </head>
       <body>
         <div id="message-container">
-          <h3>Notify User Trips</h3>
+          <h3>NOTIFICATIONS</h3>
           
         </div>
         

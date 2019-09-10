@@ -126,6 +126,17 @@ export default class RequestController {
             id: requestId
           }
         });
+
+        const emitMessage = `Your request status have been ${status}`;
+
+        await Notification.create({
+          receiver: request.userId,
+          content: emitMessage,
+          type: 'status'
+        });
+
+        eventEmitter(`requestStatus${request.userId}`, emitMessage);
+
         res.status(200).json({ status: 200, data: status });
       } else {
         res.status(401).json({ status: 401, error: 'You are not the manager of the user' });
