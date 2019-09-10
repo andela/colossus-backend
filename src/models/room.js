@@ -22,7 +22,9 @@ export default (sequelize, DataTypes) => {
   Room.associate = (models) => {
     // associations can be defined here
     Room.belongsTo(models.Accommodation, {
-      foreignKey: 'accommodationId'
+      foreignKey: 'accommodationId',
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
     });
     Room.belongsTo(models.User, {
       foreignKey: 'bookedBy',
@@ -37,6 +39,17 @@ export default (sequelize, DataTypes) => {
   }, {
     where: {
       id
+    },
+    returning: true
+  });
+
+  Room.rescind = (id, bookedBy) => Room.update({
+    bookedBy: null,
+    booked: false
+  }, {
+    where: {
+      id,
+      bookedBy
     },
     returning: true
   });
