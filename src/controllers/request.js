@@ -51,6 +51,7 @@ export default class RequestController {
       const {
         lineManagerId, firstName, lastName, appNotify, emailNotify, email
       } = req.user;
+      console.log(3333333333333333333333, req.user);
       const request = await Request.create({
         reason,
         type,

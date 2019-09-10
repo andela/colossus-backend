@@ -17,7 +17,7 @@
     "clean": "rm -rf dist && mkdir dist",
     "build": "npm run clean && npm run babel-build",
     "heroku-postbuild": "npm run build && export NODE_ENV=production && npm run migration && npm start",
-    "migration": "npx sequelize-cli db:migrate & npm run seeder",
+    "migration": "npx sequelize-cli db:migrate && npm run seeder",
     "undo-migration": "npx sequelize-cli db:migrate:undo:all",
     "seeder": "npx sequelize db:seed:all",
     "undo-seeder": "npx sequelize db:seed:undo:all"

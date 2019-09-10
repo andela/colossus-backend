@@ -699,8 +699,6 @@ module.exports = {
           }
         }
       },
-<<<<<<< HEAD
-=======
       get: {
         tags: ['comment'],
         summary: 'Allows a user to view all comment(s) related to a request',
@@ -772,7 +770,6 @@ module.exports = {
           }
         }
       },
->>>>>>> develop
     },
     '/role': {
       patch: {
