@@ -103,4 +103,26 @@ export default class RoomController {
       });
     }
   }
+
+  /**
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @returns {Promise<void>} rescinds booking an accommodation
+   */
+  static async rescindOne(req, res) {
+    try {
+      const { user, params } = req;
+      const data = await Room.rescind(params.id, user.id);
+      res.status(200).json({
+        status: 'success',
+        data
+      });
+    } catch ({ message }) {
+      res.status(500).json({
+        status: 'error',
+        error: message
+      });
+    }
+  }
 }

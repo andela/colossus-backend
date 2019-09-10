@@ -45,4 +45,11 @@ router.patch(
   RoomController.bookOne
 );
 
+router.patch(
+  '/room/rescind/:id',
+  checkToken,
+  checkVerified,
+  RoomController.rescindOne
+);
+
 export default router;
