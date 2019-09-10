@@ -32,6 +32,23 @@ export default class RequestController {
    * @param {Object} req
    * @param {Object} res
    * @returns {Object} res (server response)
+   * @description get all travel requests
+   */
+  static async getManagerRequest(req, res) {
+    const { userId } = req.params;
+    try {
+      const allRequests = await Request.findAll({ where: { lineManagerId: userId } });
+      return res.status(200).json({ status: 200, data: allRequests });
+    } catch (error) {
+      res.status(500).json({ status: 500, error });
+    }
+  }
+
+
+  /**
+   * @param {Object} req
+   * @param {Object} res
+   * @returns {Object} res (server response)
    * @description Creates a new request with the associated trips
    */
   static async createTrip(req, res) {
