@@ -29,10 +29,8 @@ router.use('/', roleRouter);
 router.use('/', permissionRouter);
 router.use('/like', likeRouter);
 
-<<<<<<< HEAD
 router.use('/', roleRouter);
 router.use('/', permissionRouter);
-=======
 router.user('/rating', checkToken, ratingRouter);
 
 
@@ -48,6 +46,5 @@ router.use((err, req, res, next) => {
 
   return next(err);
 });
->>>>>>> save unstaged changes before rebase
 
 module.exports = router;
