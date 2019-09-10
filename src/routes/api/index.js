@@ -2,15 +2,17 @@ import express from 'express';
 import authRouter from './auth';
 import requestRouter from './request';
 import profileRouter from './profile';
-import notificationRouter from './notification';
+import likeRouter from './like';
 import { checkToken } from '../../middlewares';
 import permissionRouter from './permission';
 import roleRouter from './role';
+import notificationRouter from './notification';
 import commentRouter from './comment';
 
 const router = express.Router();
 
 router.use('/auth', authRouter);
+
 router.use('/profile', profileRouter);
 router.use('/notification', checkToken, notificationRouter);
 
@@ -19,9 +21,7 @@ router.use('/request', commentRouter);
 
 router.use('/', roleRouter);
 router.use('/', permissionRouter);
-
-router.use('/', roleRouter);
-router.use('/', permissionRouter);
+router.use('/like', likeRouter);
 
 
 router.use((err, req, res, next) => {

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { RoomController } from '../controllers';
 import {
-  checkToken, checkVerified,
+  checkToken, checkVerified, checkIfBooked
 } from '../middlewares';
 import { authorize } from '../middlewares/authorize';
 import ValidateRoom from '../middlewares/validateRoom';
@@ -46,6 +46,21 @@ router.delete(
   RoomController.destroyOne
 );
 
+
+router.patch(
+  '/room/book/:id',
+  checkToken,
+  checkVerified,
+  checkIfBooked,
+  RoomController.bookOne
+);
+
+router.patch(
+  '/room/rescind/:id',
+  checkToken,
+  checkVerified,
+  RoomController.rescindOne
+);
 // update a room in an accommodation
 router.patch(
   '/accommodation/:accommodationId/room/:roomId',

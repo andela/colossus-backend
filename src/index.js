@@ -51,7 +51,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/', routes);
+app.use('/api/v1', routes);
 
 app.get('/', (req, res) => res.status(200).json({
   status: 200,

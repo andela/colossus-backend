@@ -16,7 +16,26 @@ export default {
     },
     accommodationId: {
       allowNull: false,
-      type: Sequelize.INTEGER
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'Accommodation',
+        key: 'id',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+      }
+    },
+    booked: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false
+    },
+    bookedBy: {
+      type: Sequelize.INETEGER,
+      references: {
+        model: 'Users',
+        key: 'id',
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE'
+      }
     },
     createdAt: {
       allowNull: false,

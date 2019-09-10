@@ -635,13 +635,7 @@ module.exports = {
                     type: 'string'
                   },
                   data: {
-                    type: 'object',
-                    properties: {
-                      commentBody: {
-                        type: 'string',
-                        example: 'test commentitis'
-                      }
-                    }
+                    type: 'object'
                   }
                 }
               }
@@ -705,6 +699,8 @@ module.exports = {
           }
         }
       },
+<<<<<<< HEAD
+=======
       get: {
         tags: ['comment'],
         summary: 'Allows a user to view all comment(s) related to a request',
@@ -776,6 +772,7 @@ module.exports = {
           }
         }
       },
+>>>>>>> develop
     },
     '/role': {
       patch: {
@@ -1383,12 +1380,225 @@ module.exports = {
           }
         },
       },
-      ResetPassword: {
-        type: 'object',
-        properties: {
-          password: {
-            type: 'string',
-            example: 'Password@2018',
+      '/accommodation/create': {
+        post: {
+          consumes: ['multipart/form-data'],
+          produces: ['application/json'],
+          summary: 'Creates an accommodation facility',
+          parameters: [
+            {
+              name: 'type',
+              type: 'string',
+              in: 'body',
+              description: 'Accommodation type'
+            },
+            {
+              name: 'picture',
+              type: 'file',
+              in: 'form',
+              description: 'Picture of facility if available'
+            },
+            {
+              name: 'Authorization',
+              type: 'string',
+              in: 'headers',
+              description: 'Bearer token'
+            }
+          ],
+          responses: {
+            201: {
+              description: 'Successfully created facility',
+              schema: {
+                type: 'object',
+                properties: {
+                  status: {
+                    type: 'integer'
+                  },
+                  data: {
+                    type: 'object'
+                  }
+                }
+              }
+            },
+            400: {
+              description: 'Bad request',
+              schema: {
+                type: 'object',
+                properties: {
+                  status: {
+                    type: 'integer'
+                  },
+                  error: {
+                    type: 'string'
+                  }
+                }
+              }
+            },
+            401: {
+              description: 'Unauthorized',
+              schema: {
+                type: 'object',
+                properties: {
+                  status: {
+                    type: 'integer'
+                  },
+                  error: {
+                    type: 'string'
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      '/accommodation/book': {
+        post: {
+          produces: ['application/json'],
+          summary: 'Books an accommodation facility',
+          parameters: [
+            {
+              name: 'id',
+              type: 'string',
+              in: 'query',
+              description: 'ID of accommodation to book'
+            },
+            {
+              name: 'movingIn',
+              type: 'date',
+              in: 'body',
+              description: 'Date user intends moving in'
+            },
+            {
+              name: 'movingOut',
+              type: 'date',
+              in: 'body',
+              description: 'Date user intends moving out'
+            },
+            {
+              name: 'Authorization',
+              type: 'string',
+              in: 'headers',
+              description: 'Bearer token'
+            }
+          ],
+          responses: {
+            200: {
+              description: 'Successfully booked facility',
+              schema: {
+                type: 'object',
+                properties: {
+                  status: {
+                    type: 'integer'
+                  },
+                  data: {
+                    type: 'object'
+                  }
+                }
+              }
+            },
+            400: {
+              description: 'Bad request',
+              schema: {
+                type: 'object',
+                properties: {
+                  status: {
+                    type: 'integer'
+                  },
+                  error: {
+                    type: 'string'
+                  }
+                }
+              }
+            },
+            401: {
+              description: 'Unauthorized',
+              schema: {
+                type: 'object',
+                properties: {
+                  status: {
+                    type: 'integer'
+                  },
+                  error: {
+                    type: 'string'
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      '/accommodation/rescind': {
+        post: {
+          produces: ['application/json'],
+          summary: 'Cancels booking of a facility',
+          parameters: [
+            {
+              name: 'id',
+              type: 'string',
+              in: 'query',
+              description: 'id'
+            },
+            {
+              name: 'Authorization',
+              type: 'string',
+              in: 'headers',
+              description: 'Bearer token'
+            }
+          ],
+          responses: {
+            200: {
+              description: 'Successfully rescinded booking',
+              schema: {
+                type: 'object',
+                properties: {
+                  status: {
+                    type: 'integer'
+                  },
+                  data: {
+                    type: 'string'
+                  }
+                }
+              }
+            },
+            400: {
+              description: 'Bad request',
+              schema: {
+                type: 'object',
+                properties: {
+                  status: {
+                    type: 'integer'
+                  },
+                  error: {
+                    type: 'string'
+                  }
+                }
+              }
+            },
+            401: {
+              description: 'Unauthorized',
+              schema: {
+                type: 'object',
+                properties: {
+                  status: {
+                    type: 'integer'
+                  },
+                  error: {
+                    type: 'string'
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      definitions: {
+        SendEmail: {
+          type: 'object',
+          properties: {
+            email: {
+              type: 'string',
+              example: 'fergusoniyara@gmail.com',
+            }
           },
           confirmPassword: {
             type: 'string',
