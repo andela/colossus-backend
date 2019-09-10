@@ -40,6 +40,9 @@ export default class RequestController {
         reason, passportName, type, from, to,
       } = req.body;
 
+      const origins = [...from];
+      const destinations = [...to];
+
       const {
         lineManagerId, firstName, lastName, appNotify, emailNotify, email, id
       } = req.user;
@@ -54,7 +57,7 @@ export default class RequestController {
 
       const requestSummary = await Request.findOne({ where: { id: request.id }, include: { model: Trip, as: 'trips' } });
 
-      await NotifyManagerForNewRequest(from, to, firstName, lastName, lineManagerId, type, appNotify, emailNotify, email);
+      await NotifyManagerForNewRequest(origins, destinations, firstName, lastName, lineManagerId, type, appNotify, emailNotify, email);
 
       res.status(201).json({ status: 201, data: requestSummary });
     } catch (error) {
