@@ -6,95 +6,44 @@ const AccommodationDefinition = (sequelize, DataTypes) => {
       autoIncrement: true,
       primaryKey: true
     },
-    type: {
-      type: DataTypes.STRING
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
     },
-    movingIn: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: null
+    location: {
+      type: DataTypes.STRING,
+      allowNull: false
     },
-    movingOut: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: null
-    },
-    booked: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
-    },
-    picture: {
-      type: DataTypes.JSON
+    image: {
+      type: DataTypes.STRING,
     }
-  }, {
-    timestamps: true
-  });
+  }, {});
 
-  // eslint-disable-next-line func-names
-  Accommodation.associate = function (models) {
+  Accommodation.associate = (models) => {
     // associations can be defined here
-    const accommodation = this;
-    accommodation.belongsTo(models.User, {
-      foreignKey: 'bookedBy',
+    Accommodation.hasMany(models.Room, {
+      foreignKey: 'accomodationId',
+      as: 'rooms',
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
+    });
+    Accommodation.belongsTo(models.User, {
+      foreignKey: 'owner',
       onDelete: 'SET NULL',
       onUpdate: 'CASCADE'
     });
-    accommodation.belongsTo(models.User, {
-      foreignKey: 'startedBy',
-      onDelete: 'SET NULL',
-      onUpdate: 'CASCADE'
+    Accommodation.hasMany(models.Like, {
+      foreignKey: 'accommodationId',
+      as: 'likes'
     });
   };
 
   // eslint-disable-next-line func-names
-  Accommodation.book = function (id, bookedBy, movingIn, movingOut) {
-    const accommodation = this;
-    return accommodation.update({
-      bookedBy,
-      movingIn,
-      movingOut,
-      booked: true
-    }, {
-      where: {
-        id
-      }
-    });
-  };
-
-  // eslint-disable-next-line func-names
-  Accommodation.findWhereBookedBy = function (bookedBy) {
-    const accommodation = this;
-    return accommodation.findOne({
-      where: {
-        bookedBy
-      }
-    });
-  };
-
-  // eslint-disable-next-line func-names
-  Accommodation.findWhereStartedBy = function (startedBy) {
-    const accommodation = this;
-    return accommodation.find({
-      where: {
-        startedBy
-      }
-    });
-  };
-
-  // eslint-disable-next-line func-names
-  Accommodation.rescind = function (bookedBy) {
-    const accommodation = this;
-    return accommodation.update({
-      bookedBy: null,
-      movingIn: null,
-      movingOut: null,
-      booked: false
-    }, {
-      where: {
-        bookedBy
-      }
-    });
-  };
+  Accommodation.findWhereOwner = (owner) => Accommodation.findAll({
+    where: {
+      owner
+    }
+  });
   return Accommodation;
 };
 
