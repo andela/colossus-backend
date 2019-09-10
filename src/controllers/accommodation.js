@@ -20,12 +20,12 @@ export default class AccomodationController {
         image,
         owner: req.user.id
       });
-      res.status(201).json({
+      return res.status(201).json({
         status: 'success',
         data
       });
     } catch (error) {
-      res.status(500).json({
+      return res.status(500).json({
         status: error,
         error: error.message
       });
@@ -33,7 +33,6 @@ export default class AccomodationController {
   }
 
   /**
-   *
    * @param {Request} req
    * @param {Response} res
    * @returns {Promise<void>} retrieves all accommodations
@@ -41,12 +40,12 @@ export default class AccomodationController {
   static async findAll(req, res) {
     try {
       const data = await Accommodation.findAll();
-      res.status(200).json({
+      return res.status(200).json({
         status: 'success',
         data
       });
     } catch (error) {
-      res.status(500).json({
+      return res.status(500).json({
         status: 'error',
         error: error.message
       });
@@ -54,7 +53,27 @@ export default class AccomodationController {
   }
 
   /**
-   *
+   * @param {Request} req
+   * @param {Response} res
+   * @returns {Promise<void>} deletes an accommodation
+   */
+  static async findOne(req, res) {
+    try {
+      const { accommodationId } = req.params;
+      const data = await Accommodation.findByPk(accommodationId);
+      return res.status(200).json({
+        status: 'success',
+        data: data || [],
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: 'error',
+        error: error.message
+      });
+    }
+  }
+
+  /**
    * @param {Request} req
    * @param {Response} res
    * @returns {Promise<void>} deletes an accommodation
@@ -67,12 +86,12 @@ export default class AccomodationController {
           id: accommodationId
         }
       });
-      res.status(200).json({
+      return res.status(200).json({
         status: 'success',
         data: 'Successfully deleted accommodation'
       });
     } catch (error) {
-      res.status(500).json({
+      return res.status(500).json({
         status: 'error',
         error: error.message
       });
@@ -95,12 +114,12 @@ export default class AccomodationController {
         body.movingOut
       );
       const data = await Accommodation.findByPk(query.id);
-      res.status(200).json({
+      return res.status(200).json({
         status: 'success',
         data
       });
     } catch (error) {
-      res.status(500).json({
+      return res.status(500).json({
         status: 'error',
         error
       });
@@ -117,40 +136,15 @@ export default class AccomodationController {
     try {
       const { user } = req;
       await Accommodation.rescind(user.id);
-      res.status(200).json({
+      return res.status(200).json({
         status: 'success',
         data: 'Successfully rescinded booking for accommodation'
       });
     } catch (error) {
-      res.status(500).json({
+      return res.status(500).json({
         status: 'error',
         error: error.message
       });
     }
   }
-
-  /**
-   *
-   * @param {Request} req
-   * @param {Response} res
-   * @returns {Promise<void>} gets all accommodations available for booking
-   */
-  // static async getAll(req, res) {
-  //   try {
-  //     const data = await Accommodation.find({
-  //       where: {
-  //         booked: false
-  //       }
-  //     });
-  //     res.status(200).json({
-  //       status: 'success',
-  //       data
-  //     });
-  //   } catch (error) {
-  //     res.status(500).json({
-  //       status: 'error',
-  //       error: error.message
-  //     });
-  //   }
-  // }
 }

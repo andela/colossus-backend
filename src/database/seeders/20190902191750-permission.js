@@ -152,7 +152,7 @@ export default {
       create: true,
       read: true,
       update: true,
-      delete: false,
+      delete: true,
       createdAt: new Date(),
       updatedAt: new Date()
     },
