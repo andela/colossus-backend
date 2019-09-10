@@ -705,6 +705,77 @@ module.exports = {
           }
         }
       },
+      get: {
+        tags: ['comment'],
+        summary: 'Allows a user to view all comment(s) related to a request',
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'Authorization',
+            in: 'headers',
+            description: 'Bearer token',
+            type: 'string'
+          }
+        ],
+        responses: {
+          200: {
+            description: 'An array of all comment(s) related to  request',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                data: {
+                  type: 'array'
+                }
+              }
+            }
+          },
+          401: {
+            description: 'Unauthorized, "no token provided"',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          },
+          403: {
+            description: 'Forbidden',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                data: {
+                  type: 'object'
+                }
+              }
+            }
+          },
+          404: {
+            description: 'Not found',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          }
+        }
+      },
     },
     '/role': {
       patch: {
@@ -882,60 +953,60 @@ module.exports = {
                   type: 'object'
                 }
               }
-            }
-          },
-          400: {
-            description: 'Bad request',
-            schema: {
-              type: 'object',
-              properties: {
-                status: {
-                  type: 'string'
-                },
-                error: {
-                  type: 'string'
+            },
+            400: {
+              description: 'Bad request',
+              schema: {
+                type: 'object',
+                properties: {
+                  status: {
+                    type: 'string'
+                  },
+                  error: {
+                    type: 'string'
+                  }
                 }
               }
-            }
-          },
-          401: {
-            description: 'Unauthorized',
-            schema: {
-              type: 'object',
-              properties: {
-                status: {
-                  type: 'string'
-                },
-                error: {
-                  type: 'string'
+            },
+            401: {
+              description: 'Unauthorized',
+              schema: {
+                type: 'object',
+                properties: {
+                  status: {
+                    type: 'integer'
+                  },
+                  error: {
+                    type: 'string'
+                  }
                 }
               }
-            }
-          },
-          403: {
-            description: 'Forbidden',
-            schema: {
-              type: 'object',
-              properties: {
-                status: {
-                  type: 'string'
-                },
-                error: {
-                  type: 'string'
+            },
+            403: {
+              description: 'Forbidden request',
+              schema: {
+                type: 'object',
+                properties: {
+                  status: {
+                    type: 'string'
+                  },
+                  error: {
+                    type: 'string'
+                  }
                 }
               }
-            }
-          },
-          404: {
-            description: 'Not found',
-            schema: {
-              type: 'object',
-              properties: {
-                status: {
-                  type: 'string'
-                },
-                error: {
-                  type: 'string'
+            },
+            404: {
+              description: 'Resource endpoint does not exist',
+              schema: {
+                type: 'object',
+                properties: {
+                  status: {
+                    type: 'string'
+                  },
+                  error: {
+                    type: 'string'
+                  }
                 }
               }
             }
