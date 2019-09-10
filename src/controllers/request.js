@@ -154,13 +154,13 @@ export default class RequestController {
    * @param {Response} res
    * @returns {Promise<void>} gets most travelled destinations
    */
-  static async getMostTravelledDestinations(req, res) {
+  static async getMostTravelledDestination(req, res) {
     try {
       const data = await Trip.findAll({
         attributes: ['to', [sequelize.fn('count', sequelize.col('to')), 'destination']],
         group: ['to'],
         raw: true,
-        order: sequelize.literal('destination'),
+        order: sequelize.literal('destination DESC'),
         limit: 1
       });
       res.status(200).json({
