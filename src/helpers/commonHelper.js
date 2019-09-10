@@ -64,15 +64,7 @@ class CommonHelper {
 
     const emailMessage = `
     <h2>Hi, ${firstName} ${lastName},</h2>
-<<<<<<< HEAD
-<<<<<<< HEAD
     <p>Your ${type} trip to ${to} ${`from ${from}`} has been created</p>&nbsp;
-=======
-    <p>Your ${type === 'one-way' ? `${type} trip` : type} to ${to} ${`from ${from}` || ''} has been created</p>&nbsp;
->>>>>>> feat(edit-request): Create Endpoint To Update Requests
-=======
-    <p>Your ${type === 'one-way' ? `${type} trip` : type} to ${to} ${`from ${from}` || ''} has been created</p>&nbsp;
->>>>>>> feat(edit-request): Create Endpoint To Update Requests
     <p> You can view the  details on your <a href=${'ceratenotification'}>request page</a> </p>
    `;
     if (emailNotify) await sendVerificationMail(email, 'Trip Request Details', emailMessage);
