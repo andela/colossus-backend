@@ -4,7 +4,9 @@ import { eventEmitter } from '../services/websocket';
 import sendVerificationMail from '../services/email';
 
 const { generateTrips, generatesingleTrip } = generateTripDetails;
-const { Request, Trip, Notification } = models;
+const {
+  Request, Trip, Notification, sequelize
+} = models;
 
 /**
  *
@@ -143,6 +145,33 @@ export default class RequestController {
       }
     } catch (error) {
       res.status(500).json({ status: 500, error });
+    }
+  }
+
+  /**
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @returns {Promise<void>} gets most travelled destinations
+   */
+  static async getMostTravelledDestinations(req, res) {
+    try {
+      const data = await Trip.findAll({
+        attributes: ['to', [sequelize.fn('count', sequelize.col('to')), 'destination']],
+        group: ['to'],
+        raw: true,
+        order: sequelize.literal('destination'),
+        limit: 1
+      });
+      res.status(200).json({
+        status: 'success',
+        data
+      });
+    } catch ({ message }) {
+      res.status(500).json({
+        status: 500,
+        error: message
+      });
     }
   }
 }
