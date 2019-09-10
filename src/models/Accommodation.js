@@ -1,34 +1,29 @@
 
 const AccommodationDefinition = (sequelize, DataTypes) => {
   const Accommodation = sequelize.define('Accommodation', {
-    id: {
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    location: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    image: {
+      type: DataTypes.STRING,
+    },
+    owner: {
       type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
+      allowNull: false
     },
-    type: {
-      type: DataTypes.STRING
-    },
-    movingIn: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: null
-    },
-    movingOut: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: null
-    },
-    booked: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
-    },
-    picture: {
-      type: DataTypes.JSON
-    }
-  }, {
-    timestamps: true
-  });
+  }, {});
+  Accommodation.associate = (models) => {
+    // associations can be defined here
+    Accommodation.hasMany(models.Room, {
+      foreignKey: 'accomodation',
+      as: 'rooms'
+    });
+  };
 
   // eslint-disable-next-line func-names
   Accommodation.associate = function (models) {
