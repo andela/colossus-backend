@@ -217,7 +217,6 @@ describe('POST /api/v1/request', () => {
       .get(`/api/v1/auth/verifyuser?query=${token}`)
       .end((err, res) => {
         token = res.body.token;
-        console.log(111111, token);
         done();
       });
   });
