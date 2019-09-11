@@ -28,7 +28,6 @@ router.use('/like', likeRouter);
 
 router.use('/', roleRouter);
 router.use('/', permissionRouter);
-router.user('/rating', checkToken, ratingRouter);
 router.use('/rating', checkToken, ratingRouter);
 
 
