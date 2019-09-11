@@ -17,7 +17,7 @@ export default {
     accommodationId: {
       allowNull: false,
       type: Sequelize.INTEGER,
-      onDelete: 'SET NULL',
+      onDelete: 'CASCADE',
       onUpdate: 'CASCADE',
       references: {
         model: 'Accommodation',
@@ -36,6 +36,12 @@ export default {
         model: 'Users',
         key: 'id'
       }
+    },
+    movingIn: {
+      type: Sequelize.DATE
+    },
+    movingOut: {
+      type: Sequelize.DATE
     },
     createdAt: {
       allowNull: false,

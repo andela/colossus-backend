@@ -20,35 +20,9 @@ module.exports = {
     },
     owner: {
       type: Sequelize.INTEGER,
-      allowNull: false
-    },
-    movingIn: {
-      type: Sequelize.DATE,
-      allowNull: true,
-      defaultValue: null
-    },
-    movingOut: {
-      type: Sequelize.DATE,
-      allowNull: true,
-      defaultValue: null
-    },
-    booked: {
-      type: Sequelize.BOOLEAN,
-      defaultValue: false
-    },
-    bookedBy: {
-      type: Sequelize.INTEGER,
-      onDelete: 'SET NULL',
+      allowNull: false,
       onUpdate: 'CASCADE',
-      references: {
-        model: 'Users',
-        key: 'id'
-      }
-    },
-    startedBy: {
-      type: Sequelize.INTEGER,
       onDelete: 'SET NULL',
-      onUpdate: 'CASCADE',
       references: {
         model: 'Users',
         key: 'id'
