@@ -897,7 +897,9 @@ module.exports = {
             }
           }
         }
-      },
+      }
+    },
+    '/request/requestId/comment/commentId': {
       patch: {
         tags: ['comment'],
         summary: 'Edit a posted comment',
@@ -918,7 +920,7 @@ module.exports = {
               properties: {
                 commentBody: {
                   type: 'string',
-                  example: 'About my last comment, I meant to say nothing actally.'
+                  example: 'About my last comment, I meant to say nothing actually.'
                 }
               }
             }
@@ -954,8 +956,52 @@ module.exports = {
             }
           }
         }
+      },
+      delete: {
+        tags: ['comment'],
+        summary: 'delete a posted comment',
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'Authorization',
+            in: 'headers',
+            description: 'Bearer token',
+            type: 'string'
+          }
+        ],
+        responses: {
+          200: {
+            description: 'comment successfully deleted',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                data: {
+                  type: 'object'
+                }
+              }
+            }
+          },
+          401: {
+            description: 'You are not the owner of the comment, invalid token',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          }
+        }
       }
-    },
+    }
+    ,
     '/role': {
       patch: {
         tags: ['role & permissions'],
