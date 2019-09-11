@@ -37,6 +37,7 @@ describe('POST /api/v1/auth/signup', () => {
         })
         .end((err, res) => {
           // eslint-disable-next-line no-unused-expressions
+          console.log(111111, res.body);
           emailToken = res.body.data.token;
           // eslint-disable-next-line no-unused-expressions
           expect(err).to.be.null;
