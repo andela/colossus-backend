@@ -2,7 +2,7 @@
 export default (sequelize, DataTypes) => {
   const Rating = sequelize.define('Rating', {
     averageRating: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DOUBLE,
       defaultValue: 0,
     },
     numberOfRatings: {

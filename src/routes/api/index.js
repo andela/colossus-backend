@@ -8,11 +8,8 @@ import permissionRouter from './permission';
 import roleRouter from './role';
 import notificationRouter from './notification';
 import commentRouter from './comment';
-<<<<<<< HEAD
 import tripRouter from './trip';
-=======
 import ratingRouter from './rating';
->>>>>>> save unstaged changes before rebase
 
 const router = express.Router();
 
@@ -32,6 +29,7 @@ router.use('/like', likeRouter);
 router.use('/', roleRouter);
 router.use('/', permissionRouter);
 router.user('/rating', checkToken, ratingRouter);
+router.use('/rating', checkToken, ratingRouter);
 
 
 router.use((err, req, res, next) => {

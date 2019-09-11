@@ -11,13 +11,13 @@ export default {
       allowNull: false,
       onDelete: 'CASCADE',
       references: {
-        model: 'Accommodations',
+        model: 'Accommodation',
         key: 'id',
         as: 'accommodationId',
       },
     },
     averageRating: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.DOUBLE,
       defaultValue: 0,
     },
     numberOfRatings: {
@@ -33,5 +33,5 @@ export default {
       type: Sequelize.DATE
     }
   }),
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('Ratings')
+  down: (queryInterface) => queryInterface.dropTable('Ratings')
 };
