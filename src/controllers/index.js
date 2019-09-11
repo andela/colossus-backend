@@ -6,11 +6,8 @@ import notificationController from './notification';
 import commentController from './comment';
 import accommodationController from './accommodation';
 import roomController from './room';
-<<<<<<< HEAD
 import tripController from './trips';
-=======
 import ratingController from './rating';
->>>>>>> feature(ratings):users can rate a centre/accommodation
 
 export const AuthController = authController;
 export const ProfileController = profileController;
