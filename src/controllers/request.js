@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import models from '../models';
 import Helper from '../helpers/commonHelper';
 import errorResponse from '../utils/index';
@@ -20,7 +21,20 @@ export default class RequestController {
    * @description get all travel requests
    */
   static async getAllRequests(req, res) {
+    const { startDate, endDate } = req.query;
+    const userId = req.user.id;
     try {
+      if (startDate) {
+        const trip = await Request.findAndCountAll({
+          where: {
+            createdAt: {
+              [Op.between]: [startDate, endDate]
+            },
+            userId
+          }
+        });
+        return res.status(200).json({ status: 'success', data: trip.count });
+      }
       const allRequests = await Request.findAll();
       return res.status(200).json({ status: 200, data: allRequests });
     } catch (error) {
