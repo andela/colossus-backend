@@ -182,6 +182,23 @@ describe('PATCH /request/requestId/comment/commentId, editing a comment', () => 
         expect(res.body).to.haveOwnProperty('status');
         expect(res.body.status).to.equal('success');
         expect(res.body).to.haveOwnProperty('data');
+        expect(res.body.data).to.haveOwnProperty('patcher');
+        done();
+      });
+  });
+
+  it('Should throw an error if bad edit comment is made', (done) => {
+    chai.request(server)
+      .patch(`/api/v1/request/${requestId}/comment/2`)
+      .set('Authorization', `Bearer ${firstToken}`)
+      .send({
+        commentBody: 1
+      })
+      .end((err, res) => {
+        // eslint-disable-next-line no-unused-expressions
+        expect(res).to.has.status(400);
+        expect(res.body).to.haveOwnProperty('status');
+        expect(res.body).to.haveOwnProperty('error');
         done();
       });
   });

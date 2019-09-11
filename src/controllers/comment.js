@@ -18,15 +18,20 @@ export default class CommentController {
       const userId = req.user.id;
       const { lineManagerId } = req.user;
       const { requestId } = req.params;
-      const newComment = await Comment.create({
-        commentBody, requestId, userId
-      });
 
       const request = await Request.findOne({
         where: {
           id: requestId
         }
       });
+
+      if (!request) return res.status(400).json({ 
+        status: 'error', 
+        message: 'This trip request does not exist'});
+      
+      const newComment = await Comment.create({
+          commentBody, requestId, userId
+      });  
 
       const { lineManagerId: managerId, userId: id } = request;
 
