@@ -1,5 +1,6 @@
 /* eslint-disable require-jsdoc */
 import models from '../models';
+import errorResponse from '../utils/index';
 
 const { Comment } = models;
 
@@ -51,6 +52,41 @@ export default class CommentController {
       res.status(200).json({
         status: 'success',
         data: commentRes
+      });
+    } catch (error) {
+      res.status(500).json({ status: 'error', error: error.message });
+    }
+  }
+
+  /**
+    * @param {Objec} req the edited comment
+    * @param {Object} res message to user
+    * @returns {Object} success or failure to edit comment
+    * @description Allow a user to edit a posted comment
+    */
+  static async editComment(req, res) {
+    const { commentBody } = req.body;
+    const { commentId } = req.params;
+    const userId = req.user.id;
+    try {
+      let comment = await Comment.findOne({
+        where: {
+          id: commentId, userId
+        }
+      });
+
+      if (!comment) return errorResponse(new Error('This comment doesn\'t exist'), res, 404);
+
+      comment = await comment.update({ commentBody }, { returning: true });
+      const patchedComment = comment.dataValues;
+
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          message: 'Comment successfully updated',
+          commentBody: patchedComment.commentBody,
+          patcher: patchedComment.userId
+        }
       });
     } catch (error) {
       res.status(500).json({ status: 'error', error: error.message });

@@ -61,8 +61,9 @@ before((done) => {
       status: 'pending',
       type: 'one-way',
     }).then((newRequest) => {
+      requestId = newRequest.id;
       Trip.create({
-        requestId: newRequest.id,
+        requestId,
         from: 'lagos',
         to: 'kampala',
         departureDate: '2019-08-09 13:00',
@@ -77,7 +78,7 @@ before((done) => {
 describe('POST /request/:requestId/comment, Creating a new newcomment', () => {
   it('Should return details of the new comments on a request', (done) => {
     chai.request(server)
-      .post('/api/v1/request/1/comment')
+      .post(`/api/v1/request/${requestId}/comment`)
       .set('Authorization', `Bearer ${firstToken}`)
       .send({
         commentBody: 'This is the comment',
@@ -98,7 +99,7 @@ describe('POST /request/:requestId/comment, Creating a new newcomment', () => {
   // send a second comment
   it('Should return details of the second comment on a request', (done) => {
     chai.request(server)
-      .post('/api/v1/request/1/comment')
+      .post(`/api/v1/request/${requestId}/comment`)
       .set('Authorization', `Bearer ${firstToken}`)
       .send({
         commentBody: 'second comment, this comment\'s deleted-at column sould be null ',
@@ -118,7 +119,7 @@ describe('POST /request/:requestId/comment, Creating a new newcomment', () => {
 
   it('Should respond with error object if an empty comment is made', (done) => {
     chai.request(server)
-      .post('/api/v1/request/1/comment')
+      .post(`/api/v1/request/${requestId}/comment`)
       .set('Authorization', `Bearer ${firstToken}`)
       .send({
         commentBody: '',
@@ -136,7 +137,7 @@ describe('POST /request/:requestId/comment, Creating a new newcomment', () => {
 
   it('Should respond with error object if a bad comment request is made', (done) => {
     chai.request(server)
-      .post('/api/v1/request/1/comment')
+      .post(`/api/v1/request/${requestId}/comment`)
       .set('Authorization', `Bearer ${firstToken}`)
       .send({
         commentBody: 1,
@@ -153,10 +154,45 @@ describe('POST /request/:requestId/comment, Creating a new newcomment', () => {
   });
 });
 
+describe('PATCH /request/requestId/comment/commentId, editing a comment', () => {
+  it('Should allow a users ability to edit their posted comments', (done) => {
+    chai.request(server)
+      .patch(`/api/v1/request/${requestId}/comment/2`)
+      .set('Authorization', `Bearer ${firstToken}`)
+      .send({
+        commentBody: 'Am the second comment, and i\'ve been patched! anyhow'
+      })
+      .end((err, res) => {
+        // eslint-disable-next-line no-unused-expressions
+        expect(err).to.be.null;
+        expect(res).to.has.status(200);
+        expect(res.body).to.haveOwnProperty('status');
+        expect(res.body.status).to.equal('success');
+        expect(res.body).to.haveOwnProperty('data');
+        done();
+      });
+  });
+
+  it('Should NOT allow a user ability to edit another user\'s posted comments', (done) => {
+    chai.request(server)
+      .patch(`/api/v1/request/${requestId}/comment/2`)
+      .set('Authorization', `Bearer ${secondToken}`)
+      .send({
+        commentBody: 'Am an impostor trying to patch the second comment'
+      })
+      .end((err, res) => {
+        // eslint-disable-next-line no-unused-expressions
+        expect(res).to.has.status(404);
+        expect(res.body).to.haveOwnProperty('status');
+        done();
+      });
+  });
+});
+
 describe('PSEUDO-delete /request/:requestId/comment/commentId', () => {
   it('Should NOT ALLOW a user to delete another user\'s comment', (done) => {
     chai.request(server)
-      .delete('/api/v1/request/1/comment/1')
+      .delete(`/api/v1/request/${requestId}/comment/1`)
       .set('Authorization', `Bearer ${secondToken}`)
       .end((err, res) => {
       // eslint-disable-next-line no-unused-expressions
@@ -170,7 +206,7 @@ describe('PSEUDO-delete /request/:requestId/comment/commentId', () => {
 
   it('Should set DeletedAt column to current date and time', (done) => {
     chai.request(server)
-      .delete('/api/v1/request/1/comment/1')
+      .delete(`/api/v1/request/${requestId}/comment/1`)
       .set('Authorization', `Bearer ${firstToken}`)
       .end((err, res) => {
         // eslint-disable-next-line no-unused-expressions
@@ -187,7 +223,7 @@ describe('PSEUDO-delete /request/:requestId/comment/commentId', () => {
 describe('GET /request/:requestId/comment', () => {
   it('Should return all comments in the database related to a request', (done) => {
     chai.request(server)
-      .get('/api/v1/request/1/comment')
+      .get(`/api/v1/request/${requestId}/comment`)
       .set('Authorization', `Bearer ${firstToken}`)
       .end((err, res) => {
         // eslint-disable-next-line no-unused-expressions

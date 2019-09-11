@@ -792,6 +792,63 @@ module.exports = {
             }
           }
         }
+      },
+      patch: {
+        tags: ['comment'],
+        summary: 'Edit a posted comment',
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'Authorization',
+            in: 'headers',
+            description: 'Bearer token',
+            type: 'string'
+          },
+          {
+            in: 'body',
+            name: 'body',
+            description: 'body',
+            schema: {
+              type: 'object',
+              properties: {
+                commentBody: {
+                  type: 'string',
+                  example: 'About my last comment, I meant to say nothing actally.'
+                }
+              }
+            }
+          }
+        ],
+        responses: {
+          200: {
+            description: 'comment successfully updated',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                data: {
+                  type: 'object'
+                }
+              }
+            }
+          },
+          404: {
+            description: 'comment with that comment ID and or user ID does not exist',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          }
+        }
       }
     },
     '/role': {
