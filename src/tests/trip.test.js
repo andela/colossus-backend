@@ -6,7 +6,6 @@ import models from '../models';
 import helper from '../helpers/jwtHelper';
 
 const { generateToken } = helper;
-
 dotenv.config();
 
 let token;
