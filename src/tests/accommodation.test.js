@@ -67,6 +67,7 @@ describe('Accommodation test suites', () => {
         .send({
           name: 'Kampala',
           location: 'Southern Uganda',
+          type: 'chateau',
           owner: 1
         })
         .end((err, res) => {
