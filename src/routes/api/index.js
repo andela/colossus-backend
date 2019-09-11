@@ -12,7 +12,6 @@ import tripRouter from './trip';
 import ratingRouter from './rating';
 
 
-
 const router = express.Router();
 
 router.use('/auth', authRouter);
