@@ -592,6 +592,94 @@ module.exports = {
         }
       }
     },
+    '/request/:id': {
+      patch: {
+        tags: [
+          'request'
+        ],
+        summary: 'Edit a created request',
+        description: '',
+        consumes: [
+          'application/json',
+        ],
+        parameters: [
+          {
+            in: 'path',
+            name: 'id',
+            required: true,
+          },
+          {
+            in: 'body',
+            name: 'body',
+            description: 'body',
+            required: true,
+            schema: {
+              $ref: '#definitions/CreateRequest',
+            },
+          },
+        ],
+        responses: {
+          200: {
+            description: 'successful operation',
+            schema: {
+              $ref: '#definitions/UpdateSuccessful',
+            },
+          },
+          400: {
+            description: 'Validation error',
+            schema: {
+              $ref: '#definitions/RequestValidationResponse',
+            },
+          },
+          403: {
+            description: 'Validation error',
+            schema: {
+              $ref: '#definitions/UserRightsResponse',
+            },
+          },
+          404: {
+            description: 'Validation error',
+            schema: {
+              $ref: '#definitions/RequestNotFoundResponse',
+            },
+          }
+        }
+      }
+    },
+    '/trip/:id': {
+      delete: {
+        tags: [
+          'trip'
+        ],
+        parameters: [
+          {
+            in: 'path',
+            name: 'id',
+            required: true,
+          },
+        ],
+        responses: {
+          200: {
+            description: 'successful operation',
+            schema: {
+              $ref: '#definitions/TripDeletedResponse',
+            },
+          },
+          400: {
+            description: 'Invalid trip id supplied',
+            schema: {
+              $ref: '#definitions/TripValidationResponse',
+            },
+          },
+          404: {
+            description: 'Validation error',
+            schema: {
+              $ref: '#definitions/RequestNotFoundResponse',
+            },
+          }
+        },
+      }
+    },
     '/request/:requestId/comment': {
       post: {
         tags: [
@@ -766,6 +854,48 @@ module.exports = {
                   type: 'string'
                 }
               }
+            },
+            401: {
+              description: 'Unauthorized',
+              schema: {
+                type: 'object',
+                properties: {
+                  status: {
+                    type: 'integer'
+                  },
+                  error: {
+                    type: 'string'
+                  }
+                }
+              }
+            },
+            403: {
+              description: 'Forbidden request',
+              schema: {
+                type: 'object',
+                properties: {
+                  status: {
+                    type: 'string'
+                  },
+                  error: {
+                    type: 'string'
+                  }
+                }
+              }
+            },
+            404: {
+              description: 'Resource endpoint does not exist',
+              schema: {
+                type: 'object',
+                properties: {
+                  status: {
+                    type: 'string'
+                  },
+                  error: {
+                    type: 'string'
+                  }
+                }
+              }
             }
           }
         }
@@ -845,8 +975,8 @@ module.exports = {
               }
             }
           }
-        }
-      }
+        },
+      },
     },
     '/role/permissions': {
       patch: {
@@ -948,64 +1078,22 @@ module.exports = {
                 }
               }
             },
-            400: {
-              description: 'Bad request',
-              schema: {
-                type: 'object',
-                properties: {
-                  status: {
-                    type: 'string'
-                  },
-                  error: {
-                    type: 'string'
-                  }
-                }
-              }
-            },
-            401: {
-              description: 'Unauthorized',
-              schema: {
-                type: 'object',
-                properties: {
-                  status: {
-                    type: 'integer'
-                  },
-                  error: {
-                    type: 'string'
-                  }
-                }
-              }
-            },
-            403: {
-              description: 'Forbidden request',
-              schema: {
-                type: 'object',
-                properties: {
-                  status: {
-                    type: 'string'
-                  },
-                  error: {
-                    type: 'string'
-                  }
-                }
-              }
-            },
-            404: {
-              description: 'Resource endpoint does not exist',
-              schema: {
-                type: 'object',
-                properties: {
-                  status: {
-                    type: 'string'
-                  },
-                  error: {
-                    type: 'string'
-                  }
+          },
+          400: {
+            description: 'Bad request',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                error: {
+                  type: 'string'
                 }
               }
             }
-          }
-        }
+          },
+        },
       },
       get: {
         tags: ['accommodation & rooms'],
@@ -1025,268 +1113,155 @@ module.exports = {
                 }
               }
             }
+          }
+        },
+        '/accommodation/:accommodationId': {
+          get: {
+            tags: ['accommodation & rooms'],
+            summary: 'View a specific accommodation facility',
+            produces: ['application/json'],
+            responses: {
+              200: {
+                description: 'Accommodation has been successfully created',
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string'
+                    },
+                    data: {
+                      type: 'object'
+                    }
+                  }
+                }
+              },
+              401: {
+                description: 'Unauthorized',
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string'
+                    },
+                    error: {
+                      type: 'string'
+                    }
+                  }
+                }
+              },
+            }
           },
-          401: {
-            description: 'Unauthorized',
-            schema: {
-              type: 'object',
-              properties: {
-                status: {
-                  type: 'string'
-                },
-                error: {
-                  type: 'string'
+        },
+        '/accommodation/:accommodationId/room': {
+          post: {
+            tags: ['accommodation & rooms'],
+            summary: 'Creates a room in an accommodation facility',
+            produces: ['application/json'],
+            parameters: [
+              {
+                name: 'Authorization',
+                in: 'headers',
+                description: 'Bearer token',
+                type: 'string'
+              },
+              {
+                in: 'body',
+                name: 'body',
+                description: 'body',
+                schema: {
+                  type: 'object',
+                  properties: {
+                    name: {
+                      type: 'string',
+                      example: 'Century House'
+                    },
+                    type: {
+                      type: 'string',
+                      example: 'Southern Bay'
+                    }
+                  }
+                }
+              },
+            ],
+            responses: {
+              200: {
+                description: 'Room has been successfully added',
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string'
+                    },
+                    data: {
+                      type: 'object'
+                    }
+                  }
+                }
+              },
+              400: {
+                description: 'Bad request',
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string'
+                    },
+                    error: {
+                      type: 'string'
+                    }
+                  }
+                }
+              },
+              401: {
+                description: 'Unauthorized',
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string'
+                    },
+                    error: {
+                      type: 'string'
+                    }
+                  }
+                }
+              },
+              403: {
+                description: 'Forbidden',
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string'
+                    },
+                    error: {
+                      type: 'string'
+                    }
+                  }
+                }
+              },
+              404: {
+                description: 'Not found',
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string'
+                    },
+                    error: {
+                      type: 'string'
+                    }
+                  }
                 }
               }
             }
-          },
-        }
-      }
-    },
-    '/accommodation/:accommodationId': {
-      get: {
-        tags: ['accommodation & rooms'],
-        summary: 'View a specific accommodation facility',
-        produces: ['application/json'],
-        responses: {
-          200: {
-            description: 'Accommodation has been successfully created',
-            schema: {
-              type: 'object',
-              properties: {
-                status: {
-                  type: 'string'
-                },
-                data: {
-                  type: 'object'
-                }
-              }
-            }
-          },
-          401: {
-            description: 'Unauthorized',
-            schema: {
-              type: 'object',
-              properties: {
-                status: {
-                  type: 'string'
-                },
-                error: {
-                  type: 'string'
-                }
-              }
-            }
-          },
+          }
+        },
+        post: {
+          tags: ['accommodation & rooms'],
+          summary: 'Creates a room in an accommodation facility',
         }
       },
-    },
-    '/accommodation/:accommodationId/room': {
-      post: {
-        tags: ['accommodation & rooms'],
-        summary: 'Creates a room in an accommodation facility',
-        produces: ['application/json'],
-        parameters: [
-          {
-            name: 'Authorization',
-            in: 'headers',
-            description: 'Bearer token',
-            type: 'string'
-          },
-          {
-            in: 'body',
-            name: 'body',
-            description: 'body',
-            schema: {
-              type: 'object',
-              properties: {
-                name: {
-                  type: 'string',
-                  example: 'Century House'
-                },
-                type: {
-                  type: 'string',
-                  example: 'Southern Bay'
-                }
-              }
-            }
-          },
-        ],
-        responses: {
-          200: {
-            description: 'Room has been successfully added',
-            schema: {
-              type: 'object',
-              properties: {
-                status: {
-                  type: 'string'
-                },
-                data: {
-                  type: 'object'
-                }
-              }
-            }
-          },
-          400: {
-            description: 'Bad request',
-            schema: {
-              type: 'object',
-              properties: {
-                status: {
-                  type: 'string'
-                },
-                error: {
-                  type: 'string'
-                }
-              }
-            }
-          },
-          401: {
-            description: 'Unauthorized',
-            schema: {
-              type: 'object',
-              properties: {
-                status: {
-                  type: 'string'
-                },
-                error: {
-                  type: 'string'
-                }
-              }
-            }
-          },
-          403: {
-            description: 'Forbidden',
-            schema: {
-              type: 'object',
-              properties: {
-                status: {
-                  type: 'string'
-                },
-                error: {
-                  type: 'string'
-                }
-              }
-            }
-          },
-          404: {
-            description: 'Not found',
-            schema: {
-              type: 'object',
-              properties: {
-                status: {
-                  type: 'string'
-                },
-                error: {
-                  type: 'string'
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    post: {
-      tags: ['accommodation & rooms'],
-      summary: 'Creates a room in an accommodation facility',
-      produces: ['application/json'],
-      parameters: [
-        {
-          name: 'Authorization',
-          in: 'headers',
-          description: 'Bearer token',
-          type: 'string'
-        },
-        {
-          in: 'body',
-          name: 'body',
-          description: 'body',
-          schema: {
-            type: 'object',
-            properties: {
-              name: {
-                type: 'string',
-                example: 'Century House'
-              },
-              type: {
-                type: 'string',
-                example: 'Southern Bay'
-              }
-            }
-          }
-        },
-      ],
-      responses: {
-        200: {
-          description: 'Room has been successfully added',
-          schema: {
-            type: 'object',
-            properties: {
-              status: {
-                type: 'string'
-              },
-              data: {
-                type: 'object'
-              }
-            }
-          }
-        },
-        400: {
-          description: 'Bad request',
-          schema: {
-            type: 'object',
-            properties: {
-              status: {
-                type: 'string'
-              },
-              error: {
-                type: 'string'
-              }
-            }
-          }
-        },
-        401: {
-          description: 'Unauthorized',
-          schema: {
-            type: 'object',
-            properties: {
-              status: {
-                type: 'string'
-              },
-              error: {
-                type: 'string'
-              }
-            }
-          }
-        },
-        403: {
-          description: 'Forbidden',
-          schema: {
-            type: 'object',
-            properties: {
-              status: {
-                type: 'string'
-              },
-              error: {
-                type: 'string'
-              }
-            }
-          }
-        },
-        404: {
-          description: 'Not found',
-          schema: {
-            type: 'object',
-            properties: {
-              status: {
-                type: 'string'
-              },
-              error: {
-                type: 'string'
-              }
-            }
-          }
-        }
-      }
     },
     '/accommodation:accommodationId/room/:roomId': {
       get: {
@@ -1367,293 +1342,348 @@ module.exports = {
         }
       }
     },
-    definitions: {
-      SendEmail: {
-        type: 'object',
-        properties: {
-          email: {
+    '/accommodation/create': {
+      post: {
+        consumes: ['multipart/form-data'],
+        produces: ['application/json'],
+        summary: 'Creates an accommodation facility',
+        parameters: [
+          {
+            name: 'type',
             type: 'string',
-            example: 'fergusoniyara@gmail.com',
+            in: 'body',
+            description: 'Accommodation type'
+          },
+          {
+            name: 'picture',
+            type: 'file',
+            in: 'form',
+            description: 'Picture of facility if available'
+          },
+          {
+            name: 'Authorization',
+            type: 'string',
+            in: 'headers',
+            description: 'Bearer token'
           }
+        ],
+        responses: {
+          201: {
+            description: 'Successfully created facility',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'integer'
+                },
+                data: {
+                  type: 'object'
+                }
+              }
+            }
+          },
+          400: {
+            description: 'Bad request',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'integer'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            },
+            401: {
+              description: 'Unauthorized',
+              schema: {
+                type: 'object',
+                properties: {
+                  status: {
+                    type: 'integer'
+                  },
+                  error: {
+                    type: 'string'
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    '/accommodation/book': {
+      post: {
+        produces: ['application/json'],
+        summary: 'Books an accommodation facility',
+        parameters: [
+          {
+            name: 'id',
+            type: 'string',
+            in: 'query',
+            description: 'ID of accommodation to book'
+          },
+          {
+            name: 'movingIn',
+            type: 'date',
+            in: 'body',
+            description: 'Date user intends moving in'
+          },
+          {
+            name: 'movingOut',
+            type: 'date',
+            in: 'body',
+            description: 'Date user intends moving out'
+          },
+          {
+            name: 'Authorization',
+            type: 'string',
+            in: 'headers',
+            description: 'Bearer token'
+          }
+        ],
+        responses: {
+          200: {
+            description: 'Successfully booked facility',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'integer'
+                },
+                data: {
+                  type: 'object'
+                }
+              }
+            }
+          },
+          400: {
+            description: 'Bad request',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'integer'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          },
+          401: {
+            description: 'Unauthorized',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'integer'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    '/accommodation/rescind': {
+      post: {
+        produces: ['application/json'],
+        summary: 'Cancels booking of a facility',
+        parameters: [
+          {
+            name: 'id',
+            type: 'string',
+            in: 'query',
+            description: 'id'
+          },
+          {
+            name: 'Authorization',
+            type: 'string',
+            in: 'headers',
+            description: 'Bearer token'
+          }
+        ],
+        responses: {
+          200: {
+            description: 'Successfully rescinded booking',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'integer'
+                },
+                data: {
+                  type: 'string'
+                }
+              }
+            }
+          },
+          400: {
+            description: 'Bad request',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'integer'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          },
+          401: {
+            description: 'Unauthorized',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'integer'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+  },
+  definitions: {
+    SendEmail: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          example: 'fergusoniyara@gmail.com',
+        }
+      },
+    },
+    ResetPassword: {
+      type: 'object',
+      properties: {
+        password: {
+          type: 'string',
+          example: 'Password@2018',
         },
-      },
-      '/accommodation/create': {
-        post: {
-          consumes: ['multipart/form-data'],
-          produces: ['application/json'],
-          summary: 'Creates an accommodation facility',
-          parameters: [
-            {
-              name: 'type',
-              type: 'string',
-              in: 'body',
-              description: 'Accommodation type'
-            },
-            {
-              name: 'picture',
-              type: 'file',
-              in: 'form',
-              description: 'Picture of facility if available'
-            },
-            {
-              name: 'Authorization',
-              type: 'string',
-              in: 'headers',
-              description: 'Bearer token'
-            }
-          ],
-          responses: {
-            201: {
-              description: 'Successfully created facility',
-              schema: {
-                type: 'object',
-                properties: {
-                  status: {
-                    type: 'integer'
-                  },
-                  data: {
-                    type: 'object'
-                  }
-                }
-              }
-            },
-            400: {
-              description: 'Bad request',
-              schema: {
-                type: 'object',
-                properties: {
-                  status: {
-                    type: 'integer'
-                  },
-                  error: {
-                    type: 'string'
-                  }
-                }
-              }
-            },
-            401: {
-              description: 'Unauthorized',
-              schema: {
-                type: 'object',
-                properties: {
-                  status: {
-                    type: 'integer'
-                  },
-                  error: {
-                    type: 'string'
-                  }
-                }
-              }
-            }
-          }
+        confirmPassword: {
+          type: 'string',
+          example: 'Password@2018',
         }
       },
-      '/accommodation/book': {
-        post: {
-          produces: ['application/json'],
-          summary: 'Books an accommodation facility',
-          parameters: [
-            {
-              name: 'id',
-              type: 'string',
-              in: 'query',
-              description: 'ID of accommodation to book'
-            },
-            {
-              name: 'movingIn',
-              type: 'date',
-              in: 'body',
-              description: 'Date user intends moving in'
-            },
-            {
-              name: 'movingOut',
-              type: 'date',
-              in: 'body',
-              description: 'Date user intends moving out'
-            },
-            {
-              name: 'Authorization',
-              type: 'string',
-              in: 'headers',
-              description: 'Bearer token'
-            }
-          ],
-          responses: {
-            200: {
-              description: 'Successfully booked facility',
-              schema: {
-                type: 'object',
-                properties: {
-                  status: {
-                    type: 'integer'
-                  },
-                  data: {
-                    type: 'object'
-                  }
-                }
-              }
-            },
-            400: {
-              description: 'Bad request',
-              schema: {
-                type: 'object',
-                properties: {
-                  status: {
-                    type: 'integer'
-                  },
-                  error: {
-                    type: 'string'
-                  }
-                }
-              }
-            },
-            401: {
-              description: 'Unauthorized',
-              schema: {
-                type: 'object',
-                properties: {
-                  status: {
-                    type: 'integer'
-                  },
-                  error: {
-                    type: 'string'
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      '/accommodation/rescind': {
-        post: {
-          produces: ['application/json'],
-          summary: 'Cancels booking of a facility',
-          parameters: [
-            {
-              name: 'id',
-              type: 'string',
-              in: 'query',
-              description: 'id'
-            },
-            {
-              name: 'Authorization',
-              type: 'string',
-              in: 'headers',
-              description: 'Bearer token'
-            }
-          ],
-          responses: {
-            200: {
-              description: 'Successfully rescinded booking',
-              schema: {
-                type: 'object',
-                properties: {
-                  status: {
-                    type: 'integer'
-                  },
-                  data: {
-                    type: 'string'
-                  }
-                }
-              }
-            },
-            400: {
-              description: 'Bad request',
-              schema: {
-                type: 'object',
-                properties: {
-                  status: {
-                    type: 'integer'
-                  },
-                  error: {
-                    type: 'string'
-                  }
-                }
-              }
-            },
-            401: {
-              description: 'Unauthorized',
-              schema: {
-                type: 'object',
-                properties: {
-                  status: {
-                    type: 'integer'
-                  },
-                  error: {
-                    type: 'string'
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      definitions: {
-        SendEmail: {
+    },
+    MessageSentResponse: {
+      type: 'object',
+      properties: {
+        status: {
+          type: 'integer',
+          example: 200,
+        },
+        data: {
           type: 'object',
           properties: {
-            email: {
+            message: {
               type: 'string',
-              example: 'fergusoniyara@gmail.com',
+              example: 'A verification has been sent to your email. Kindly follow that link to reset your password',
+            },
+            token: {
+              type: 'string',
+              example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Iml5YXJhZmVyZ3Vzb25AZ21haWwuY29tIiwiaWF0IjoxNTY2NDAzMTA3LCJleHAiOjE1NjY0ODk1MDd9.jDq8clsqJtTBN0-PKLJdu0U2GihHDCtn5P90aO0CHAs',
+            },
+          },
+        },
+      },
+    },
+    PasswordResetResponse: {
+      type: 'object',
+      properties: {
+        status: {
+          type: 'integer',
+          example: 200,
+        },
+        data: {
+          type: 'object',
+          properties: {
+            message: {
+              type: 'string',
+              example: 'Password reset successful',
             }
           },
-          confirmPassword: {
-            type: 'string',
-            example: 'Password@2018',
-          }
         },
       },
-      MessageSentResponse: {
+      TripValidationResponse: {
         type: 'object',
         properties: {
           status: {
             type: 'integer',
-            example: 200,
-          },
-          data: {
-            type: 'object',
-            properties: {
-              message: {
-                type: 'string',
-                example: 'A verification has been sent to your email. Kindly follow that link to reset your password',
-              },
-              token: {
-                type: 'string',
-                example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Iml5YXJhZmVyZ3Vzb25AZ21haWwuY29tIiwiaWF0IjoxNTY2NDAzMTA3LCJleHAiOjE1NjY0ODk1MDd9.jDq8clsqJtTBN0-PKLJdu0U2GihHDCtn5P90aO0CHAs',
-              },
-            },
-          },
-        },
-      },
-      PasswordResetResponse: {
-        type: 'object',
-        properties: {
-          status: {
-            type: 'integer',
-            example: 200,
-          },
-          data: {
-            type: 'object',
-            properties: {
-              message: {
-                type: 'string',
-                example: 'Password reset successful',
-              }
-            },
-          },
-        },
-      },
-      EmailNotFoundResponse: {
-        type: 'object',
-        properties: {
-          status: {
-            type: 'integer',
-            example: 404,
+            example: 400,
           },
           error: {
             type: 'string',
-            example: 'No User with the provided email'
+            example: 'Invalid id supplied'
           },
+        },
+      },
+    },
+    EmailNotFoundResponse: {
+      type: 'object',
+      properties: {
+        status: {
+          type: 'integer',
+          example: 200,
+        },
+        data: {
+          type: 'object',
+          properties: {
+            message: {
+              type: 'string',
+              example: 'Password reset successful',
+            }
+          },
+        },
+      },
+    },
+    TripValidationResponse: {
+      type: 'object',
+      properties: {
+        status: {
+          type: 'integer',
+          example: 400,
+        },
+        error: {
+          type: 'string',
+          example: 'Invalid id supplied'
+        },
+      },
+    },
+    TripDeletedResponse: {
+      type: 'object',
+      properties: {
+        status: {
+          type: 'integer',
+          example: 200,
+        },
+        message: {
+          type: 'string',
+          example: 'Trip successfully deleted'
+        },
+      },
+    },
+    RequestNotFoundResponse: {
+      type: 'object',
+      properties: {
+        status: {
+          type: 'integer',
+          example: 404,
+        },
+        error: {
+          type: 'string',
+          example: 'Invalid requset Id/ No trip with the stated id'
         },
       },
       PasswordResetValidationResponse: {
@@ -1669,6 +1699,120 @@ module.exports = {
           },
         },
       },
+      RequestValidationResponse: {
+        type: 'object',
+        properties: {
+          id: {
+            type: 'integer',
+            example: 1,
+          },
+          error: {
+            type: 'array',
+            example: ['Invalid date selected']
+          },
+        },
+      },
+    },
+    RequestValidationResponse: {
+      type: 'object',
+      properties: {
+        status: {
+          type: 'integer',
+          example: 400,
+        },
+        error: {
+          type: 'array',
+          example: ['Invalid date selected']
+        },
+      },
+    },
+    CreateRequest: {
+      type: 'object',
+      properties: {
+        passportName: {
+          type: 'string',
+          example: 'Iyara Ferguson'
+        },
+        reason: {
+          type: 'string',
+          example: 'Pilgrimage'
+        },
+        type: {
+          type: 'string',
+          example: 'round-trip'
+        },
+        from: {
+          type: 'array',
+          example: ['Dubai']
+        },
+        to: {
+          type: 'array',
+          example: ['Seychelles']
+        },
+        departureDate: {
+          type: 'array',
+          example: ['2018-03-29T13:34:00.000']
+        },
+        arrivalDate: {
+          type: 'array',
+          example: ['2018-03-29T13:34:00.000']
+        },
+        accommodation: {
+          type: 'array',
+          example: ['Four Points']
+        },
+      }
+    },
+    UpdateSuccessful: {
+      type: 'object',
+      properties: {
+        status: {
+          type: 'integer',
+          example: 200,
+        },
+        data: {
+          type: 'object',
+          properties: {
+            id: {
+              type: 'integer',
+              example: 1,
+            },
+            passportName: {
+              type: 'string',
+              example: 'Iyara Ferguson',
+            },
+            reason: {
+              type: 'string',
+              example: 'Pilgrimage',
+            },
+            type: {
+              type: 'string',
+              example: 'one-way',
+            },
+            trips: {
+              type: 'array',
+              example: [
+                {
+                  from: 'Dubai',
+                  to: 'Lagos',
+                  departureDate: '2018-03-29T13:34:00.000',
+                  arrivalDate: '2018-03-29T13:34:00.000',
+                  accommodation: 'Four Points'
+                }
+              ],
+            }
+          },
+        },
+      },
+    },
+    EmailInvalidResponse: {
+      type: 'object',
+      properties: {
+        status: {
+          type: 'integer',
+          example: 400,
+        },
+      },
       EmailInvalidResponse: {
         type: 'object',
         properties: {
@@ -1682,15 +1826,28 @@ module.exports = {
           },
         },
       },
-      Comment: {
-        type: 'object',
-        properties: {
-          commentBody: {
-            type: 'string',
-            example: 'I just have to be granted this request, let me go and chill',
-          }
+    },
+    UserRightsResponse: {
+      type: 'object',
+      properties: {
+        status: {
+          type: 'integer',
+          example: 403,
+        },
+        error: {
+          type: 'string',
+          example: 'You do not have rights to this resource'
         },
       },
     },
-  }
+    Comment: {
+      type: 'object',
+      properties: {
+        commentBody: {
+          type: 'string',
+          example: 'I just have to be granted this request, let me go and chill',
+        }
+      },
+    },
+  },
 };
