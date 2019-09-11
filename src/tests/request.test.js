@@ -36,6 +36,7 @@ describe('GET /api/v1/request', () => {
           lastName: 'Potter',
           email: 'wolverine@hogwarts.com',
           password: 'expeliamus',
+          isVerified: true
         })
         .end((err, res) => {
           // generate a verified token to access protected routes
@@ -243,10 +244,10 @@ describe('POST /api/v1/request', () => {
         passportName: 'John Doe',
         reason: 'Work leave',
         type: 'one-way',
-        from: 'New york',
-        to: 'London',
-        departureDate: '2018-03-29T13:34:00.000',
-        accommodation: 'Burj Al-Arab'
+        from: ['New york'],
+        to: ['London'],
+        departureDate: ['2018-03-29T13:34:00.000'],
+        accommodation: ['Burj Al-Arab']
       })
       .end((err, res) => {
         expect(res).to.have.status(201);
