@@ -5,7 +5,9 @@ import { AuthController } from '../../controllers';
 import AuthValidator from '../../middlewares/inputVaidator';
 import emailValidation from '../../middlewares/emailValidation';
 import passwordValidation from '../../middlewares/passwordValidator';
-import { checkToken, checkVerified, blob } from '../../middlewares';
+import {
+  checkToken, checkVerified, blob, checkRoleChange
+} from '../../middlewares';
 import multipart from '../../helpers/multipartHelper';
 
 const router = Router();
@@ -23,6 +25,7 @@ router.patch(
   '/edit',
   checkToken,
   checkVerified,
+  checkRoleChange,
   multipart.single('picture'),
   blob,
   AuthController.editProfile

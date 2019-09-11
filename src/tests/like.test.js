@@ -7,22 +7,20 @@ import app from '..';
 
 dotenv.config();
 
-const { User } = models;
-const root = '/api/v1/accommodation';
+const { Accommodation, User } = models;
+const root = '/api/v1/like';
+let token = null;
+let accommodationId = null;
 
 chai.use(chaiHttp);
 
-let token = null;
-let id = null;
-
-describe('Accommodation test suites', () => {
+describe('Like tests', () => {
   before((done) => {
     User.create({
-      firstName: 'Jeremy',
-      lastName: 'Gray',
-      email: 'jGrayson@app.com',
+      firstName: 'Jeremias',
+      lastName: 'Damian',
+      email: 'jDamian@app.com',
       password: 'password',
-      gender: 'male',
       isVerified: true
     })
       .then((user) => {
@@ -30,36 +28,39 @@ describe('Accommodation test suites', () => {
           email: user.email,
           id: user.id
         }, process.env.JWT_SECRET);
-        done();
+        Accommodation.create({
+          type: 'chateau',
+          name: 'Kampala',
+          location: 'Uganda',
+          owner: 1
+        })
+          .then((accommodation) => {
+            accommodationId = accommodation.id;
+            done();
+          });
       });
   });
   describe('Main tests', () => {
-    it('should create an accommodation', (done) => {
+    it('should like an accommodation facility', (done) => {
       chai.request(app)
-        .post(`${root}/create`)
+        .post(`${root}/create/${accommodationId}`)
         .set('Authorization', `Bearer ${token}`)
-        .send({
-          type: 'villa'
-        })
         .end((err, res) => {
           const { status, body } = res;
-          id = body.data.id;
           const isTrueAboutBody = Object.keys(body).some((value) => value === 'data');
           expect(isTrueAboutBody).to.be.eql(true);
           expect(status).to.be.eql(201);
           done();
         });
     });
-    it('should book an accommodation', (done) => {
+    it('should unlike an accommodation facility', (done) => {
       chai.request(app)
-        .post(`${root}/book?id=${id}`)
+        .delete(`${root}/unlike/${accommodationId}`)
         .set('Authorization', `Bearer ${token}`)
-        .send({
-          movingIn: '2019-09-04',
-          movingOut: '2019-10-04'
-        })
         .end((err, res) => {
-          const { status } = res;
+          const { status, body } = res;
+          const { data } = body;
+          expect(data).to.be.a('string');
           expect(status).to.be.eql(200);
           done();
         });

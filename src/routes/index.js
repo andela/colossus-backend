@@ -1,6 +1,12 @@
 import { Router } from 'express';
+import allRoutes from './api';
+import accommodationRouter from './accommodation';
+import roomRouter from './room';
 
 const router = Router();
-router.use('/api/v1', require('./api'));
+
+router.use('/', allRoutes);
+router.use('/', accommodationRouter);
+router.use('/', roomRouter);
 
 export default router;

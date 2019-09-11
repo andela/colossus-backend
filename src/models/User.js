@@ -35,7 +35,8 @@ const UserDefinition = (sequelize, DataTypes) => {
         notEmpty: {
           msg: 'Email is required'
         }
-      }
+      },
+      unique: true
     },
     password: {
       type: DataTypes.STRING,

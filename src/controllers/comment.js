@@ -1,8 +1,9 @@
 /* eslint-disable require-jsdoc */
 import models from '../models';
 import errorResponse from '../utils/index';
+import { eventEmitter } from '../services/websocket';
 
-const { Comment } = models;
+const { Comment, Notification, Request } = models;
 
 export default class CommentController {
   /**
@@ -15,11 +16,34 @@ export default class CommentController {
     const { commentBody } = req.body;
     try {
       const userId = req.user.id;
+      const { lineManagerId } = req.user;
       const { requestId } = req.params;
-
       const newComment = await Comment.create({
         commentBody, requestId, userId
       });
+
+      const request = await Request.findOne({
+        where: {
+          id: requestId
+        }
+      });
+
+      const { lineManagerId: managerId, userId: id } = request;
+
+      const emitMessage = 'New Comment';
+
+      const notificationData = {
+        receiver: '',
+        content: emitMessage,
+        type: 'comment'
+      };
+
+      if (userId === managerId) { notificationData.receiver = id; } else { notificationData.receiver = lineManagerId; }
+
+      await Notification.create(notificationData);
+
+      eventEmitter(`commentAdded${notificationData.receiver}`, emitMessage);
+
       res.status(201).json({
         status: 'success',
         data: {

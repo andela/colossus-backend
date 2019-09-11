@@ -1,6 +1,5 @@
-
-module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('Accommodation', {
+export default {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('Rooms', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -11,41 +10,25 @@ module.exports = {
       allowNull: false,
       type: Sequelize.STRING
     },
-    image: {
-      type: Sequelize.STRING
-    },
-    location: {
+    type: {
       allowNull: false,
       type: Sequelize.STRING
     },
-    owner: {
+    accommodationId: {
+      allowNull: false,
       type: Sequelize.INTEGER,
-      allowNull: false
-    },
-    movingIn: {
-      type: Sequelize.DATE,
-      allowNull: true,
-      defaultValue: null
-    },
-    movingOut: {
-      type: Sequelize.DATE,
-      allowNull: true,
-      defaultValue: null
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+      references: {
+        model: 'Accommodation',
+        key: 'id'
+      }
     },
     booked: {
       type: Sequelize.BOOLEAN,
       defaultValue: false
     },
     bookedBy: {
-      type: Sequelize.INTEGER,
-      onDelete: 'SET NULL',
-      onUpdate: 'CASCADE',
-      references: {
-        model: 'Users',
-        key: 'id'
-      }
-    },
-    startedBy: {
       type: Sequelize.INTEGER,
       onDelete: 'SET NULL',
       onUpdate: 'CASCADE',
@@ -63,5 +46,5 @@ module.exports = {
       type: Sequelize.DATE
     }
   }),
-  down: (queryInterface) => queryInterface.dropTable('Accommodation')
+  down: (queryInterface) => queryInterface.dropTable('Rooms')
 };

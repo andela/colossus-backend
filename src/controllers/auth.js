@@ -212,13 +212,13 @@ class AuthController extends CommonHelper {
       });
       if (invalidated) {
         res.status(200).json({
-          status: 200,
+          status: 'success',
           data: `Successfully signed out user with email ${user.email}`
         });
       }
     } catch (error) {
       res.status(500).json({
-        status: 500,
+        status: 'error',
         error
       });
     }
@@ -241,12 +241,12 @@ class AuthController extends CommonHelper {
       );
       const data = await UserModel.findByPk(id);
       res.status(200).json({
-        status: 200,
+        status: 'success',
         data
       });
     } catch (error) {
       res.status(500).json({
-        status: 500,
+        status: 'error',
         error
       });
     }

@@ -34,6 +34,7 @@
         "MethodDefinition": true,
         "ClassDeclaration": true
       }
-    }]
+    }],
+    "import/no-cycle": 0
   }
 }
