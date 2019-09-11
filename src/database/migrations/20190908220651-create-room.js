@@ -29,7 +29,7 @@ export default {
       defaultValue: false
     },
     bookedBy: {
-      type: Sequelize.INETEGER,
+      type: Sequelize.INTEGER,
       references: {
         model: 'Users',
         key: 'id',

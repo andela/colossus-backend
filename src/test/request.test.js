@@ -217,7 +217,6 @@ describe('POST /api/v1/request', () => {
       .get(`/api/v1/auth/verifyuser?query=${token}`)
       .end((err, res) => {
         token = res.body.token;
-        console.log(111111, token);
         done();
       });
   });
@@ -235,7 +234,7 @@ describe('POST /api/v1/request', () => {
         done();
       });
   });
-  it('Should successfully create a request', (done) => {
+  it('Should create a new request', (done) => {
     chai
       .request(server)
       .post('/api/v1/request')
@@ -244,10 +243,10 @@ describe('POST /api/v1/request', () => {
         passportName: 'John Doe',
         reason: 'Work leave',
         type: 'one-way',
-        from: ['New york'],
-        to: ['London'],
-        departureDate: ['2018-03-29T13:34:00.000'],
-        accommodation: ['Burj Al-Arab']
+        from: 'New york',
+        to: 'London',
+        departureDate: '2018-03-29T13:34:00.000',
+        accommodation: 'Burj Al-Arab'
       })
       .end((err, res) => {
         expect(res).to.have.status(201);
