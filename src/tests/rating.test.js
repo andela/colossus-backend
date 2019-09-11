@@ -8,9 +8,6 @@ import helper from '../helpers/jwtHelper';
 
 const { generateToken } = helper;
 
-let userId;
-let token;
-
 dotenv.config();
 
 const {
@@ -74,6 +71,22 @@ describe('POST /api/v1/rating', () => {
         .post('/api/v1/rating')
         .set('Authorization', `Bearer ${normalUserToken}`)
         .send({ accommodationId: accommodation.id, rating: 5 })
+        .end((err, res) => {
+          // eslint-disable-next-line no-unused-expressions
+          expect(err).to.be.null;
+          expect(res).to.has.status(200);
+          expect(res.body).to.haveOwnProperty('status');
+          expect(res.body.status).to.equal(200);
+          expect(res.body.data).to.haveOwnProperty('averageRating');
+          expect(res.body.data).to.haveOwnProperty('numberOfRatings');
+          done();
+        });
+    });
+    it('Should return the details of the accommodation rating', (done) => {
+      chai.request(server)
+        .post('/api/v1/rating')
+        .set('Authorization', `Bearer ${normalUserToken}`)
+        .send({ accommodationId: accommodation.id, rating: 3 })
         .end((err, res) => {
           // eslint-disable-next-line no-unused-expressions
           expect(err).to.be.null;
