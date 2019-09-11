@@ -35,6 +35,7 @@ describe('GET /api/v1/request', () => {
           lastName: 'Potter',
           email: 'wolverine@hogwarts.com',
           password: 'expeliamus',
+          isVerified: true
         })
         .end((err, res) => {
           // generate a verified token to access protected routes
@@ -210,7 +211,30 @@ describe('PATCH /api/v1/request/:requestId/status', () => {
 });
 
 describe('POST /api/v1/request', () => {
-  it('Should successfully create a request', (done) => {
+  before((done) => {
+    // Verify the newly created user
+    chai.request(server)
+      .get(`/api/v1/auth/verifyuser?query=${token}`)
+      .end((err, res) => {
+        token = res.body.token;
+        done();
+      });
+  });
+  before((done) => {
+    // Edit the line manager id of the new user
+    chai.request(server)
+      .patch('/api/v1/auth/edit')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        gender: 'male',
+        lineManagerId: 1
+      })
+      // eslint-disable-next-line no-unused-vars
+      .end((err, res) => {
+        done();
+      });
+  });
+  it('Should create a new request', (done) => {
     chai
       .request(server)
       .post('/api/v1/request')
@@ -218,7 +242,6 @@ describe('POST /api/v1/request', () => {
       .send({
         passportName: 'John Doe',
         reason: 'Work leave',
-        lineManagerId: 2,
         type: 'one-way',
         from: 'New york',
         to: 'London',
@@ -227,6 +250,7 @@ describe('POST /api/v1/request', () => {
       })
       .end((err, res) => {
         expect(res).to.have.status(201);
+        userId = res.body.data.id;
         expect(res.body.status).to.be.equal(201);
         expect(res.body.data.trips).to.be.an('array');
         done();

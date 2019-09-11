@@ -66,7 +66,9 @@ describe('Accommodation test suites', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({
           name: 'Kampala',
-          location: 'Southern Uganda'
+          location: 'Southern Uganda',
+          type: 'chateau',
+          owner: 1
         })
         .end((err, res) => {
           const { status, body } = res;

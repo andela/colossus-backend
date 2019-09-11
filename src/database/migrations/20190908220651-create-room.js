@@ -17,11 +17,11 @@ export default {
     accommodationId: {
       allowNull: false,
       type: Sequelize.INTEGER,
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
       references: {
         model: 'Accommodation',
-        key: 'id',
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE'
+        key: 'id'
       }
     },
     booked: {
@@ -29,12 +29,12 @@ export default {
       defaultValue: false
     },
     bookedBy: {
-      type: Sequelize.INETEGER,
+      type: Sequelize.INTEGER,
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE',
       references: {
         model: 'Users',
-        key: 'id',
-        onDelete: 'SET NULL',
-        onUpdate: 'CASCADE'
+        key: 'id'
       }
     },
     createdAt: {
