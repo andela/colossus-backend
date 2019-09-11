@@ -22,7 +22,7 @@ const AccommodationDefinition = (sequelize, DataTypes) => {
   Accommodation.associate = (models) => {
     // associations can be defined here
     Accommodation.hasMany(models.Room, {
-      foreignKey: 'accomodationId',
+      foreignKey: 'accommodationId',
       as: 'rooms',
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE'

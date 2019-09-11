@@ -18,7 +18,7 @@ export default (sequelize, DataTypes) => {
     },
     accommodation: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
   }, {});
   Trip.associate = (models) => {
