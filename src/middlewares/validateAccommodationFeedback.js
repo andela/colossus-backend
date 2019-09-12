@@ -12,7 +12,7 @@ export default (req, res, next) => {
      * @description Validate the user's feedback inputs
      */
   req
-    .checkParams('propertyId', 'The property ID must be a number')
+    .checkParams('accommodationId', 'The accommodation ID must be a number')
     .notEmpty()
     .isInt();
   const errors = req.validationErrors();

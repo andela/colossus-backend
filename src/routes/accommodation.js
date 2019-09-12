@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { AccommodationController, AccommodationFeedbackController } from '../controllers';
 import {
-  checkToken, checkVerified, /* checkIfBooked, checkIfOwner */
+  checkToken, checkVerified
 } from '../middlewares';
 import getImageFromRequest from '../middlewares/getImageFromRequest';
 import ValidateAccommodation from '../middlewares/validateAccommodation';
@@ -23,7 +23,6 @@ router.post(
   '/accommodation/:accommodationId/feedback',
   checkToken,
   checkVerified,
-  // authorize,
   validateAccommodationFeedback,
   AccommodationFeedbackController.postFeedback
 );
@@ -33,7 +32,7 @@ router.post(
   '/accommodation',
   checkToken,
   checkVerified,
-  // authorize,
+  authorize,
   getImageFromRequest,
   validateAccommodation,
   cloudinaryConfig,

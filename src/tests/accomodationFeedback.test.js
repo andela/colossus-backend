@@ -39,15 +39,17 @@ before((done) => {
       userId,
       name: 'lagos',
       location: 'kampala',
-    }).then(() => {
+      owner: userId,
+    }).then((accommodation) => {
+      accommodationId = accommodation.id;
       done();
     });
   });
 });
 describe('POST /accommodation/:accommodationId/feedback, Creating a new feedback', () => {
   it('Should successfully create a feedback and return details of the new feedback', (done) => {
-    chai.accommodation(server)
-      .post('/api/v1/accommodation/1/feedback')
+    chai.request(server)
+      .post(`/api/v1/accommodation/${accommodationId}/feedback`)
       .set('Authorization', `Bearer ${token}`)
       .send({
         feedbackBody: 'This is the feedback body',
@@ -63,21 +65,20 @@ describe('POST /accommodation/:accommodationId/feedback, Creating a new feedback
         done();
       });
   });
-  // it('Should return 400 if not token is provided', (done) => {
-  //   chai.accommodation(server)
-  //     .post('/api/v1/accommodation/1/feedback')
-  //     .set('Authorization', 'Bearer rubbishToken')
-  //     .send({
-  //       feedbackBody: 'This is the feedback body',
-  //       userId,
-  //       accommodationId
-  //     })
-  //     .end((err, res) => {
-  //       // eslint-disable-next-line no-unused-expressions
-  //       expect(res).to.has.status(400);
-  //       expect(res.body).to.haveOwnProperty('status');
-  //       expect(res.body).to.haveOwnProperty('error');
-  //       done();
-  //     });
-  // });
+  it('Should return 400 if not token is provided', (done) => {
+    chai.request(server)
+      .post('/api/v1/accommodation/1/feedback')
+      .send({
+        feedbackBody: 'This is the feedback body',
+        userId,
+        accommodationId
+      })
+      .end((err, res) => {
+        // eslint-disable-next-line no-unused-expressions
+        expect(res).to.has.status(400);
+        expect(res.body).to.haveOwnProperty('status');
+        expect(res.body).to.haveOwnProperty('error');
+        done();
+      });
+  });
 });
