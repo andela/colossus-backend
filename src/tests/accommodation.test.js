@@ -105,25 +105,13 @@ describe('Accommodation test suites', () => {
     });
     it('should create a room', (done) => {
       chai.request(app)
-        .post(`${root}/accommodation/${accommodationId}/room`)
+        .patch(`${root}/accommodation/${accommodationId}`)
         .set('Authorization', `Bearer ${token}`)
         .send({
           name: 'Colony',
           type: 'Broad',
           cost: 1000000
         })
-        .end((err, res) => {
-          const { status, body } = res;
-          const { data } = body;
-          roomId = data.id;
-          expect(status).to.be.eql(201);
-          done();
-        });
-    });
-    it('should book a room', (done) => {
-      chai.request(app)
-        .patch(`${root}/room/book/${roomId}`)
-        .set('Authorization', `Bearer ${token}`)
         .end((err, res) => {
           const { status } = res;
           expect(status).to.be.eql(200);
