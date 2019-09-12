@@ -46,7 +46,6 @@ router.delete(
   RoomController.destroyOne
 );
 
-
 router.patch(
   '/room/book/:id',
   checkToken,
@@ -62,6 +61,7 @@ router.patch(
   checkIfBookedBy,
   RoomController.rescindOne
 );
+
 // update a room in an accommodation
 router.patch(
   '/accommodation/:accommodationId/room/:roomId',

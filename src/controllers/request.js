@@ -167,6 +167,8 @@ export default class RequestController {
       passportName, reason, type, managerId,
     } = body;
 
+    const { lineManagerId, firstName, lastName } = req.user;
+
     try {
       const request = await Request.findByPk(params.id);
 
@@ -185,6 +187,16 @@ export default class RequestController {
       await request.update({
         passportName, reason, type, managerId,
       });
+
+      const emitMessage = `modified request from ${firstName} ${lastName}`;
+
+      await Notification.create({
+        receiver: lineManagerId,
+        content: emitMessage,
+        type: 'status'
+      });
+
+      eventEmitter(`requestModified${lineManagerId}`, emitMessage);
 
       const updateSummary = await Request.findOne({ where: { id: params.id }, include: { model: Trip, as: 'trips' } });
 

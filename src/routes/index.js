@@ -7,7 +7,9 @@ import statsRouter from './statistics';
 const router = Router();
 
 router.use('/', allRoutes);
+
 router.use('/', accommodationRouter);
+
 router.use('/', roomRouter);
 router.use('/', statsRouter);
 
