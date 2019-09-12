@@ -135,13 +135,14 @@ export default class RequestController {
    */
   static async getMostTravelledDestination(req, res) {
     try {
-      const data = await Trip.findAll({
-        attributes: ['to', [sequelize.fn('count', sequelize.col('to')), 'destination']],
+      const item = await Trip.findAll({
+        attributes: ['to', [sequelize.fn('COUNT', sequelize.col('to')), 'travels']],
         group: ['to'],
         raw: true,
-        order: sequelize.literal('destination DESC'),
+        order: sequelize.literal('travels DESC'),
         limit: 1
       });
+      const data = item[0];
       res.status(200).json({
         status: 'success',
         data
