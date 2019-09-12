@@ -1,5 +1,6 @@
 /* eslint-disable require-jsdoc */
 import models from '../models';
+import errorResponse from '../utils/index';
 import { eventEmitter } from '../services/websocket';
 
 const { Comment, Notification, Request } = models;
@@ -17,15 +18,20 @@ export default class CommentController {
       const userId = req.user.id;
       const { lineManagerId } = req.user;
       const { requestId } = req.params;
-      const newComment = await Comment.create({
-        commentBody, requestId, userId
-      });
 
       const request = await Request.findOne({
         where: {
           id: requestId
         }
       });
+
+      if (!request) return res.status(400).json({ 
+        status: 'error', 
+        message: 'This trip request does not exist'});
+      
+      const newComment = await Comment.create({
+          commentBody, requestId, userId
+      });  
 
       const { lineManagerId: managerId, userId: id } = request;
 
@@ -75,6 +81,41 @@ export default class CommentController {
       res.status(200).json({
         status: 'success',
         data: commentRes
+      });
+    } catch (error) {
+      res.status(500).json({ status: 'error', error: error.message });
+    }
+  }
+
+  /**
+    * @param {Objec} req the edited comment
+    * @param {Object} res message to user
+    * @returns {Object} success or failure to edit comment
+    * @description Allow a user to edit a posted comment
+    */
+  static async editComment(req, res) {
+    const { commentBody } = req.body;
+    const { commentId } = req.params;
+    const userId = req.user.id;
+    try {
+      let comment = await Comment.findOne({
+        where: {
+          id: commentId, userId
+        }
+      });
+
+      if (!comment) return errorResponse(new Error('This comment doesn\'t exist'), res, 404);
+
+      comment = await comment.update({ commentBody }, { returning: true });
+      const patchedComment = comment.dataValues;
+
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          message: 'Comment successfully updated',
+          commentBody: patchedComment.commentBody,
+          patcher: patchedComment.userId
+        }
       });
     } catch (error) {
       res.status(500).json({ status: 'error', error: error.message });
