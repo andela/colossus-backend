@@ -3,6 +3,7 @@ import allRoutes from './api';
 import accommodationRouter from './accommodation';
 import roomRouter from './room';
 
+
 const router = Router();
 
 router.use('/', allRoutes);
