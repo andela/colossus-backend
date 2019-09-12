@@ -166,7 +166,7 @@ class AuthController extends CommonHelper {
       const message = `<p>You're almost there. To finish resetting your password, 
       please click on this link <a href = '${link}'>Reset Password</a>.</p>`;
       await sendVerificationMail(email, subject, message);
-      const response = 'A verification has been sent to your email. Kindly follow that link to reset your password';
+      const response = 'A verification link has been sent to your email. Kindly follow that link to reset your password';
       return res.status(200).json({
         status: 200,
         data: { message: response, token }
@@ -212,13 +212,13 @@ class AuthController extends CommonHelper {
       });
       if (invalidated) {
         res.status(200).json({
-          status: 200,
+          status: 'success',
           data: `Successfully signed out user with email ${user.email}`
         });
       }
     } catch (error) {
       res.status(500).json({
-        status: 500,
+        status: 'error',
         error
       });
     }
@@ -241,12 +241,12 @@ class AuthController extends CommonHelper {
       );
       const data = await UserModel.findByPk(id);
       res.status(200).json({
-        status: 200,
+        status: 'success',
         data
       });
     } catch (error) {
       res.status(500).json({
-        status: 500,
+        status: 'error',
         error
       });
     }

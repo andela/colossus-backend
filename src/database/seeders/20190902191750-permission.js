@@ -12,7 +12,7 @@ export default {
     },
     {
       role: 'super_admin',
-      resource: 'accomodation',
+      resource: 'accommodation',
       create: true,
       read: true,
       update: true,
@@ -58,7 +58,7 @@ export default {
     },
     {
       role: 'manager',
-      resource: 'accomodation',
+      resource: 'accommodation',
       createdAt: new Date(),
       updatedAt: new Date()
     },
@@ -88,7 +88,7 @@ export default {
     },
     {
       role: 'requester',
-      resource: 'accomodation',
+      resource: 'accommodation',
       createdAt: new Date(),
       updatedAt: new Date()
     },
@@ -118,7 +118,7 @@ export default {
     },
     {
       role: 'supplier',
-      resource: 'accomodation',
+      resource: 'accommodation',
       createdAt: new Date(),
       updatedAt: new Date()
     },
@@ -148,7 +148,11 @@ export default {
     },
     {
       role: 'travel_admin',
-      resource: 'accomodation',
+      resource: 'accommodation',
+      create: true,
+      read: true,
+      update: true,
+      delete: true,
       createdAt: new Date(),
       updatedAt: new Date()
     },
@@ -178,7 +182,7 @@ export default {
     },
     {
       role: 'travel_team_member',
-      resource: 'accomodation',
+      resource: 'accommodation',
       createdAt: new Date(),
       updatedAt: new Date()
     },
