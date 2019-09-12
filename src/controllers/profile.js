@@ -36,6 +36,9 @@ class ProfileController {
           socket.on('requestStatus${userId}', (data) => { 
             appendMessage(data);
           })
+          socket.on('requestModified${userId}', (data) => { 
+            appendMessage(data);
+          })
         </script>
       </head>
       <body>
