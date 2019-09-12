@@ -9,7 +9,7 @@ module.exports = {
     'https',
     'http'
   ],
-  host: 'barefoot-nomad.herokuapp.com/',
+  host: 'barefoot-nomad.herokuapp.com',
   basePath: '/api/v1',
   securityDefinitions: {
     Bearer: {
@@ -712,7 +712,6 @@ module.exports = {
           }
         ],
         responses: {
-          200: {
             description: 'Permissions have been set for a role',
             201: {
               description: 'successful operation; comment created',
@@ -784,7 +783,6 @@ module.exports = {
                 }
               }
             }
-          }
         }
       },
       get: {
@@ -899,8 +897,111 @@ module.exports = {
             }
           }
         }
-      },
+      }
     },
+    '/request/requestId/comment/commentId': {
+      patch: {
+        tags: ['comment'],
+        summary: 'Edit a posted comment',
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'Authorization',
+            in: 'headers',
+            description: 'Bearer token',
+            type: 'string'
+          },
+          {
+            in: 'body',
+            name: 'body',
+            description: 'body',
+            schema: {
+              type: 'object',
+              properties: {
+                commentBody: {
+                  type: 'string',
+                  example: 'About my last comment, I meant to say nothing actually.'
+                }
+              }
+            }
+          }
+        ],
+        responses: {
+          200: {
+            description: 'comment successfully updated',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                data: {
+                  type: 'object'
+                }
+              }
+            }
+          },
+          404: {
+            description: 'comment with that comment ID and or user ID does not exist',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          }
+        }
+      },
+      delete: {
+        tags: ['comment'],
+        summary: 'delete a posted comment',
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'Authorization',
+            in: 'headers',
+            description: 'Bearer token',
+            type: 'string'
+          }
+        ],
+        responses: {
+          200: {
+            description: 'comment successfully deleted',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                data: {
+                  type: 'object'
+                }
+              }
+            }
+          },
+          401: {
+            description: 'You are not the owner of the comment, invalid token',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    ,
     '/role': {
       patch: {
         tags: ['role & permissions'],
@@ -1553,6 +1654,105 @@ module.exports = {
         }
       }
     },
+    '/rating': {
+      post: {
+        tags: [
+          'rating'
+        ],
+        summary: 'Rate an accommodation',
+        description: '',
+        consumes: [
+          'application/json',
+          'application/xml'
+        ],
+        produces: [
+          'application/json'
+        ],
+        parameters: [
+          {
+            in: 'body',
+            name: 'body',
+            description: 'body',
+            required: true,
+            schema: {
+              type: 'object',
+              properties: {
+                accommodationId: {
+                  type: 'integer',
+                  example: 1
+                },
+                rating: {
+                  type: 'integer',
+                  example: 4
+                }
+              }
+            }
+          }
+        ],
+        responses: {
+          200: {
+            description: 'successful operation; rating was successful',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'integer'
+                },
+                data: {
+                  type: 'object',
+                  properties: {
+                    id: {
+                      type: 'integer',
+                      example: 1
+                    },
+                    averageRating: {
+                      type: 'integer',
+                      example: 4
+                    },
+                    numberOfRatings: {
+                      type: 'integer',
+                      example: 3
+                    },
+                    accommodationId: {
+                      type: 'integer',
+                      example: 3
+                    }
+                  }
+                }
+              }
+            }
+          },
+          400: {
+            description: 'Bad Request: Some fields are empty or invalid data format',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'integer'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          },
+          401: {
+            description: 'Trying to rate an accommodation that a user has not booked',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'integer'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   definitions: {
     SendEmail: {
