@@ -27,5 +27,6 @@ router.use('/request', commentRouter);
 router.use('/', roleRouter);
 router.use('/', permissionRouter);
 router.use('/like', likeRouter);
+router.use('/rating', checkToken, ratingRouter);
 
 module.exports = router;
