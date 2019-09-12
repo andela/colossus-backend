@@ -73,7 +73,20 @@ before((done) => {
     });
   });
 });
-
+before((done) => {
+  // Edit the line manager id of the new user
+  chai.request(server)
+    .patch('/api/v1/auth/edit')
+    .set('Authorization', `Bearer ${firstToken}`)
+    .send({
+      gender: 'male',
+      lineManagerId: 1
+    })
+    // eslint-disable-next-line no-unused-vars
+    .end((err, res) => {
+      done();
+    });
+});
 describe('POST /request/:requestId/comment, Creating a new newcomment', () => {
   it('Should return details of the new comments on a request', (done) => {
     chai.request(server)
