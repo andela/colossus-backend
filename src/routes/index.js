@@ -6,7 +6,9 @@ import roomRouter from './room';
 const router = Router();
 
 router.use('/', allRoutes);
+
 router.use('/', accommodationRouter);
+
 router.use('/', roomRouter);
 
 export default router;
