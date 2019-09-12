@@ -1154,6 +1154,30 @@ module.exports = {
                 location: {
                   type: 'string',
                   example: 'Southern Bay'
+                },
+                type: {
+                  type: 'string',
+                  example: 'xyz suite'
+                },
+                cost: {
+                  type: 'string',
+                  example: 'We offer a range of 300 to 700k'
+                },
+                totalNumberOfRooms: {
+                  type: 'integer',
+                  example: '10'
+                },
+                description: {
+                  type: 'string',
+                  example: 'Centiry house is a test accommodation...'
+                },
+                addOn: {
+                  type: 'string',
+                  example: 'Exclusive courtyard'
+                },
+                amenities: {
+                  type: 'array',
+                  example: ['Internet', 'Power']
                 }
               }
             }
@@ -1168,6 +1192,146 @@ module.exports = {
         responses: {
           200: {
             description: 'Accommodation has been successfully created',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                data: {
+                  type: 'object'
+                }
+              }
+            },
+          },
+          400: {
+            description: 'Bad request',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          },
+        },
+      },
+      patch: {
+        tags: ['accommodation & rooms'],
+        summary: 'Updates the details of an accommodation facility',
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'Authorization',
+            in: 'headers',
+            description: 'Bearer token',
+            type: 'string'
+          },
+          {
+            in: 'body',
+            name: 'body',
+            description: 'body',
+            schema: {
+              type: 'object',
+              properties: {
+                name: {
+                  type: 'string',
+                  example: 'Century House'
+                },
+                location: {
+                  type: 'string',
+                  example: 'Southern Bay'
+                },
+                type: {
+                  type: 'string',
+                  example: 'xyz suite'
+                },
+                cost: {
+                  type: 'string',
+                  example: 'We offer a range of 300 to 700k'
+                },
+                totalNumberOfRooms: {
+                  type: 'integer',
+                  example: '10'
+                },
+                description: {
+                  type: 'string',
+                  example: 'Centiry house is a test accommodation...'
+                },
+                addOn: {
+                  type: 'string',
+                  example: 'Exclusive courtyard'
+                },
+                amenities: {
+                  type: 'array',
+                  example: ['Internet', 'Power']
+                }
+              }
+            }
+          },
+          {
+            in: 'formData',
+            name: 'image',
+            description: 'image of the accommodation',
+            type: 'file'
+          }
+        ],
+        responses: {
+          200: {
+            description: 'Accommodation has been successfully updated',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                data: {
+                  type: 'object'
+                }
+              }
+            },
+          },
+          400: {
+            description: 'Bad request',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          },
+        },
+      },
+      delete: {
+        tags: ['accommodation & rooms'],
+        summary: 'Creates an accommodation facility',
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'Authorization',
+            in: 'headers',
+            description: 'Bearer token',
+            type: 'string'
+          },
+          {
+            name: 'Parameter',
+            in: 'headers',
+            description: 'accommodation id',
+            type: 'integer'
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Accommodation has been successfully deleted',
             schema: {
               type: 'object',
               properties: {

@@ -26,7 +26,16 @@ export default class RoomValidator {
       .check('type', 'Type of accommodation is required')
       .notEmpty()
       .trim();
-
+    req
+      .check('cost', 'Specify the cost of the room')
+      .notEmpty()
+      .trim()
+      .isNumeric()
+      .withMessage('Cost is invalid');
+    req
+      .check('type', 'Type of accommodation is required')
+      .notEmpty()
+      .trim();
     const errors = req.validationErrors();
     if (errors) {
       return res.status(400).json({

@@ -43,6 +43,16 @@ router.get(
   AccommodationController.findOne
 );
 
+router.patch(
+  '/accommodation/:accommodationId',
+  checkToken,
+  checkVerified,
+  authorize,
+  findAccommodation,
+  checkAccommodationOwner,
+  AccommodationController.updateOne
+);
+
 router.delete(
   '/accommodation/:accommodationId',
   checkToken,

@@ -119,6 +119,10 @@ export default {
     {
       role: 'supplier',
       resource: 'accommodation',
+      create: true,
+      read: true,
+      update: true,
+      delete: true,
       createdAt: new Date(),
       updatedAt: new Date()
     },

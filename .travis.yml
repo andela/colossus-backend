@@ -10,10 +10,12 @@ install:
   - npm install    
 services:
   - postgresql
+env:
+  - DATABASE_DEV=postgres://postgres@127.0.0.1:5432/travis
 before_script:
-  - psql -c 'create database barefootnomadDB;' -U postgres
-  - npm run build   
+  - psql -c 'drop database if exists travis;' -U postgres
+  - psql -c 'create database travis;' -U postgres
 script:
-  - npm run test-travis
+  - npm run test
 after_success:
   - npm run coverage

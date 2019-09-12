@@ -13,11 +13,10 @@ export default class RoomController {
    */
   static async create(req, res) {
     try {
-      const { name, type } = req.body;
+      const { ...values } = req.body;
       const { accommodationId } = req.params;
       const data = await Room.create({
-        name,
-        type,
+        ...values,
         accommodationId,
       });
       return res.status(201).json({
@@ -66,21 +65,16 @@ export default class RoomController {
     try {
       const { accommodationId, roomId } = req.params;
       const { ...body } = req.body;
-      const room = await Room.findOne({
+      const data = await Room.update({ ...body }, {
         where: {
           id: roomId,
           accommodationId
-        }
-      });
-      const data = await room.update({ ...body }, {
-        where: {
-          id: roomId,
-          accommodationId
-        }
+        },
+        returning: true
       });
       return res.status(200).json({
         status: 'success',
-        data
+        data: data[1][0].dataValues
       });
     } catch (error) {
       return res.status(500).json({

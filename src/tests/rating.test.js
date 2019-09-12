@@ -42,6 +42,7 @@ describe('POST /api/v1/rating', () => {
           image: 'test',
           location: 'test',
           owner: 1,
+          totalNumberOfRooms: 10,
           bookedBy: 1,
           startedBy: 1,
         }).then((AccommodatioN) => {
