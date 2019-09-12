@@ -12,7 +12,9 @@ import findAccommodation from '../middlewares/findAccommodation';
 const router = Router();
 
 const { validateAccommodation } = ValidateAccommodation;
+
 const { cloudinaryConfig } = CloudinaryConfig;
+
 const { imageHandler } = ImageHandler;
 
 router.post(
