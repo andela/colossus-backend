@@ -16,7 +16,26 @@ const AccommodationDefinition = (sequelize, DataTypes) => {
     },
     image: {
       type: DataTypes.STRING,
-    }
+    },
+    owner: {
+      type: DataTypes.INTEGER
+    },
+    totalNumberOfRooms: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    description: {
+      type: DataTypes.TEXT
+    },
+    cost: {
+      type: DataTypes.TEXT
+    },
+    addOn: {
+      type: DataTypes.TEXT
+    },
+    amenities: {
+      type: DataTypes.ARRAY(DataTypes.TEXT)
+    },
   }, {});
 
   Accommodation.associate = (models) => {

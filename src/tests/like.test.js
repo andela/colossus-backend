@@ -32,6 +32,7 @@ describe('Like tests', () => {
           type: 'chateau',
           name: 'Kampala',
           location: 'Uganda',
+          totalNumberOfRooms: 5,
           owner: 1
         })
           .then((accommodation) => {
