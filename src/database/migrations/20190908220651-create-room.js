@@ -14,6 +14,9 @@ export default {
       allowNull: false,
       type: Sequelize.STRING
     },
+    cost: {
+      type: Sequelize.DECIMAL(13, 4)
+    },
     accommodationId: {
       allowNull: false,
       type: Sequelize.INTEGER,

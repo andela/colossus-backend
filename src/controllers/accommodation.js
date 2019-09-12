@@ -1,6 +1,6 @@
 import models from '../models';
 
-const { Accommodation } = models;
+const { Accommodation, sequelize } = models;
 
 /**
  * Controller class for accommodation operations
@@ -13,11 +13,9 @@ export default class AccomodationController {
    */
   static async create(req, res) {
     try {
-      const { name, location, image } = req.body;
+      const { ...values } = req.body;
       const data = await Accommodation.create({
-        name,
-        location,
-        image,
+        ...values,
         owner: req.user.id
       });
       return res.status(201).json({
@@ -39,10 +37,17 @@ export default class AccomodationController {
    */
   static async findAll(req, res) {
     try {
-      const data = await Accommodation.findAll();
+      const rawQueryString = `SELECT "Accommodation"."id", "Accommodation"."name", 
+      "Accommodation"."location", "Accommodation"."image", "Accommodation"."owner",
+      "Accommodation"."totalNumberOfRooms", COUNT("rooms") AS "spaceAvailable", "Accommodation"."description", "Accommodation"."cost",
+      "Accommodation"."addOn", "Accommodation"."amenities", "Accommodation"."createdAt",
+      "Accommodation"."updatedAt" FROM "Accommodation"
+      AS "Accommodation" LEFT OUTER JOIN "Rooms" AS "rooms" ON "Accommodation"."id" = "rooms"."accommodationId"
+      AND "rooms"."booked" = false GROUP BY "Accommodation"."id";`;
+      const data = await sequelize.query(rawQueryString);
       return res.status(200).json({
         status: 'success',
-        data
+        data: data[0],
       });
     } catch (error) {
       return res.status(500).json({
@@ -60,10 +65,46 @@ export default class AccomodationController {
   static async findOne(req, res) {
     try {
       const { accommodationId } = req.params;
-      const data = await Accommodation.findByPk(accommodationId);
+      const rawQueryString = `SELECT "Accommodation"."id", "Accommodation"."name",
+      "Accommodation"."location", "Accommodation"."image", "Accommodation"."owner",
+      "Accommodation"."totalNumberOfRooms", COUNT("rooms") AS "spaceAvailable", "Accommodation"."description", "Accommodation"."cost",
+      "Accommodation"."addOn", "Accommodation"."amenities", "Accommodation"."createdAt",
+      "Accommodation"."updatedAt" FROM "Accommodation"
+      AS "Accommodation" LEFT OUTER JOIN "Rooms" AS "rooms" ON "Accommodation"."id" = "rooms"."accommodationId"
+      WHERE "Accommodation"."id" = ${accommodationId}
+      AND "rooms"."booked" = false
+      GROUP BY "Accommodation"."id";`;
+      const data = await sequelize.query(rawQueryString);
       return res.status(200).json({
         status: 'success',
-        data: data || [],
+        data: data[0],
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: 'error',
+        error: error.message
+      });
+    }
+  }
+
+  /**
+   * @param {Request} req
+   * @param {Response} res
+   * @returns {Promise<void>} deletes an accommodation
+   */
+  static async updateOne(req, res) {
+    try {
+      const { accommodationId } = req.params;
+      const { ...body } = req.body;
+      const data = await Accommodation.update({ ...body }, {
+        where: {
+          id: accommodationId
+        },
+        returning: true
+      });
+      return res.status(200).json({
+        status: 'success',
+        data: data[1][0].dataValues
       });
     } catch (error) {
       return res.status(500).json({

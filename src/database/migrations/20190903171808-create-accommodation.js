@@ -20,7 +20,50 @@ module.exports = {
     },
     owner: {
       type: Sequelize.INTEGER,
-      allowNull: false,
+      allowNull: false
+    },
+    totalNumberOfRooms: {
+      type: Sequelize.INTEGER,
+      allowNull: false
+    },
+    description: {
+      type: Sequelize.TEXT
+    },
+    cost: {
+      type: Sequelize.TEXT
+    },
+    addOn: {
+      type: Sequelize.TEXT
+    },
+    amenities: {
+      type: Sequelize.ARRAY(Sequelize.TEXT)
+    },
+    movingIn: {
+      type: Sequelize.DATE,
+      allowNull: true,
+      defaultValue: null
+    },
+    movingOut: {
+      type: Sequelize.DATE,
+      allowNull: true,
+      defaultValue: null
+    },
+    booked: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false
+    },
+    bookedBy: {
+      type: Sequelize.INTEGER,
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE',
+      references: {
+        model: 'Users',
+        key: 'id'
+      }
+    },
+    startedBy: {
+      type: Sequelize.INTEGER,
+      onDelete: 'SET NULL',
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE',
       references: {

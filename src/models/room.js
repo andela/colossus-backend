@@ -13,6 +13,9 @@ export default (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING
     },
+    cost: {
+      type: DataTypes.DECIMAL(13, 4)
+    },
     booked: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
