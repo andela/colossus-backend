@@ -11,6 +11,7 @@ install:
 services:
   - postgresql
 before_script:
+  - psql -c 'drop database if exists travis;' -U postgres
   - psql -c 'create database travis;' -U postgres
   - npm run build   
 script:
