@@ -15,8 +15,8 @@ class Helpers {
    * @memberof Helpers
    */
   static extractErrors(errors) {
-    const validationErrors = [];
-    errors.map((error) => validationErrors.push(error.msg));
+    let validationErrors;
+    errors.map((error => validationErrors = error.msg));
     return validationErrors;
   }
 }
