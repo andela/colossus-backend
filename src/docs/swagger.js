@@ -712,7 +712,6 @@ module.exports = {
           }
         ],
         responses: {
-          200: {
             description: 'Permissions have been set for a role',
             201: {
               description: 'successful operation; comment created',
@@ -784,7 +783,6 @@ module.exports = {
                 }
               }
             }
-          }
         }
       },
       get: {
@@ -899,8 +897,111 @@ module.exports = {
             }
           }
         }
-      },
+      }
     },
+    '/request/requestId/comment/commentId': {
+      patch: {
+        tags: ['comment'],
+        summary: 'Edit a posted comment',
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'Authorization',
+            in: 'headers',
+            description: 'Bearer token',
+            type: 'string'
+          },
+          {
+            in: 'body',
+            name: 'body',
+            description: 'body',
+            schema: {
+              type: 'object',
+              properties: {
+                commentBody: {
+                  type: 'string',
+                  example: 'About my last comment, I meant to say nothing actually.'
+                }
+              }
+            }
+          }
+        ],
+        responses: {
+          200: {
+            description: 'comment successfully updated',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                data: {
+                  type: 'object'
+                }
+              }
+            }
+          },
+          404: {
+            description: 'comment with that comment ID and or user ID does not exist',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          }
+        }
+      },
+      delete: {
+        tags: ['comment'],
+        summary: 'delete a posted comment',
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'Authorization',
+            in: 'headers',
+            description: 'Bearer token',
+            type: 'string'
+          }
+        ],
+        responses: {
+          200: {
+            description: 'comment successfully deleted',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                data: {
+                  type: 'object'
+                }
+              }
+            }
+          },
+          401: {
+            description: 'You are not the owner of the comment, invalid token',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    ,
     '/role': {
       patch: {
         tags: ['role & permissions'],
