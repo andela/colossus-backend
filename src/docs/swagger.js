@@ -9,7 +9,7 @@ module.exports = {
     'https',
     'http'
   ],
-  host: 'barefoot-nomad.herokuapp.com/',
+  host: 'barefoot-nomad.herokuapp.com',
   basePath: '/api/v1',
   securityDefinitions: {
     Bearer: {
@@ -1553,6 +1553,105 @@ module.exports = {
         }
       }
     },
+    '/rating': {
+      post: {
+        tags: [
+          'rating'
+        ],
+        summary: 'Rate an accommodation',
+        description: '',
+        consumes: [
+          'application/json',
+          'application/xml'
+        ],
+        produces: [
+          'application/json'
+        ],
+        parameters: [
+          {
+            in: 'body',
+            name: 'body',
+            description: 'body',
+            required: true,
+            schema: {
+              type: 'object',
+              properties: {
+                accommodationId: {
+                  type: 'integer',
+                  example: 1
+                },
+                rating: {
+                  type: 'integer',
+                  example: 4
+                }
+              }
+            }
+          }
+        ],
+        responses: {
+          200: {
+            description: 'successful operation; rating was successful',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'integer'
+                },
+                data: {
+                  type: 'object',
+                  properties: {
+                    id: {
+                      type: 'integer',
+                      example: 1
+                    },
+                    averageRating: {
+                      type: 'integer',
+                      example: 4
+                    },
+                    numberOfRatings: {
+                      type: 'integer',
+                      example: 3
+                    },
+                    accommodationId: {
+                      type: 'integer',
+                      example: 3
+                    }
+                  }
+                }
+              }
+            }
+          },
+          400: {
+            description: 'Bad Request: Some fields are empty or invalid data format',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'integer'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          },
+          401: {
+            description: 'Trying to rate an accommodation that a user has not booked',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'integer'
+                },
+                error: {
+                  type: 'string'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   definitions: {
     SendEmail: {
