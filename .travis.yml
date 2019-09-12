@@ -10,6 +10,8 @@ install:
   - npm install    
 services:
   - postgresql
+env:
+  - DATABASE_DEV=postgres
 before_script:
   - psql -c 'drop database if exists travis;' -U postgres
   - psql -c 'create database travis;' -U postgres
