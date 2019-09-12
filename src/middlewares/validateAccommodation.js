@@ -26,6 +26,14 @@ export default class AccomodationValidator {
       .check('location', 'Location of accommodation is required')
       .notEmpty()
       .trim();
+    req
+      .check('type', 'Type of accommodation is required')
+      .notEmpty()
+      .trim();
+    req
+      .check('totalNumberOfRooms', 'Specify the total number of rooms')
+      .notEmpty()
+      .trim();
     if (req.file && !req.file.mimetype.startsWith('image/')) {
       req
         .check('image', 'Invalid image type')

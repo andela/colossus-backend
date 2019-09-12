@@ -22,6 +22,22 @@ module.exports = {
       type: Sequelize.INTEGER,
       allowNull: false
     },
+    totalNumberOfRooms: {
+      type: Sequelize.INTEGER,
+      allowNull: false
+    },
+    description: {
+      type: Sequelize.TEXT
+    },
+    cost: {
+      type: Sequelize.TEXT
+    },
+    addOn: {
+      type: Sequelize.TEXT
+    },
+    amenities: {
+      type: Sequelize.ARRAY(Sequelize.TEXT)
+    },
     movingIn: {
       type: Sequelize.DATE,
       allowNull: true,
