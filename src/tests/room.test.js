@@ -98,16 +98,6 @@ describe('Room test suites', () => {
           done();
         });
     });
-    it('should book a room', (done) => {
-      chai.request(app)
-        .patch(`${root}/${accommodation.id}/room/book/${room.id}`)
-        .set('Authorization', `Bearer ${token}`)
-        .end((err, res) => {
-          const { status } = res;
-          expect(status).to.be.eql(200);
-          done();
-        });
-    });
     it('should delete a room in an accommodation facility', (done) => {
       chai.request(app)
         .delete(`${root}/${accommodation.id}/room/${room.id}`)

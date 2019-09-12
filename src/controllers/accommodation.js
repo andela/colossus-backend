@@ -77,7 +77,7 @@ export default class AccomodationController {
       const data = await sequelize.query(rawQueryString);
       return res.status(200).json({
         status: 'success',
-        data: data[0] || [],
+        data: data[0],
       });
     } catch (error) {
       return res.status(500).json({
