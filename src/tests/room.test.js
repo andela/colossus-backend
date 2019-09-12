@@ -37,7 +37,9 @@ describe('Room test suites', () => {
           .set('Authorization', `Bearer ${token}`)
           .send({
             name: 'Kampala',
-            location: 'Southern Uganda'
+            type: 'test type',
+            location: 'Southern Uganda',
+            totalNumberOfRooms: 5,
           })
           .then((res) => {
             accommodation = res.body.data;
@@ -62,7 +64,8 @@ describe('Room test suites', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({
           name: 'Cabin',
-          type: 'Courtyard'
+          type: 'Courtyard',
+          cost: 500000
         })
         .end((err, res) => {
           const { status } = res;
@@ -89,6 +92,16 @@ describe('Room test suites', () => {
           name: 'Updated Cabin',
           type: 'Updated Courtyard'
         })
+        .end((err, res) => {
+          const { status } = res;
+          expect(status).to.be.eql(200);
+          done();
+        });
+    });
+    it('should book a room', (done) => {
+      chai.request(app)
+        .patch(`/api/v1/room/book/${room.id}`)
+        .set('Authorization', `Bearer ${token}`)
         .end((err, res) => {
           const { status } = res;
           expect(status).to.be.eql(200);

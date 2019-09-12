@@ -15,6 +15,7 @@ chai.use(chaiHttp);
 let token = null;
 let accommodationId = null;
 let roomId = null;
+let userId = null;
 
 describe('Accommodation test suites', () => {
   before((done) => {
@@ -31,21 +32,7 @@ describe('Accommodation test suites', () => {
           email: user.email,
           id: user.id
         }, process.env.JWT_SECRET);
-
-        User.create({
-          firstName: 'Travel',
-          lastName: 'Admin',
-          email: 'traveladmin2@barefootnomad.com',
-          password: 'password',
-          isVerified: true,
-          role: 'travel_admin'
-        })
-          .then((user2) => {
-            token = jwt.sign({
-              email: user2.email,
-              id: user2.id
-            }, process.env.JWT_SECRET);
-          });
+        userId = user.id;
         done();
       });
   });
@@ -66,7 +53,10 @@ describe('Accommodation test suites', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({
           name: 'Kampala',
-          location: 'Southern Uganda'
+          location: 'Southern Uganda',
+          type: 'chateau',
+          totalNumberOfRooms: 5,
+          owner: userId,
         })
         .end((err, res) => {
           const { status, body } = res;
@@ -76,25 +66,61 @@ describe('Accommodation test suites', () => {
           done();
         });
     });
-    it('should create a room', (done) => {
+    it('should update an accommodation', (done) => {
       chai.request(app)
-        .post(`${root}/accommodation/${accommodationId}/room`)
+        .patch(`${root}/accommodation/${accommodationId}`)
         .set('Authorization', `Bearer ${token}`)
         .send({
-          name: 'Colony',
-          type: 'Broad'
+          name: 'Sudan',
+          location: 'Southern Uganda',
+          type: 'chateau',
+          totalNumberOfRooms: 3,
+          owner: userId
         })
         .end((err, res) => {
-          const { status, body } = res;
-          const { data } = body;
-          roomId = data.id;
-          expect(status).to.be.eql(201);
+          const { status } = res;
+          expect(status).to.be.eql(200);
           done();
         });
     });
-    it('should book a room', (done) => {
+    it('should get an accommodation', (done) => {
       chai.request(app)
-        .patch(`${root}/room/book/${roomId}`)
+        .get(`${root}/accommodation/${accommodationId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .end((err, res) => {
+          const { status } = res;
+          expect(status).to.be.eql(200);
+          done();
+        });
+    });
+    it('should get all accommodation facilities', (done) => {
+      chai.request(app)
+        .get(`${root}/accommodation`)
+        .set('Authorization', `Bearer ${token}`)
+        .end((err, res) => {
+          const { status } = res;
+          expect(status).to.be.eql(200);
+          done();
+        });
+    });
+    it('should create a room', (done) => {
+      chai.request(app)
+        .patch(`${root}/accommodation/${accommodationId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          name: 'Colony',
+          type: 'Broad',
+          cost: 1000000
+        })
+        .end((err, res) => {
+          const { status } = res;
+          expect(status).to.be.eql(200);
+          done();
+        });
+    });
+    it('should delete an accommodation', (done) => {
+      chai.request(app)
+        .delete(`${root}/accommodation/${accommodationId}`)
         .set('Authorization', `Bearer ${token}`)
         .end((err, res) => {
           const { status } = res;

@@ -29,7 +29,11 @@ describe('Like tests', () => {
           id: user.id
         }, process.env.JWT_SECRET);
         Accommodation.create({
-          type: 'chateau'
+          type: 'chateau',
+          name: 'Kampala',
+          location: 'Uganda',
+          totalNumberOfRooms: 5,
+          owner: 1
         })
           .then((accommodation) => {
             accommodationId = accommodation.id;

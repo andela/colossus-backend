@@ -8,6 +8,8 @@ import permissionRouter from './permission';
 import roleRouter from './role';
 import notificationRouter from './notification';
 import commentRouter from './comment';
+import tripRouter from './trip';
+import ratingRouter from './rating';
 
 const router = express.Router();
 
@@ -15,6 +17,7 @@ router.use('/auth', authRouter);
 
 router.use('/profile', profileRouter);
 router.use('/notification', checkToken, notificationRouter);
+router.use('/trip', checkToken, tripRouter);
 
 router.use('/request', checkToken, requestRouter);
 router.use('/request', commentRouter);
@@ -22,6 +25,10 @@ router.use('/request', commentRouter);
 router.use('/', roleRouter);
 router.use('/', permissionRouter);
 router.use('/like', likeRouter);
+
+router.use('/', roleRouter);
+router.use('/', permissionRouter);
+router.use('/rating', checkToken, ratingRouter);
 
 
 router.use((err, req, res, next) => {

@@ -1,8 +1,6 @@
 import { Router } from 'express';
 import { AccommodationController } from '../controllers';
-import {
-  checkToken, checkVerified, /* checkIfBooked, checkIfOwner */
-} from '../middlewares';
+import { checkToken, checkVerified } from '../middlewares';
 import getImageFromRequest from '../middlewares/getImageFromRequest';
 import ValidateAccommodation from '../middlewares/validateAccommodation';
 import CloudinaryConfig from '../middlewares/cloudinaryConfig';
@@ -14,7 +12,9 @@ import findAccommodation from '../middlewares/findAccommodation';
 const router = Router();
 
 const { validateAccommodation } = ValidateAccommodation;
+
 const { cloudinaryConfig } = CloudinaryConfig;
+
 const { imageHandler } = ImageHandler;
 
 router.post(
@@ -41,6 +41,16 @@ router.get(
   checkToken,
   checkVerified,
   AccommodationController.findOne
+);
+
+router.patch(
+  '/accommodation/:accommodationId',
+  checkToken,
+  checkVerified,
+  authorize,
+  findAccommodation,
+  checkAccommodationOwner,
+  AccommodationController.updateOne
 );
 
 router.delete(

@@ -6,6 +6,8 @@ import notificationController from './notification';
 import commentController from './comment';
 import accommodationController from './accommodation';
 import roomController from './room';
+import tripController from './trips';
+import ratingController from './rating';
 
 export const AuthController = authController;
 export const ProfileController = profileController;
@@ -15,3 +17,5 @@ export const AccommodationController = accommodationController;
 export const LikeController = likeController;
 export const NotificationController = notificationController;
 export const RoomController = roomController;
+export const TripController = tripController;
+export const RatingController = ratingController;
