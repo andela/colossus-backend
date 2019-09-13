@@ -117,7 +117,7 @@ io.on('connect', (client) => {
     const allChats = await Chat.findAll({
       include: [User]
     });
-    chat('MESSAGE_RECEIVED', allChats);
+    chat('ALL_MESSAGES_RECEIVED', allChats);
   });
 });
 io.on('disconnet', (client) => {

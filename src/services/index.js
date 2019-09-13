@@ -1,1 +1,1 @@
-export { chat } from './chat';
+export { chat, watchSocket } from './chat';
