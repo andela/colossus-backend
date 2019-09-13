@@ -98,7 +98,6 @@ const UserDefinition = (sequelize, DataTypes) => {
   {
     hooks: {
       beforeSave: (user) => {
-        // Hash password before saving
         if (user.changed('password')) {
           const salt = genSaltSync(10);
           user.password = hashSync(user.password, salt);
@@ -123,7 +122,8 @@ const UserDefinition = (sequelize, DataTypes) => {
     return user.update(update, {
       where: {
         id
-      }
+      },
+      individualHooks: true
     });
   };
 

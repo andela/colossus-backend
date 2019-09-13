@@ -22,8 +22,7 @@ const validateEditRequest = (req, res, next) => {
   if ((type && type === 'round-trip') && !arrivalDate) errors.push('at least one arrival date is required');
   if (from && !Array.isArray(from)) errors.push('origin must be an array');
   if (to && !Array.isArray(to)) errors.push('destination must be an array');
-  if (accommodation && !Array.isArray(accommodation)) errors.push('origin must be an array');
-  if (accommodation && !Array.isArray(accommodation)) errors.push('accomodation must be an array');
+  if (accommodation && !Array.isArray(accommodation)) errors.push('accommodation must be an array');
   if (arrivalDate && !Array.isArray(arrivalDate)) errors.push('return date must be an array');
   if (departureDate && !Array.isArray(departureDate)) errors.push('travel date must be an array');
   if (id && !Array.isArray(id)) errors.push('trip ids must be an array');

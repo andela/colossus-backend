@@ -48,7 +48,7 @@ const AccommodationDefinition = (sequelize, DataTypes) => {
     });
     Accommodation.belongsTo(models.User, {
       foreignKey: 'owner',
-      onDelete: 'SET NULL',
+      onDelete: 'CASCADE',
       onUpdate: 'CASCADE'
     });
     Accommodation.hasMany(models.Like, {

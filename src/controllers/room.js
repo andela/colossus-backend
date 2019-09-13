@@ -118,10 +118,10 @@ export default class RoomController {
   static async bookOne(req, res) {
     try {
       const { user, params } = req;
-      const data = await Room.book(params.id, user.id);
+      const item = await Room.book(params.id, user.id);
       res.status(200).json({
         status: 'success',
-        data
+        data: item[1][0]
       });
     } catch ({ message }) {
       res.status(500).json({
@@ -140,10 +140,10 @@ export default class RoomController {
   static async rescindOne(req, res) {
     try {
       const { user, params } = req;
-      const data = await Room.rescind(params.id, user.id);
+      const item = await Room.rescind(params.id, user.id);
       res.status(200).json({
         status: 'success',
-        data
+        data: item[1][0]
       });
     } catch ({ message }) {
       res.status(500).json({

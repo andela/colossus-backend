@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { RoomController } from '../controllers';
 import {
-  checkToken, checkVerified, checkIfBooked
+  checkToken, checkVerified, checkIfBooked, checkIfBookedBy
 } from '../middlewares';
 import { authorize } from '../middlewares/authorize';
 import ValidateRoom from '../middlewares/validateRoom';
@@ -58,6 +58,7 @@ router.patch(
   '/room/rescind/:id',
   checkToken,
   checkVerified,
+  checkIfBookedBy,
   RoomController.rescindOne
 );
 
