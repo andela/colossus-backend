@@ -6,8 +6,8 @@ import {
 import { authorize } from '../middlewares/authorize';
 import ValidateRoom from '../middlewares/validateRoom';
 import checkAccommodationOwner from '../middlewares/checkAccommodationOwner';
-import findRoom from '../middlewares/findRoom';
 import findAccommodation from '../middlewares/findAccommodation';
+import findRoom from '../middlewares/findRoom';
 
 const router = Router();
 

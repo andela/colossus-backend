@@ -4,6 +4,7 @@ import accommodationRouter from './accommodation';
 import roomRouter from './room';
 import statsRouter from './statistics';
 
+
 const router = Router();
 
 router.use('/', allRoutes);
