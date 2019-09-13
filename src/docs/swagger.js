@@ -646,6 +646,32 @@ module.exports = {
         }
       }
     },
+    '/request/search': {
+      get: {
+        tags: [
+          'request'
+        ],
+        summary: 'Search for a request',
+        description: '',
+        consumes: [
+          'application/json',
+        ],
+        parameters: [
+          {
+            in: 'query',
+            name: 'column-data e.g., type=one-way&status=approved',
+          }
+        ],
+        responses: {
+          200: {
+            description: 'successful operation',
+            schema: {
+              $ref: '#definitions/UpdateSuccessful',
+            },
+          }
+        }
+      }
+    },
     '/trip/:id': {
       delete: {
         tags: [
@@ -897,7 +923,7 @@ module.exports = {
             }
           }
         }
-      }
+      },
     },
     '/request/requestId/comment/commentId': {
       patch: {

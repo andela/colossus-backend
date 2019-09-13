@@ -8,7 +8,9 @@ const router = Router();
 
 router.get('/', RequestController.getAllRequests);
 
-router.post('/', checkLineManagerId, validateTripRequest, RequestController.createTrip);
+router.get('/search', RequestController.searchRequests);
+
+router.post('/', validateTripRequest, RequestController.createTrip);
 
 router.patch('/:id', validateTripRequest, RequestController.editRequest);
 

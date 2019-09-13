@@ -48,18 +48,23 @@ export default class RequestController {
    * @param {Object} req
    * @param {Object} res
    * @returns {Object} res (server response)
-   * @description get all travel requests
+   * @description search for request
    */
-  static async getManagerRequest(req, res) {
-    const { userId } = req.params;
+  static async searchRequests(req, res) {
     try {
-      const allRequests = await Request.findAll({ where: { lineManagerId: userId } });
-      return res.status(200).json({ status: 200, data: allRequests });
+      const { query } = req;
+      const where = {};
+      Object.keys(query).forEach((key) => {
+        where[key] = !Number.isNaN(parseInt(query[key], 10)) ? parseInt(query[key], 10) : query[key];
+      });
+      const foundRequests = await Request.findAll({
+        where
+      });
+      return res.status(200).json({ status: 200, data: foundRequests });
     } catch (error) {
       res.status(500).json({ status: 500, error });
     }
   }
-
 
   /**
    * @param {Object} req
