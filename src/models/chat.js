@@ -1,4 +1,4 @@
-'use strict';
+
 export default (sequelize, DataTypes) => {
   const Chat = sequelize.define('Chat', {
     message: DataTypes.STRING
