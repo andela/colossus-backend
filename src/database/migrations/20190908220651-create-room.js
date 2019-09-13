@@ -40,6 +40,12 @@ export default {
         key: 'id'
       }
     },
+    movingIn: {
+      type: Sequelize.DATE
+    },
+    movingOut: {
+      type: Sequelize.DATE
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE

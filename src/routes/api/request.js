@@ -14,6 +14,4 @@ router.patch('/:id', validateTripRequest, RequestController.editRequest);
 
 router.patch('/:requestId/status', validateTripStatus, RequestController.updateStatus);
 
-router.patch('/:requestId/status', validateTripStatus, RequestController.updateStatus);
-
 export default router;

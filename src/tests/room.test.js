@@ -108,6 +108,16 @@ describe('Room test suites', () => {
           done();
         });
     });
+    it('should rescind booking a room in an accommodation facility', (done) => {
+      chai.request(app)
+        .patch(`/api/v1/room/rescind/${room.id}`)
+        .set('Authorization', `Bearer ${token}`)
+        .end((err, res) => {
+          const { status } = res;
+          expect(status).to.be.eql(200);
+          done();
+        });
+    });
     it('should delete a room in an accommodation facility', (done) => {
       chai.request(app)
         .delete(`${root}/${accommodation.id}/room/${room.id}`)

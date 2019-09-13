@@ -25,9 +25,9 @@ router.patch(
   '/edit',
   checkToken,
   checkVerified,
-  checkRoleChange,
   multipart.single('picture'),
   blob,
+  checkRoleChange,
   AuthController.editProfile
 );
 

@@ -4,8 +4,8 @@ import { checkToken, checkVerified } from '../middlewares';
 import getImageFromRequest from '../middlewares/getImageFromRequest';
 import ValidateAccommodation from '../middlewares/validateAccommodation';
 import CloudinaryConfig from '../middlewares/cloudinaryConfig';
-import ImageHandler from '../middlewares/imageHandler';
 import { authorize } from '../middlewares/authorize';
+import ImageHandler from '../middlewares/imageHandler';
 import checkAccommodationOwner from '../middlewares/checkAccommodationOwner';
 import findAccommodation from '../middlewares/findAccommodation';
 

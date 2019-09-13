@@ -1916,6 +1916,50 @@ module.exports = {
           }
         }
       }
+    },
+    '/destination/most_travelled': {
+      get: {
+        produces: ['application/json'],
+        summary: 'Gets the most travelled destination',
+        parameters: [
+          {
+            name: 'Authorization',
+            in: 'headers',
+            type: 'string',
+            description: 'Bearer token'
+          }
+        ],
+        responses: {
+          200: {
+            description: 'Success',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                data: {
+                  type: 'object'
+                }
+              }
+            }
+          },
+          401: {
+            description: 'Unauthorized',
+            schema: {
+              type: 'object',
+              properties: {
+                status: {
+                  type: 'string'
+                },
+                data: {
+                  type: 'object'
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   definitions: {

@@ -1,10 +1,13 @@
+import { Op } from 'sequelize';
 import models from '../models';
 import Helper from '../helpers/commonHelper';
 import errorResponse from '../utils/index';
 import { eventEmitter } from '../services/websocket';
 
 const { generateTrips, NotifyManagerForNewRequest } = Helper;
-const { Request, Trip, Notification } = models;
+const {
+  Request, Trip, Notification, sequelize
+} = models;
 
 /**
  *
@@ -20,7 +23,20 @@ export default class RequestController {
    * @description get all travel requests
    */
   static async getAllRequests(req, res) {
+    const { startDate, endDate } = req.query;
+    const userId = req.user.id;
     try {
+      if (startDate) {
+        const trip = await Request.findAndCountAll({
+          where: {
+            createdAt: {
+              [Op.between]: [startDate, endDate]
+            },
+            userId
+          }
+        });
+        return res.status(200).json({ status: 'success', data: trip.count });
+      }
       const allRequests = await Request.findAll();
       return res.status(200).json({ status: 200, data: allRequests });
     } catch (error) {
@@ -125,6 +141,33 @@ export default class RequestController {
     }
   }
 
+  /**
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @returns {Promise<void>} gets most travelled destinations
+   */
+  static async getMostTravelledDestination(req, res) {
+    try {
+      const item = await Trip.findAll({
+        attributes: ['to', [sequelize.fn('COUNT', sequelize.col('to')), 'travels']],
+        group: ['to'],
+        raw: true,
+        order: sequelize.literal('travels DESC'),
+        limit: 1
+      });
+      const data = item[0];
+      res.status(200).json({
+        status: 'success',
+        data
+      });
+    } catch ({ message }) {
+      res.status(500).json({
+        status: 500,
+        error: message
+      });
+    }
+  }
 
   /**
    * @param {Object} req

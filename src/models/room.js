@@ -19,6 +19,12 @@ export default (sequelize, DataTypes) => {
     booked: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
+    },
+    movingIn: {
+      type: DataTypes.DATE
+    },
+    movingOut: {
+      type: DataTypes.DATE
     }
   }, {});
 
@@ -36,8 +42,10 @@ export default (sequelize, DataTypes) => {
     });
   };
 
-  Room.book = (id, bookedBy) => Room.update({
+  Room.book = (id, bookedBy, movingIn, movingOut) => Room.update({
     bookedBy,
+    movingIn,
+    movingOut,
     booked: true
   }, {
     where: {
@@ -48,7 +56,9 @@ export default (sequelize, DataTypes) => {
 
   Room.rescind = (id, bookedBy) => Room.update({
     bookedBy: null,
-    booked: false
+    booked: false,
+    movingIn: null,
+    movingOut: null
   }, {
     where: {
       id,
