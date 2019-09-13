@@ -92,9 +92,9 @@ describe('GET /api/v1/request', () => {
           done();
         });
     });
-    it('Should search for requests and return the data if found, based on column name', (done) => {
+    it('Should search for requests', (done) => {
       chai.request(server)
-        .get('/api/v1/request/search?type=one-way&status=pending')
+        .get('/api/v1/request/search?type=one-way&status=approved')
         .set('Authorization', `Bearer ${token}`)
         .end((err, res) => {
           // eslint-disable-next-line no-unused-expressions

@@ -48,23 +48,42 @@ export default class RequestController {
    * @param {Object} req
    * @param {Object} res
    * @returns {Object} res (server response)
-   * @description search for request
+   * @description get all travel requests
    */
-  static async searchRequests(req, res) {
+  static async getManagerRequest(req, res) {
+    const { userId } = req.params;
     try {
-      const { query } = req;
-      const where = {};
-      Object.keys(query).forEach((key) => {
-        where[key] = !Number.isNaN(parseInt(query[key], 10)) ? parseInt(query[key], 10) : query[key];
-      });
-      const foundRequests = await Request.findAll({
-        where
-      });
-      return res.status(200).json({ status: 200, data: foundRequests });
+      const allRequests = await Request.findAll({ where: { lineManagerId: userId } });
+      return res.status(200).json({ status: 200, data: allRequests });
     } catch (error) {
       res.status(500).json({ status: 500, error });
     }
   }
+
+  /*
+  * @param {Object} req
+  * @param {Object} res
+  * @returns {Object} res (server response)
+  * @description get all travel requests
+  * @description search for request
+  */
+ static async searchRequests(req, res) {
+   try {
+     const { query } = req;
+     const where = {
+       userId: req.user.id
+     };
+     Object.keys(query).forEach((key) => {
+       where[key] = !Number.isNaN(parseInt(query[key], 10)) ? parseInt(query[key], 10) : query[key];
+     });
+     const foundRequests = await Request.findAll({
+       where
+     });
+     return res.status(200).json({ status: 200, data: foundRequests });
+   } catch (error) {
+     res.status(500).json({ status: 500, error });
+   }
+ }
 
   /**
    * @param {Object} req

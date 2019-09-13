@@ -592,6 +592,32 @@ module.exports = {
         }
       }
     },
+    '/request/search': {
+      get: {
+        tags: [
+          'request'
+        ],
+        summary: 'Search for a request',
+        description: '',
+        consumes: [
+          'application/json',
+        ],
+        parameters: [
+          {
+            in: 'query',
+            name: 'column-data e.g., type=one-way&status=approved',
+          }
+        ],
+        responses: {
+          200: {
+            description: 'successful operation',
+            schema: {
+              $ref: '#definitions/UpdateSuccessful',
+            },
+          }
+        }
+      }
+    },
     '/request/:id': {
       patch: {
         tags: [
@@ -641,32 +667,6 @@ module.exports = {
             description: 'Validation error',
             schema: {
               $ref: '#definitions/RequestNotFoundResponse',
-            },
-          }
-        }
-      }
-    },
-    '/request/search': {
-      get: {
-        tags: [
-          'request'
-        ],
-        summary: 'Search for a request',
-        description: '',
-        consumes: [
-          'application/json',
-        ],
-        parameters: [
-          {
-            in: 'query',
-            name: 'column-data e.g., type=one-way&status=approved',
-          }
-        ],
-        responses: {
-          200: {
-            description: 'successful operation',
-            schema: {
-              $ref: '#definitions/UpdateSuccessful',
             },
           }
         }
@@ -923,7 +923,7 @@ module.exports = {
             }
           }
         }
-      },
+      }
     },
     '/request/requestId/comment/commentId': {
       patch: {
