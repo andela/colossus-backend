@@ -8,6 +8,7 @@ import ValidateRoom from '../middlewares/validateRoom';
 import checkAccommodationOwner from '../middlewares/checkAccommodationOwner';
 import findAccommodation from '../middlewares/findAccommodation';
 import findRoom from '../middlewares/findRoom';
+import checkMaxRooms from '../middlewares/checkMaxRooms';
 
 const router = Router();
 
@@ -22,6 +23,7 @@ router.post(
   findAccommodation,
   checkAccommodationOwner,
   validateRoom,
+  checkMaxRooms,
   RoomController.create
 );
 

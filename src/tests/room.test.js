@@ -39,7 +39,7 @@ describe('Room test suites', () => {
             name: 'Kampala',
             type: 'test type',
             location: 'Southern Uganda',
-            totalNumberOfRooms: 5,
+            totalNumberOfRooms: 2,
           })
           .then((res) => {
             accommodation = res.body.data;
@@ -71,6 +71,36 @@ describe('Room test suites', () => {
           const { status } = res;
           room = res.body.data;
           expect(status).to.be.eql(201);
+          done();
+        });
+    });
+    it('should create another room in the accommodation facility', (done) => {
+      chai.request(app)
+        .post(`${root}/${accommodation.id}/room`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          name: 'Cabin2',
+          type: 'Courtyard2',
+          cost: 900000
+        })
+        .end((err, res) => {
+          const { status } = res;
+          expect(status).to.be.eql(201);
+          done();
+        });
+    });
+    it('should throw an error when the creation of rooms has exceeded capacity available', (done) => {
+      chai.request(app)
+        .post(`${root}/${accommodation.id}/room`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          name: 'Cabin3',
+          type: 'Courtyard3',
+          cost: 450000
+        })
+        .end((err, res) => {
+          const { status } = res;
+          expect(status).to.be.eql(403);
           done();
         });
     });
