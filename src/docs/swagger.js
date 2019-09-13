@@ -1654,7 +1654,7 @@ module.exports = {
         }
       }
     },
-    '/accommodation/1/feedback': {
+    '/accommodation/:accommodationId/feedback': {
       post: {
         tags: [
           'accommodationFeedback'
