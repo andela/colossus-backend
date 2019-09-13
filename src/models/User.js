@@ -123,7 +123,10 @@ const UserDefinition = (sequelize, DataTypes) => {
       where: {
         id
       },
-      individualHooks: true
+      individualHooks: true,
+      attributes: {
+        exclude: ['password']
+      }
     });
   };
 

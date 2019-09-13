@@ -8,7 +8,8 @@ export default (sequelize, DataTypes) => {
     Chat.belongsTo(models.User, {
       foreignKey: 'userId',
       onDelete: 'CASCADE',
-      onUpdate: 'CASCADE'
+      onUpdate: 'CASCADE',
+      as: 'user'
     });
   };
   return Chat;

@@ -1,1 +1,1 @@
-export { chat, watchSocket } from './chat';
+export { chat, watchSocket, createMessage, getAllMessages } from './chat';

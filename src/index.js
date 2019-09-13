@@ -10,7 +10,7 @@ import cors from 'cors';
 import expressValidator from 'express-validator';
 import swaggerDocument from './docs/swagger';
 import routes from './routes';
-import { chat } from './services';
+import { chat, watchSocket, createMessage, getAllMessages } from './services';
 import models from './models';
 
 const { Chat, User } = models;
@@ -109,18 +109,16 @@ const server = app.listen(PORT, () => {
 export const io = socketIo(server);
 io.on('connect', (client) => {
   logger.info(`New connection, form client ${client.id}`);
-  client.on('CHAT', async (data) => {
-    await Chat.create({
-      message: data.message,
-      userId: data.user.id
-    });
-    const allChats = await Chat.findAll({
-      include: [User]
-    });
-    chat('ALL_MESSAGES_RECEIVED', allChats);
+  watchSocket(client, 'GET_ALL_MESSAGES', async () => {
+    const messages = await getAllMessages();
+    chat('ALL_MESSAGES_RECEIVED', messages);
   });
+  watchSocket(client, 'SEND_A_MESSAGE', async (data) => {
+    const message = await createMessage(data);
+    chat('A_MESSAGE_SENT', message);
+  })
 });
-io.on('disconnet', (client) => {
+io.on('disconnect', (client) => {
   logger.info(`Disconnection, form client ${client.id}`);
 });
 
