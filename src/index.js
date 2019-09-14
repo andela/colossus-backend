@@ -116,7 +116,7 @@ io.on('connect', (client) => {
   watchSocket(client, 'SEND_A_MESSAGE', async (data) => {
     const message = await createMessage(data);
     chat('A_MESSAGE_SENT', message);
-  })
+  });
 });
 io.on('disconnect', (client) => {
   logger.info(`Disconnection, form client ${client.id}`);
