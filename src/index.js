@@ -108,7 +108,7 @@ const server = app.listen(PORT, () => {
 
 export const io = socketIo(server);
 io.on('connect', (client) => {
-  logger.info(`New connection, form client ${client.id}`);
+  logger.info(`New connection, from client ${client.id}`);
   watchSocket(client, 'GET_ALL_MESSAGES', async () => {
     const messages = await getAllMessages();
     chat('ALL_MESSAGES_RECEIVED', messages);
@@ -119,7 +119,7 @@ io.on('connect', (client) => {
   });
 });
 io.on('disconnect', (client) => {
-  logger.info(`Disconnection, form client ${client.id}`);
+  logger.info(`Disconnection, from client ${client.id}`);
 });
 
 export default app;

@@ -36,12 +36,14 @@ export const getAllMessages = async () => {
 export const createMessage = async ({ userId, message }) => {
   const chatItem = await Chat.create({
     userId,
-    message,
+    message
+  });
+  const newChatItem = await Chat.findByPk(chatItem.id, {
     include: [{
       model: User,
-      attributes: ['firstName', 'lastName', 'id', 'email'],
-      as: 'user'
+      as: 'user',
+      attributes: ['firstName', 'lastName', 'id', 'email']
     }]
-  });
-  return chatItem;
+  }) 
+  return newChatItem;
 };
