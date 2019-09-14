@@ -22,6 +22,17 @@ export const watchSocket = (socket, eventName, cb) => {
   socket.on(eventName, cb);
 };
 
+export const getAllMessages = async () => {
+  const messages = await Chat.findAll({
+    include: [{
+      model: User,
+      as: 'user',
+      attributes: ['firstName', 'lastName', 'id', 'email']
+    }]
+  });
+  return messages;
+};
+
 export const createMessage = async ({ userId, message }) => {
   const chatItem = await Chat.create({
     userId,
@@ -33,15 +44,4 @@ export const createMessage = async ({ userId, message }) => {
     }]
   });
   return chatItem;
-};
-
-export const getAllMessages = async () => {
-  const messages = await Chat.findAll({
-    include: [{
-      model: User,
-      as: 'user',
-      attributes: ['firstName', 'lastName', 'id', 'email']
-    }]
-  });
-  return messages;
 };
