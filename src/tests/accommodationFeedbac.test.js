@@ -37,8 +37,10 @@ before((done) => {
 
     Accommodation.create({
       userId,
-      name: 'lagos',
-      location: 'kampala',
+      name: 'Kampala',
+      location: 'Southern Uganda',
+      type: 'chateau',
+      totalNumberOfRooms: 5,
       owner: userId,
     }).then((accommodation) => {
       accommodationId = accommodation.id;
