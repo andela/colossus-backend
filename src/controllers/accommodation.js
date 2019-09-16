@@ -72,7 +72,6 @@ export default class AccomodationController {
       "Accommodation"."updatedAt" FROM "Accommodation"
       AS "Accommodation" LEFT OUTER JOIN "Rooms" AS "rooms" ON "Accommodation"."id" = "rooms"."accommodationId"
       WHERE "Accommodation"."id" = ${accommodationId}
-      AND "rooms"."booked" = false
       GROUP BY "Accommodation"."id";`;
       const data = await sequelize.query(rawQueryString);
       return res.status(200).json({

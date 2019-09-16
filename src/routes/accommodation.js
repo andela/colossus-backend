@@ -40,6 +40,7 @@ router.get(
   '/accommodation/:accommodationId',
   checkToken,
   checkVerified,
+  findAccommodation,
   AccommodationController.findOne
 );
 
