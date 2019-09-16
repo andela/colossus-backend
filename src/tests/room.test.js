@@ -133,6 +133,15 @@ describe('Room test suites', () => {
           done();
         });
     });
+    it('should respond with a 400 when no auth header is present', (done) => {
+      chai.request(app)
+        .patch(`/api/v1/room/rescind/${room.id}`)
+        .end((err, res) => {
+          const { status } = res;
+          expect(status).to.be.eql(400);
+          done();
+        });
+    });
     it('should delete a room in an accommodation facility', (done) => {
       chai.request(app)
         .delete(`${root}/${accommodation.id}/room/${room.id}`)
