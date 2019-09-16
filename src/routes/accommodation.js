@@ -1,8 +1,9 @@
 import { Router } from 'express';
-import { AccommodationController } from '../controllers';
+import { AccommodationController, AccommodationFeedbackController } from '../controllers';
 import { checkToken, checkVerified } from '../middlewares';
 import getImageFromRequest from '../middlewares/getImageFromRequest';
 import ValidateAccommodation from '../middlewares/validateAccommodation';
+import validateAccommodationFeedback from '../middlewares/validateAccommodationFeedback';
 import CloudinaryConfig from '../middlewares/cloudinaryConfig';
 import { authorize } from '../middlewares/authorize';
 import ImageHandler from '../middlewares/imageHandler';
@@ -16,6 +17,16 @@ const { validateAccommodation } = ValidateAccommodation;
 const { cloudinaryConfig } = CloudinaryConfig;
 
 const { imageHandler } = ImageHandler;
+
+
+// api/v1 is already prepended to the request
+router.post(
+  '/accommodation/:accommodationId/feedback',
+  checkToken,
+  checkVerified,
+  validateAccommodationFeedback,
+  AccommodationFeedbackController.postFeedback
+);
 
 router.post(
   '/accommodation',
